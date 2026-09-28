@@ -1,0 +1,31 @@
+.modal-backdrop { position: fixed; z-index: 60; inset: 0; display: grid; padding: 20px; place-items: center; overflow-y: auto; background: var(--backdrop); }
+.quiz-modal { width: min(650px, 100%); padding: 28px; border: 2px solid var(--line); border-radius: 26px; color: var(--ink); background: var(--surface); box-shadow: 10px 10px 0 var(--card-shadow); animation: modal-enter .24s cubic-bezier(.2, .8, .2, 1); }
+.quiz-modal__header { display: flex; align-items: flex-start; justify-content: space-between; gap: 20px; margin-bottom: 24px; }
+.quiz-modal__header h2 { margin: 5px 0 0; font: 750 1.45rem "Archivo", sans-serif; }
+.modal-close { display: grid; width: 38px; height: 38px; flex: 0 0 auto; place-items: center; border-radius: 12px; color: var(--muted); background: var(--purple-soft); font-size: 1.5rem; line-height: 1; }
+.quiz-modal form { display: grid; gap: 19px; }
+.form-field { display: grid; gap: 8px; color: var(--ink); font-size: .76rem; font-weight: 700; }
+.form-field small { color: var(--muted); font-weight: 500; }
+.form-field input, .form-field textarea { width: 100%; padding: 13px 14px; border: 1px solid var(--line); border-radius: 13px; outline: none; color: var(--ink); background: var(--page-bg); resize: vertical; transition: border-color .2s ease, box-shadow .2s ease; }
+.form-field input:focus, .form-field textarea:focus { border-color: var(--purple); box-shadow: 0 0 0 3px var(--purple-soft); }
+.quiz-modal__actions { display: flex; justify-content: flex-end; gap: 10px; padding-top: 4px; }
+.modal-cancel { min-height: 42px; padding: 0 16px; border-radius: 12px; color: var(--muted); background: transparent; font-size: .75rem; font-weight: 700; }
+.quiz-manage-modal { width: min(510px, 100%); }
+.quiz-manage-modal__warning { margin: 0; padding: 17px; border-left: 4px solid #c6554d; color: var(--muted); background: var(--page-bg); font-size: .8rem; line-height: 1.6; }
+.quiz-manage-modal__warning strong { color: var(--ink); }
+.quiz-import-conflict__message { margin: 0; padding: 15px 17px; border-left: 4px solid var(--coral); color: var(--muted); background: var(--page-bg); font-size: .78rem; line-height: 1.6; }
+.quiz-export-modal { width: min(560px, 100%); }
+.export-filename-field { display: flex; min-width: 0; align-items: stretch; border: 1px solid var(--line); border-radius: 7px; overflow: hidden; background: var(--page-bg); }
+.export-filename-field:focus-within { border-color: var(--purple); box-shadow: 0 0 0 3px var(--purple-soft); }
+.form-field .export-filename-field input { min-width: 0; flex: 1; border: 0; border-radius: 0; box-shadow: none; }
+.export-filename-field > span { display: flex; padding: 0 12px; align-items: center; color: var(--muted); background: var(--purple-soft); font-size: .68rem; white-space: nowrap; }
+.quiz-export-modal__drive { display: flex; padding: 16px; align-items: center; gap: 18px; border-left: 4px solid var(--purple); background: var(--page-bg); }
+.quiz-export-modal__drive > div { flex: 1; }
+.quiz-export-modal__drive strong { font-size: .8rem; }
+.quiz-export-modal__drive p { margin: 5px 0 0; color: var(--muted); font-size: .7rem; line-height: 1.5; }
+.quiz-export-modal__drive button { min-height: 38px; padding: 0 12px; flex: 0 0 auto; border-radius: 6px; color: var(--on-primary); background: var(--purple); font-size: .68rem; font-weight: 750; }
+.secondary-button.is-danger { color: #fff; background: #b94b44; }
+
+.menu-backdrop { display: none; }
+
+@keyframes modal-enter { from { opacity: 0; transform: translateY(12px) scale(.98); } }

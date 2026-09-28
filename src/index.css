@@ -1,0 +1,263 @@
+:root {
+  font-family: "Archivo", Arial, sans-serif;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+
+  --ink: #f4f1e9;
+  --muted: #c5c9bd;
+  --purple: #d8ddd4;
+  --purple-dark: #f4f1e9;
+  --purple-soft: #596a4e;
+  --coral: #ef8068;
+  --coral-soft: #6e5142;
+  --mint: #adb7aa;
+  --mint-soft: #4b5b42;
+  --surface: #4b5b40;
+  --line: #74806d;
+  --page-bg: #3f5037;
+  --page-background: radial-gradient(circle at 84% 8%, rgba(216, 221, 212, .13), transparent 27%), linear-gradient(135deg, #34432e 0%, #405238 52%, #4b5e40 100%);
+  --sidebar-bg: #283326;
+  --nav-label: #98a291;
+  --nav-text: #cbd0c5;
+  --nav-hover: #46563d;
+  --tip-ink: #f4f1e9;
+  --tip-muted: #cbd0c5;
+  --tip-from: #3d4c35;
+  --tip-to: #536248;
+  --hero-from: #20291f;
+  --hero-mid: #3f5336;
+  --hero-to: #65745b;
+  --hero-shadow: rgba(24, 31, 22, .34);
+  --empty-bg: #46563d;
+  --empty-line: #7e8a76;
+  --toast-bg: #f0eee7;
+  --toast-text: #293326;
+  --toast-shadow: #263122;
+  --backdrop: rgba(17, 23, 16, .56);
+  --primary-button-bg: #e1e3dc;
+  --primary-button-ink: #293326;
+  --on-primary: #293326;
+  --card-shadow: #263122;
+  --hero-panel-bg: #d8ddd4;
+  --hero-panel-ink: #2b3528;
+  --theme-page-bg: #3f5136;
+  --ribbon-one: #65755b;
+  --ribbon-two: #293225;
+  --ribbon-three: #939e8e;
+  --ribbon-icon: #f0eee7;
+  --theme-copy: #526446;
+  --sileo-state-success: #3f7b4d;
+  --sileo-state-loading: #687466;
+  --sileo-state-error: #c64f43;
+  --sileo-state-warning: #bd6a3f;
+  --sileo-state-info: #49623b;
+  --sileo-state-action: #49623b;
+  --sileo-duration: 560ms;
+  color: var(--ink);
+  background: var(--page-background, var(--page-bg));
+}
+
+:root[data-theme="violet"] {
+  --sidebar-bg: #344530;
+}
+
+:root[data-theme="sky"] {
+  --ink: #17354b;
+  --muted: #6c8291;
+  --purple: #2388bb;
+  --purple-dark: #11698f;
+  --purple-soft: #e2f5fc;
+  --coral: #ff8a66;
+  --coral-soft: #fff0ed;
+  --mint: #39aa87;
+  --mint-soft: #e6f8f2;
+  --surface: #ffffff;
+  --line: #dcecf2;
+  --page-bg: #f3fbfe;
+  --page-background: var(--page-bg);
+  --sidebar-bg: #ffffff;
+  --nav-label: #8298a5;
+  --nav-text: #637c8b;
+  --nav-hover: #eaf8fc;
+  --tip-ink: #285d75;
+  --tip-muted: #6b8b99;
+  --tip-from: #e6f7fc;
+  --tip-to: #f1fcf8;
+  --hero-from: #147da9;
+  --hero-mid: #239ccb;
+  --hero-to: #68c9d7;
+  --hero-shadow: rgba(31, 137, 181, .2);
+  --empty-bg: #ffffff;
+  --empty-line: #cde4ec;
+  --toast-bg: #173b4c;
+  --toast-text: #eefaff;
+  --toast-shadow: #0b536f;
+  --backdrop: rgba(18, 61, 80, .28);
+  --primary-button-bg: #ffffff;
+  --primary-button-ink: var(--purple-dark);
+  --on-primary: #ffffff;
+  --card-shadow: #cfe2ea;
+  --hero-panel-bg: #ffffff;
+  --hero-panel-ink: #17354b;
+  --theme-page-bg: #eef9fc;
+  --ribbon-one: #b9e5f3;
+  --ribbon-two: #2388bb;
+  --ribbon-three: #d9f1f8;
+  --ribbon-icon: #11698f;
+  --theme-copy: #cfeaf3;
+  --sileo-state-info: oklch(0.62 0.14 225);
+  --sileo-state-action: oklch(0.62 0.14 225);
+}
+
+:root[data-theme="midnight"] {
+  --ink: #f2efff;
+  --muted: #aaa4bd;
+  --purple: #e3a44c;
+  --purple-dark: #ffd08a;
+  --purple-soft: #392b1b;
+  --coral: #d8783f;
+  --coral-soft: #42291d;
+  --mint: #c79552;
+  --mint-soft: #3b3022;
+  --surface: #1e2123;
+  --line: #363b3e;
+  --page-bg: #111315;
+  --page-background: var(--page-bg);
+  --sidebar-bg: #181b1d;
+  --nav-label: #85898b;
+  --nav-text: #a8abad;
+  --nav-hover: #282c2e;
+  --tip-ink: #f0c98e;
+  --tip-muted: #b4aa9e;
+  --tip-from: #30271f;
+  --tip-to: #242326;
+  --hero-from: #171a1c;
+  --hero-mid: #292b29;
+  --hero-to: #8c5624;
+  --hero-shadow: rgba(0, 0, 0, .28);
+  --empty-bg: #1e2123;
+  --empty-line: #4a425c;
+  --toast-bg: #eee9ff;
+  --toast-text: #292016;
+  --toast-shadow: #08090a;
+  --backdrop: rgba(5, 4, 9, .6);
+  --primary-button-bg: #eee9df;
+  --primary-button-ink: #352716;
+  --on-primary: #21180e;
+  --card-shadow: #090a0b;
+  --hero-panel-bg: #eee9df;
+  --hero-panel-ink: #292016;
+  --theme-page-bg: #111315;
+  --ribbon-one: #2b2f31;
+  --ribbon-two: #92571f;
+  --ribbon-three: #211b16;
+  --ribbon-icon: #f0c98e;
+  --theme-copy: #282c2e;
+  --sileo-state-success: oklch(0.74 0.14 158);
+  --sileo-state-loading: oklch(0.7 0.02 290);
+  --sileo-state-error: oklch(0.72 0.17 27);
+  --sileo-state-warning: oklch(0.82 0.14 78);
+  --sileo-state-info: #a86520;
+  --sileo-state-action: #a86520;
+}
+
+:root[data-theme="pink"] {
+  --ink: #541b35;
+  --muted: #966079;
+  --purple: #d62970;
+  --purple-dark: #9e174f;
+  --purple-soft: #ffd6e6;
+  --coral: #f06488;
+  --coral-soft: #ffe2eb;
+  --mint: #c62b68;
+  --mint-soft: #fbd0df;
+  --surface: #fff8f5;
+  --line: #eeb4c9;
+  --page-bg: #f9d6e2;
+  --page-background: radial-gradient(circle at 86% 10%, rgba(255, 247, 235, .9), transparent 28%), linear-gradient(135deg, #f7c8d9 0%, #f8dae4 52%, #f3b5cc 100%);
+  --sidebar-bg: #fff1f4;
+  --nav-label: #ad7189;
+  --nav-text: #89536b;
+  --nav-hover: #fbd6e3;
+  --tip-ink: #651735;
+  --tip-muted: #8b536a;
+  --tip-from: #f6bfd2;
+  --tip-to: #fff0e8;
+  --hero-from: #a81750;
+  --hero-mid: #d92b70;
+  --hero-to: #ff8fb3;
+  --hero-shadow: rgba(133, 24, 67, .24);
+  --empty-bg: #fff8f5;
+  --empty-line: #df9db7;
+  --toast-bg: #57152f;
+  --toast-text: #fff3f7;
+  --toast-shadow: #9e174f;
+  --backdrop: rgba(91, 20, 49, .35);
+  --primary-button-bg: #fff7ec;
+  --primary-button-ink: #9e174f;
+  --on-primary: #fff8f5;
+  --card-shadow: #d88aa8;
+  --hero-panel-bg: #fff4ed;
+  --hero-panel-ink: #75153b;
+  --theme-page-bg: #f6c5d7;
+  --ribbon-one: #ee7ba5;
+  --ribbon-two: #a91d53;
+  --ribbon-three: #ffe4ec;
+  --ribbon-icon: #fff5ef;
+  --theme-copy: #e9a5bd;
+  --sileo-state-success: oklch(0.67 0.16 158);
+  --sileo-state-loading: oklch(0.68 0.08 348);
+  --sileo-state-error: oklch(0.62 0.2 20);
+  --sileo-state-warning: oklch(0.76 0.14 65);
+  --sileo-state-info: oklch(0.62 0.19 350);
+  --sileo-state-action: oklch(0.62 0.19 350);
+}
+
+[data-sileo-svg] {
+  filter: drop-shadow(4px 5px 0 var(--toast-shadow));
+}
+
+[data-sileo-description] {
+  color: color-mix(in srgb, var(--toast-text) 76%, transparent) !important;
+}
+
+[data-sileo-title] {
+  font-family: "Archivo", sans-serif;
+  font-weight: 750;
+}
+
+[data-sileo-button] {
+  font-family: "Archivo", sans-serif;
+  font-weight: 700;
+}
+
+* { box-sizing: border-box; }
+html { min-width: 320px; min-height: 100%; }
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+  color: var(--ink);
+  background: var(--page-background, var(--page-bg));
+  background-attachment: fixed;
+  transition: color .32s ease, background-color .32s ease;
+}
+button, input, textarea { font: inherit; }
+button { border: 0; }
+button:not(:disabled) { cursor: pointer; }
+svg { display: block; }
+#root { min-height: 100vh; }
+
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+::view-transition-new(root) { z-index: 2; }
+::view-transition-old(root) { z-index: 1; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 1ms !important; transition-duration: 1ms !important; }
+}

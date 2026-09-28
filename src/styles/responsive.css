@@ -1,0 +1,122 @@
+@media (max-width: 1080px) {
+  .quick-grid { grid-template-columns: 1fr 1fr; }
+  .action-card:last-child { grid-column: 1 / -1; }
+  .hero-card { grid-template-columns: 1fr .7fr; }
+  .mascot-card { width: 180px; }
+  .quiz-library-grid { grid-template-columns: 1fr 1fr; }
+  .game-mode-grid { grid-template-columns: 1fr 1fr; }
+  .game-setup__intro { grid-template-columns: auto 1fr; }
+  .game-setup__launch { grid-column: 1 / -1; padding: 18px 0 0; grid-template-columns: 1fr auto; align-items: center; border-top: 1px solid var(--line); border-left: 0; }
+  .game-mode-config, .game-mode-config--race { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .game-mode-config__heading { grid-column: 1 / -1; }
+  .theme-gallery { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .music-album-grid { grid-auto-columns: minmax(185px, 205px); }
+  .settings-options { grid-template-rows: 245px 104px; }
+  .question-type-picker { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .question-type-picker > div { grid-column: 1 / -1; padding: 4px; }
+  .theme-ribbon { opacity: .72; }
+  .theme-ribbon--one { right: -1%; }
+  .theme-ribbon--two { right: 10%; }
+  .theme-ribbon--three { right: 21%; }
+}
+
+@media (max-width: 820px) {
+  .sidebar { width: 270px; transform: translateX(-100%); transition: transform .25s ease; }
+  .sidebar.is-open { transform: translateX(0); }
+  .menu-backdrop { position: fixed; z-index: 15; inset: 0; display: block; background: var(--backdrop); }
+  .main-content { width: 100%; margin-left: 0; padding: 24px; }
+  .main-content--themes { width: 100%; }
+  .main-content--settings { width: 100%; }
+  .main-content--music { width: 100%; }
+  .main-content--workspace { width: 100%; }
+  .menu-button { display: grid; flex: 0 0 auto; }
+  .topbar { justify-content: flex-start; }
+  .hero-card { grid-template-columns: 1fr; }
+  .hero-visual { display: none; }
+  .hero-card h2 { font-size: clamp(2.7rem, 10vw, 4rem); }
+  .settings-home { min-height: 0; padding: 10px 0 0; }
+  .quiz-library-filters { grid-template-columns: 1fr 1fr; }
+  .quiz-library-result-count { grid-column: 1 / -1; width: max-content; }
+}
+
+@media (max-width: 600px) {
+  .main-content { padding: 18px 16px 40px; }
+  .topbar { align-items: flex-start; }
+  .topbar h1 { font-size: 1.13rem; }
+  .hero-card { min-height: 375px; border-radius: 24px; }
+  .hero-card__content { padding: 34px 27px; }
+  .hero-card p { font-size: .82rem; }
+  .quick-grid { grid-template-columns: 1fr; }
+  .action-card:last-child { grid-column: auto; }
+  .empty-library { flex-direction: column; align-items: flex-start; }
+  .secondary-button { width: 100%; }
+  .text-button { display: none; }
+  .library-section .section-heading { align-items: flex-start; flex-direction: column; }
+  .library-heading-actions { width: 100%; justify-content: flex-start; }
+  .library-heading-actions .text-button { display: inline-flex; }
+  .quiz-library-grid { grid-template-columns: 1fr; }
+  .game-setup__intro { min-height: 0; padding: 22px; grid-template-columns: 1fr; }
+  .game-setup__quiz-mark { width: 62px; height: 62px; }
+  .game-mode-grid { grid-template-columns: 1fr; }
+  .game-mode-card { min-height: 160px; }
+  .game-setup__launch { grid-column: auto; grid-template-columns: 1fr; align-items: stretch; }
+  .game-setup__launch > button { width: 100%; }
+  .game-mode-config, .game-mode-config--race { grid-template-columns: 1fr; padding: 15px; }
+  .game-mode-config__heading { grid-column: auto; }
+  .quiz-play__topbar { grid-template-columns: auto 1fr auto; padding: 8px 0; }
+  .quiz-play__topbar > div:nth-child(2) { justify-items: start; }
+  .quiz-question { min-height: 470px; padding: 22px 17px; }
+  .quiz-answer-options { grid-template-columns: 1fr; }
+  .quiz-matching-answer label { grid-template-columns: 1fr; gap: 5px; }
+  .quiz-result__actions { width: 100%; flex-direction: column-reverse; }
+  .quiz-library-filters { grid-template-columns: 1fr; }
+  .quiz-library-result-count { grid-column: auto; }
+  .quiz-export-modal__drive { align-items: stretch; flex-direction: column; }
+  .quiz-export-modal__drive button { width: 100%; }
+  .quiz-library-card:last-child { grid-column: auto; }
+  .overview-grid { grid-template-columns: 1fr; }
+  .overview-card--recent { flex-wrap: wrap; }
+  .overview-card--recent > button { width: 100%; margin-left: 64px; }
+  .quiz-modal { padding: 22px; }
+  .quiz-modal__actions { flex-direction: column-reverse; }
+  .modal-cancel { width: 100%; }
+  .theme-studio { padding: 14px 0 36px; }
+  .theme-gallery { grid-template-columns: 1fr; }
+  .music-album-grid { grid-auto-columns: 180px; }
+  .music-player-bar { grid-template-columns: auto 1fr; }
+  .music-player-bar__controls { grid-column: 1 / -1; }
+  .music-player-bar__volume { display: none; }
+  .theme-card { width: min(100%, 320px); height: 440px; grid-column: auto; justify-self: center; }
+  .settings-option { padding: 16px; }
+  .settings-home { padding: 8px 0 0; }
+  .settings-options { grid-template-columns: 1fr; grid-template-rows: 245px 245px repeat(3, 96px); }
+  .settings-option--featured,
+  .settings-option--music,
+  .settings-option--sound,
+  .settings-option--help,
+  .settings-option--accessibility { grid-column: auto; grid-row: auto; }
+  .quiz-editor__toolbar { position: static; flex-wrap: wrap; }
+  .quiz-editor__save-state { order: 3; width: 100%; margin-left: 0; }
+  .quiz-editor__toolbar .secondary-button { margin-left: auto; }
+  .quiz-editor__header { grid-template-columns: 1fr; padding: 18px; }
+  .quiz-icon-picker > div { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .question-type-picker { grid-template-columns: 1fr; }
+  .question-type-picker > div { grid-column: auto; }
+  .question-editor { padding: 17px; }
+  .question-editor__top { align-items: flex-start; flex-direction: column; }
+  .question-editor__controls { justify-content: flex-start; }
+  .matching-row { grid-template-columns: 1fr auto; }
+  .matching-row > span { display: none; }
+  .matching-row .editor-icon-button { grid-column: 2; grid-row: 1 / 3; }
+  .settings-option__copy { left: 22px; bottom: 22px; }
+  .theme-ribbon { width: 62px; opacity: .5; }
+  .theme-ribbon--one { right: -4%; }
+  .theme-ribbon--two { right: 13%; }
+  .theme-ribbon--three { right: 30%; }
+  .music-ribbon { width: 62px; opacity: .42; }
+  .music-ribbon--one { right: -4%; }
+  .music-ribbon--two { right: 13%; }
+  .music-ribbon--three { right: 30%; }
+  .theme-backdrop-copy > span { left: -3%; font-size: 5rem; }
+  .music-backdrop__copy > span { left: -3%; font-size: 4.6rem; }
+}
