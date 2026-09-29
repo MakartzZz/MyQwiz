@@ -31,6 +31,10 @@
 .quiz-library-card__top, .quiz-library-card__footer { display: flex; align-items: center; justify-content: space-between; gap: 12px; color: var(--muted); font-size: .68rem; }
 .quiz-status { padding: 5px 8px; border-radius: 999px; color: var(--purple-dark); background: var(--purple-soft); font-weight: 700; }
 .quiz-status.is-ready { color: var(--on-primary); background: var(--mint); }
+.quiz-best-score { display: inline-flex; padding: 6px 9px; align-items: baseline; gap: 6px; color: var(--on-primary); background: var(--purple); clip-path: polygon(5% 0, 100% 7%, 95% 100%, 0 93%); }
+.quiz-best-score small { font-size: .52rem; font-weight: 750; letter-spacing: .05em; text-transform: uppercase; }
+.quiz-best-score strong { font-size: .74rem; font-weight: 850; }
+.quiz-best-score.is-empty { color: var(--muted); background: var(--page-bg); }
 .quiz-library-card__identity { display: grid; min-height: 82px; margin: 17px 0 18px; grid-template-columns: auto 1fr; align-items: start; gap: 12px; }
 .quiz-library-card__icon { display: grid; width: 48px; height: 48px; place-items: center; color: var(--on-primary); background: var(--purple); }
 .quiz-library-card__identity > div { min-width: 0; }

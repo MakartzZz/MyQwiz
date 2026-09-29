@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { themes } from "../config/themes.js";
 
 const studyIconPaths = {
@@ -48,6 +49,13 @@ const ThemeRibbons = () => (
 );
 
 function ThemeSwitcher({ activeTheme, onChange }) {
+  const [spinningTheme, setSpinningTheme] = useState(null);
+
+  const selectTheme = (themeId, event) => {
+    setSpinningTheme(themeId);
+    onChange(themeId, event.currentTarget);
+  };
+
   return (
     <>
       <ThemeRibbons key={activeTheme} />
@@ -62,14 +70,17 @@ function ThemeSwitcher({ activeTheme, onChange }) {
       <div className="theme-gallery">
         {themes.map((theme, index) => (
           <button
-            className={`theme-card ${activeTheme === theme.id ? "is-active" : ""}`}
+            className={`theme-card ${activeTheme === theme.id ? "is-active" : ""} ${spinningTheme === theme.id ? "is-spinning" : ""}`}
             data-theme-card={theme.id}
             key={theme.id}
             type="button"
             aria-label={`Usar tema ${theme.label}`}
             aria-pressed={activeTheme === theme.id}
             title={theme.label}
-            onClick={(event) => onChange(theme.id, event.currentTarget)}
+            onClick={(event) => selectTheme(theme.id, event)}
+            onAnimationEnd={(event) => {
+              if (event.animationName === "theme-card-spin") setSpinningTheme(null);
+            }}
           >
             <img src={theme.character} alt="" />
             <span className="theme-card__poster" aria-hidden="true">

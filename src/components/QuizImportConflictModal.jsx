@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
+import { useModalOpenSound } from "../hooks/useModalOpenSound.js";
 
 function QuizImportConflictModal({ conflict, onClose, onConfirm }) {
   const [title, setTitle] = useState("");
+  useModalOpenSound(Boolean(conflict));
 
   useEffect(() => {
     if (!conflict) return;

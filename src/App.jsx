@@ -5,10 +5,12 @@ import QuizEditor from "./components/QuizEditor.jsx";
 import QuizExportModal from "./components/QuizExportModal.jsx";
 import GameModeSelector from "./components/GameModeSelector.jsx";
 import QuizImportConflictModal from "./components/QuizImportConflictModal.jsx";
+import QuizImportModal from "./components/QuizImportModal.jsx";
 import QuizLibrary from "./components/QuizLibrary.jsx";
 import QuizManageModal from "./components/QuizManageModal.jsx";
 import QuizPlayer from "./components/QuizPlayer.jsx";
 import MusicSelector from "./components/MusicSelector.jsx";
+import PromptRoom from "./components/PromptRoom.jsx";
 import ThemeSwitcher from "./components/ThemeSwitcher.jsx";
 import { themes } from "./config/themes.js";
 import { DEFAULT_MUSIC_ALBUM, MUSIC_ALBUM_STORAGE_KEY, musicAlbums } from "./config/musicAlbums.js";
@@ -52,13 +54,13 @@ const Icon = ({ name, size = 20 }) => {
 const navigation = [
   { label: "Inicio", icon: "home" },
   { label: "Mis quizzes", icon: "library" },
-  { label: "Progreso", icon: "chart" },
+  { label: "Sala de prompts", icon: "sparkle" },
 ];
 
 const sectionTitles = {
   Inicio: "Tu espacio de estudio.",
   "Mis quizzes": "Crea y organiza tus quizzes.",
-  Progreso: "Descubre cómo avanzas.",
+  "Sala de prompts": "Diseña quizzes con ayuda de IA.",
   Ajustes: "Configura tu experiencia.",
 };
 
@@ -67,6 +69,14 @@ const formatShortDate = (date) => new Intl.DateTimeFormat("es-CR", {
   month: "short",
   year: "numeric",
 }).format(new Date(date));
+
+const MUSIC_VOLUME_STORAGE_KEY = "myqwiz:music-volume";
+const MUSIC_VOLUME_LEVELS = [0.07, 0.13, 0.2];
+
+const readStoredMusicVolume = () => {
+  const storedVolume = Number(window.localStorage.getItem(MUSIC_VOLUME_STORAGE_KEY));
+  return MUSIC_VOLUME_LEVELS.includes(storedVolume) ? storedVolume : 0.2;
+};
 
 function App() {
   const [activeSection, setActiveSection] = useState("Inicio");
@@ -81,6 +91,7 @@ function App() {
   const [managedQuiz, setManagedQuiz] = useState(null);
   const [manageMode, setManageMode] = useState("rename");
   const [importConflict, setImportConflict] = useState(null);
+  const [isImportModalOpen, setIsImportModalOpen] = useState(false);
   const [exportingQuiz, setExportingQuiz] = useState(null);
   const importInputRef = useRef(null);
   const [settingsView, setSettingsView] = useState("index");
@@ -90,6 +101,7 @@ function App() {
   const [currentTrackIndex, setCurrentTrackIndex] = useState(0);
   const [isMusicPlaying, setIsMusicPlaying] = useState(false);
   const [isMusicChanging, setIsMusicChanging] = useState(false);
+  const [musicVolume, setMusicVolume] = useState(readStoredMusicVolume);
   const musicAudioRef = useRef(null);
   const musicChangeAudioRef = useRef(null);
   const musicChangeSequenceRef = useRef(0);
@@ -107,6 +119,7 @@ function App() {
   const isMusicScreen = activeSection === "Ajustes" && settingsView === "music";
   const isHomeScreen = activeSection === "Inicio";
   const isQuizScreen = activeSection === "Mis quizzes";
+  const isQuizActivityScreen = isQuizScreen && Boolean(editingQuiz || playingQuiz);
   const bestQuiz = quizzes
     .filter((quiz) => Number.isFinite(quiz.stats?.bestScore))
     .sort((first, second) => second.stats.bestScore - first.stats.bestScore)[0] ?? null;
@@ -166,7 +179,7 @@ function App() {
         setCurrentTrackIndex(0);
         setIsMusicPlaying(true);
         window.localStorage.setItem(MUSIC_ALBUM_STORAGE_KEY, albumId);
-        systemNotifications.success("Álbum seleccionado", `${album.title} comenzó a reproducirse.`);
+        systemNotifications.success("Álbum seleccionado", `${album.title} comenzó a reproducirse.`, { sound: false });
       });
     } else {
       musicChangeSequenceRef.current += 1;
@@ -197,16 +210,22 @@ function App() {
     setIsMusicPlaying(true);
   }, [selectedAlbum]);
 
+  const changeMusicVolume = (volume) => {
+    if (!MUSIC_VOLUME_LEVELS.includes(volume)) return;
+    setMusicVolume(volume);
+    window.localStorage.setItem(MUSIC_VOLUME_STORAGE_KEY, String(volume));
+  };
+
   useEffect(() => {
     const audio = musicAudioRef.current;
     if (!audio) return;
-    audio.volume = 0.2;
+    audio.volume = musicVolume;
     if (!isMusicPlaying || !currentMusicTrack) {
       audio.pause();
       return;
     }
     audio.play().catch(() => setIsMusicPlaying(false));
-  }, [currentMusicTrack, isMusicPlaying]);
+  }, [currentMusicTrack, isMusicPlaying, musicVolume]);
 
   useEffect(() => {
     const hoverSound = new Audio("/sounds/button-hover.mp3");
@@ -375,7 +394,8 @@ function App() {
     systemNotifications.warning("Quiz incompleto", `${firstError}${remaining}`);
   };
 
-  const openQuizImport = () => importInputRef.current?.click();
+  const openQuizImport = () => setIsImportModalOpen(true);
+  const chooseQuizImportFile = () => importInputRef.current?.click();
 
   const completeQuizImport = (sourceQuiz) => {
     const importedQuiz = importDraft(sourceQuiz);
@@ -384,18 +404,14 @@ function App() {
     return importedQuiz;
   };
 
-  const importQuizFile = async (event) => {
-    const file = event.target.files?.[0];
-    if (!file) return;
-
+  const importQuizContent = (content) => {
     try {
-      if (file.size > MAX_QUIZ_FILE_SIZE) {
-        throw new Error("El archivo supera el límite de 5 MB.");
-      }
-      const parsedQuiz = parseQuizImport(await file.text());
+      if (new Blob([content]).size > MAX_QUIZ_FILE_SIZE) throw new Error("El contenido supera el límite de 5 MB.");
+      const parsedQuiz = parseQuizImport(content);
       const identicalQuiz = quizzes.find((quiz) => areQuizzesEquivalent(quiz, parsedQuiz));
       const sameNameQuiz = quizzes.find((quiz) => normalizeQuizTitle(quiz.title) === normalizeQuizTitle(parsedQuiz.title));
 
+      setIsImportModalOpen(false);
       if (identicalQuiz || sameNameQuiz) {
         setImportConflict({
           quiz: parsedQuiz,
@@ -405,6 +421,20 @@ function App() {
       } else {
         completeQuizImport(parsedQuiz);
       }
+      return true;
+    } catch (error) {
+      systemNotifications.error("No se pudo reconocer el JSON", error.message || "El contenido no es compatible.");
+      return false;
+    }
+  };
+
+  const importQuizFile = async (event) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    try {
+      if (file.size > MAX_QUIZ_FILE_SIZE) throw new Error("El archivo supera el límite de 5 MB.");
+      importQuizContent(await file.text());
     } catch (error) {
       systemNotifications.error("No se pudo importar", error.message || "El archivo no es compatible.");
     } finally {
@@ -512,7 +542,7 @@ function App() {
       {isMenuOpen && <button className="menu-backdrop" aria-label="Cerrar menú" onClick={() => setIsMenuOpen(false)} />}
 
       <main className={`main-content ${isThemeScreen ? "main-content--themes" : ""} ${isSettingsHome ? "main-content--settings" : ""} ${isMusicScreen ? "main-content--music" : ""} ${isHomeScreen || isQuizScreen ? "main-content--workspace" : ""} ${isHomeScreen ? "main-content--home" : ""} ${isQuizScreen ? "main-content--library" : ""}`}>
-        {!isThemeScreen && (
+        {!isThemeScreen && !isQuizActivityScreen && (
           <header className="topbar">
             <button className="menu-button" type="button" aria-label={isMenuOpen ? "Cerrar menú" : "Abrir menú"} onClick={() => setIsMenuOpen(!isMenuOpen)}>
               <Icon name={isMenuOpen ? "close" : "menu"} />
@@ -586,6 +616,7 @@ function App() {
               <QuizPlayer
                 key={`${playingQuiz.id}-${activeGameMode}-${gameAttemptKey}`}
                 quiz={playingQuiz}
+                theme={theme}
                 gameMode={activeGameMode}
                 gameRules={activeGameRules}
                 initialSession={savedGameSession}
@@ -612,7 +643,7 @@ function App() {
                 <div className="library-heading-actions">
                   <button className="text-button" type="button" onClick={() => setIsCreatorOpen(true)}><Icon name="plus" size={17} /> Crear quiz</button>
                   <button className="text-button" type="button" onClick={openQuizImport}><Icon name="file" size={17} /> Importar</button>
-                  <button className="text-button" type="button" onClick={() => chooseAction("El generador asistido se conectará en una fase posterior.")}><Icon name="sparkle" size={17} /> Generación asistida</button>
+                  <button className="text-button" type="button" onClick={() => selectSection("Sala de prompts")}><Icon name="sparkle" size={17} /> Generación asistida</button>
                 </div>
               </div>
               <QuizLibrary
@@ -630,13 +661,7 @@ function App() {
           )
         )}
 
-        {activeSection === "Progreso" && (
-          <section className="future-section">
-            <span className="future-section__icon"><Icon name="chart" size={28} /></span>
-            <h2>Progreso</h2>
-            <p>Esta sección se habilitará en una siguiente etapa del desarrollo.</p>
-          </section>
-        )}
+        {activeSection === "Sala de prompts" && <PromptRoom />}
 
         {activeSection === "Ajustes" && (
           settingsView === "themes" ? (
@@ -657,9 +682,12 @@ function App() {
                 currentTrack={currentMusicTrack}
                 isPlaying={isMusicPlaying}
                 isChanging={isMusicChanging}
+                volume={musicVolume}
                 onChange={selectMusicAlbum}
                 onToggle={toggleMusicPlayback}
+                onPrevious={playPreviousMusicTrack}
                 onNext={playNextMusicTrack}
+                onVolumeChange={changeMusicVolume}
               />
             </div>
           ) : (
@@ -686,21 +714,27 @@ function App() {
                   </span>
                   <Icon name="arrow" size={20} />
                 </button>
-                <button className="settings-option settings-option--sound" type="button" onClick={() => chooseAction("Aquí podrás configurar los efectos y avisos sonoros.")}>
-                  <span className="settings-option__icon"><Icon name="volume" size={25} /></span>
-                  <strong>Sonido</strong>
-                  <Icon name="arrow" size={20} />
-                </button>
-                <button className="settings-option settings-option--help" type="button" onClick={() => chooseAction("Los tutoriales y recursos de ayuda se agregarán aquí.")}>
-                  <span className="settings-option__icon"><Icon name="help" size={25} /></span>
-                  <strong>Tutoriales y ayuda</strong>
-                  <Icon name="arrow" size={20} />
-                </button>
-                <button className="settings-option settings-option--accessibility" type="button" onClick={() => chooseAction("Aquí podrás ajustar movimiento, contraste y otras ayudas visuales.")}>
-                  <span className="settings-option__icon"><Icon name="accessibility" size={25} /></span>
-                  <strong>Accesibilidad</strong>
-                  <Icon name="arrow" size={20} />
-                </button>
+                <div className="settings-option-frame settings-option-frame--sound">
+                  <button className="settings-option settings-option--sound" type="button" onClick={() => chooseAction("Aquí podrás configurar los efectos y avisos sonoros.")}>
+                    <span className="settings-option__icon"><Icon name="volume" size={25} /></span>
+                    <strong>Sonido</strong>
+                    <Icon name="arrow" size={20} />
+                  </button>
+                </div>
+                <div className="settings-option-frame settings-option-frame--help">
+                  <button className="settings-option settings-option--help" type="button" onClick={() => chooseAction("Los tutoriales y recursos de ayuda se agregarán aquí.")}>
+                    <span className="settings-option__icon"><Icon name="help" size={25} /></span>
+                    <strong>Tutoriales y ayuda</strong>
+                    <Icon name="arrow" size={20} />
+                  </button>
+                </div>
+                <div className="settings-option-frame settings-option-frame--accessibility">
+                  <button className="settings-option settings-option--accessibility" type="button" onClick={() => chooseAction("Aquí podrás ajustar movimiento, contraste y otras ayudas visuales.")}>
+                    <span className="settings-option__icon"><Icon name="accessibility" size={25} /></span>
+                    <strong>Accesibilidad</strong>
+                    <Icon name="arrow" size={20} />
+                  </button>
+                </div>
               </div>
             </section>
           )
@@ -709,6 +743,7 @@ function App() {
 
       <QuizCreatorModal isOpen={isCreatorOpen} onClose={() => setIsCreatorOpen(false)} onCreate={createQuizDraft} />
       <QuizManageModal quiz={managedQuiz} mode={manageMode} onClose={closeManageQuiz} onConfirm={confirmManageQuiz} />
+      <QuizImportModal isOpen={isImportModalOpen} onClose={() => setIsImportModalOpen(false)} onChooseFile={chooseQuizImportFile} onImportText={importQuizContent} />
       <QuizImportConflictModal conflict={importConflict} onClose={() => setImportConflict(null)} onConfirm={confirmConflictingImport} />
       <QuizExportModal quiz={exportingQuiz} onClose={() => setExportingQuiz(null)} onExport={exportQuizFile} onDrive={openGoogleDrive} />
       <audio ref={musicAudioRef} src={currentMusicTrack?.src} preload="metadata" onEnded={playNextMusicTrack} />

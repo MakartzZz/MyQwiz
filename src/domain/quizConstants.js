@@ -2,6 +2,7 @@ export const QUIZ_SCHEMA_VERSION = 2;
 
 export const QUESTION_TYPES = Object.freeze({
   MULTIPLE_CHOICE: "multiple-choice",
+  TRUE_FALSE: "true-false",
   MATCHING: "matching",
   FILL_BLANK: "fill-blank",
   SHORT_ANSWER: "short-answer",
@@ -60,6 +61,7 @@ export const DEFAULT_GAME_RULES = Object.freeze({
   race: Object.freeze({
     secondsByQuestionType: Object.freeze({
       [QUESTION_TYPES.MULTIPLE_CHOICE]: 15,
+      [QUESTION_TYPES.TRUE_FALSE]: 10,
       [QUESTION_TYPES.FILL_BLANK]: 15,
       [QUESTION_TYPES.MATCHING]: 60,
       [QUESTION_TYPES.SHORT_ANSWER]: 180,

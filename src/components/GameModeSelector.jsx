@@ -35,6 +35,7 @@ const modeSoundPaths = {
 
 const questionTypeLabels = {
   [QUESTION_TYPES.MULTIPLE_CHOICE]: "Selección múltiple",
+  [QUESTION_TYPES.TRUE_FALSE]: "Verdadero o falso",
   [QUESTION_TYPES.FILL_BLANK]: "Completar",
   [QUESTION_TYPES.MATCHING]: "Asociar",
   [QUESTION_TYPES.SHORT_ANSWER]: "Respuesta breve",

@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { DEFAULT_GAME_RULES, GAME_MODES, QUESTION_TYPES } from "../domain/quizConstants.js";
 import { getRaceTimeForQuestion } from "../domain/gameModes.js";
 import { calculateScore, evaluateQuestionAnswer, prepareQuizForPlay } from "../domain/quizGameplay.js";
+import GameFeedbackReaction from "./GameFeedbackReaction.jsx";
 import { QuizIcon } from "./QuizIcon.jsx";
 
 const modeLabels = {
@@ -13,6 +14,7 @@ const modeLabels = {
 
 const questionTypeLabels = {
   [QUESTION_TYPES.MULTIPLE_CHOICE]: "Selección múltiple",
+  [QUESTION_TYPES.TRUE_FALSE]: "Verdadero o falso",
   [QUESTION_TYPES.FILL_BLANK]: "Completar",
   [QUESTION_TYPES.MATCHING]: "Asociar",
   [QUESTION_TYPES.SHORT_ANSWER]: "Respuesta breve",
@@ -23,7 +25,14 @@ const createEmptyAnswer = (question) => {
   return "";
 };
 
-function QuizPlayer({ quiz, gameMode, gameRules = {}, initialSession, onExit, onComplete, onProgress, onRetry }) {
+const playGameSound = (sound) => {
+  if (!sound) return;
+  const playback = sound.cloneNode();
+  playback.volume = sound.volume;
+  playback.play().catch(() => {});
+};
+
+function QuizPlayer({ quiz, theme, gameMode, gameRules = {}, initialSession, onExit, onComplete, onProgress, onRetry }) {
   const restoredSession = initialSession?.quizId === quiz.id && initialSession?.gameMode === gameMode
     ? initialSession
     : null;
@@ -32,6 +41,21 @@ function QuizPlayer({ quiz, gameMode, gameRules = {}, initialSession, onExit, on
   const [answer, setAnswer] = useState(() => restoredSession?.answer ?? createEmptyAnswer(questions[restoredSession?.questionIndex ?? 0]));
   const [isChecked, setIsChecked] = useState(restoredSession?.isChecked ?? false);
   const [isCorrect, setIsCorrect] = useState(restoredSession?.isCorrect ?? false);
+  const [feedbackReaction, setFeedbackReaction] = useState(() => (
+    restoredSession?.isChecked ? (restoredSession.isCorrect ? "correct" : "wrong") : null
+  ));
+  const [isReviewingMatching, setIsReviewingMatching] = useState(false);
+  const [activeMatchingItem, setActiveMatchingItem] = useState(null);
+  const [matchingReview, setMatchingReview] = useState(() => {
+    const restoredQuestion = questions[restoredSession?.questionIndex ?? 0];
+    if (!restoredSession?.isChecked || restoredQuestion?.type !== QUESTION_TYPES.MATCHING) return {};
+    return Object.fromEntries(restoredQuestion.leftItems.map((item) => [
+      item.id,
+      restoredSession.answer?.[item.id] === item.id ? "correct" : "wrong",
+    ]));
+  });
+  const [questionTransition, setQuestionTransition] = useState("idle");
+  const [automaticNextSeconds, setAutomaticNextSeconds] = useState(null);
   const [showReference, setShowReference] = useState(restoredSession?.showReference ?? false);
   const [correctAnswers, setCorrectAnswers] = useState(restoredSession?.correctAnswers ?? 0);
   const [lives, setLives] = useState(restoredSession?.lives ?? DEFAULT_GAME_RULES.lives.initialLives);
@@ -43,40 +67,75 @@ function QuizPlayer({ quiz, gameMode, gameRules = {}, initialSession, onExit, on
   ));
   const [isFinished, setIsFinished] = useState(false);
   const completionSent = useRef(false);
+  const previousBestScore = useRef(Number.isFinite(quiz.stats?.bestScore) ? quiz.stats.bestScore : null);
   const clockSoundRef = useRef(null);
   const loseLifeSoundRef = useRef(null);
+  const correctAnswerSoundRef = useRef(null);
+  const badAnswerSoundRef = useRef(null);
+  const nextQuestionSoundRef = useRef(null);
   const clockAlertQuestionRef = useRef(null);
   const lifePopTimerRef = useRef(null);
+  const sequenceTimersRef = useRef(new Set());
   const currentQuestion = questions[questionIndex];
   const score = calculateScore(correctAnswers, questions.length);
+  const isNewBestScore = previousBestScore.current === null || score > previousBestScore.current;
+  const isTiedBestScore = previousBestScore.current !== null && score === previousBestScore.current;
+  const recordedBestScore = previousBestScore.current === null
+    ? score
+    : Math.max(previousBestScore.current, score);
+  const isTerminalGameOver = isChecked && (
+    (gameMode === GAME_MODES.LIVES && lives === 0)
+    || (gameMode === GAME_MODES.CHECKPOINT && timeLeft === 0)
+  );
 
   const finish = useCallback(() => setIsFinished(true), []);
 
   useEffect(() => {
     const clockSound = new Audio("/sounds/gameplay/clock.mp3");
     const loseLifeSound = new Audio("/sounds/gameplay/lose-life.mp3");
-    clockSound.preload = "auto";
-    loseLifeSound.preload = "auto";
+    const correctAnswerSound = new Audio("/sounds/gameplay/correct-answer.mp3");
+    const badAnswerSound = new Audio("/sounds/gameplay/bad-answer.mp3");
+    const nextQuestionSound = new Audio("/sounds/gameplay/next-question.mp3");
+    [clockSound, loseLifeSound, correctAnswerSound, badAnswerSound, nextQuestionSound].forEach((sound) => {
+      sound.preload = "auto";
+    });
     clockSound.volume = 0.6;
     loseLifeSound.volume = 0.68;
+    correctAnswerSound.volume = 0.58;
+    badAnswerSound.volume = 0.58;
+    nextQuestionSound.volume = 1;
     clockSoundRef.current = clockSound;
     loseLifeSoundRef.current = loseLifeSound;
+    correctAnswerSoundRef.current = correctAnswerSound;
+    badAnswerSoundRef.current = badAnswerSound;
+    nextQuestionSoundRef.current = nextQuestionSound;
 
     return () => {
       window.clearTimeout(lifePopTimerRef.current);
-      clockSound.pause();
-      loseLifeSound.pause();
+      sequenceTimersRef.current.forEach((timer) => window.clearTimeout(timer));
+      sequenceTimersRef.current.clear();
+      [clockSound, loseLifeSound, correctAnswerSound, badAnswerSound, nextQuestionSound].forEach((sound) => sound.pause());
       clockSoundRef.current = null;
       loseLifeSoundRef.current = null;
+      correctAnswerSoundRef.current = null;
+      badAnswerSoundRef.current = null;
+      nextQuestionSoundRef.current = null;
     };
   }, []);
 
-  const checkAnswer = useCallback((forcedAnswer = answer) => {
-    if (isChecked || isFinished) return;
-    const result = evaluateQuestionAnswer(currentQuestion, forcedAnswer);
-    setAnswer(forcedAnswer);
+  const queueSequenceStep = useCallback((callback, delay) => {
+    const timer = window.setTimeout(() => {
+      sequenceTimersRef.current.delete(timer);
+      callback();
+    }, delay);
+    sequenceTimersRef.current.add(timer);
+  }, []);
+
+  const applyAnswerResult = useCallback((result, withSound = true, reason = "answer") => {
     setIsCorrect(result);
     setIsChecked(true);
+    setFeedbackReaction(result ? "correct" : reason === "timeout" ? "timeout" : gameMode === GAME_MODES.LIVES ? "life" : "wrong");
+    if (withSound) playGameSound(result ? correctAnswerSoundRef.current : badAnswerSoundRef.current);
     if (result) {
       setCorrectAnswers((value) => value + 1);
       if (gameMode === GAME_MODES.CHECKPOINT) {
@@ -99,46 +158,84 @@ function QuizPlayer({ quiz, gameMode, gameRules = {}, initialSession, onExit, on
         setTimeLeft((value) => Math.max(0, value - (gameRules.incorrectPenaltySeconds ?? DEFAULT_GAME_RULES.checkpoint.incorrectPenaltySeconds)));
       }
     }
-  }, [answer, currentQuestion, gameMode, gameRules.correctBonusSeconds, gameRules.incorrectPenaltySeconds, isChecked, isFinished, lives]);
+  }, [gameMode, gameRules.correctBonusSeconds, gameRules.incorrectPenaltySeconds, lives]);
+
+  const checkAnswer = useCallback((forcedAnswer = answer, { reason = "answer" } = {}) => {
+    if (isChecked || isFinished || isReviewingMatching) return;
+    const result = evaluateQuestionAnswer(currentQuestion, forcedAnswer);
+    setAnswer(forcedAnswer);
+
+    if (currentQuestion.type !== QUESTION_TYPES.MATCHING) {
+      applyAnswerResult(result, true, reason);
+      return;
+    }
+
+    setIsReviewingMatching(true);
+    setMatchingReview({});
+    currentQuestion.leftItems.forEach((item, index) => {
+      const startDelay = index * 720;
+      const pairIsCorrect = forcedAnswer?.[item.id] === item.id;
+      queueSequenceStep(() => {
+        setMatchingReview((review) => ({ ...review, [item.id]: "checking" }));
+      }, startDelay);
+      queueSequenceStep(() => {
+        setMatchingReview((review) => ({ ...review, [item.id]: pairIsCorrect ? "correct" : "wrong" }));
+        playGameSound(pairIsCorrect ? correctAnswerSoundRef.current : badAnswerSoundRef.current);
+        if (index === currentQuestion.leftItems.length - 1) {
+          queueSequenceStep(() => {
+            setIsReviewingMatching(false);
+            applyAnswerResult(result, false, reason);
+          }, 420);
+        }
+      }, startDelay + 260);
+    });
+  }, [answer, applyAnswerResult, currentQuestion, isChecked, isFinished, isReviewingMatching, queueSequenceStep]);
 
   useEffect(() => {
-    if (isFinished || isChecked || ![GAME_MODES.CHECKPOINT, GAME_MODES.RACE].includes(gameMode)) return undefined;
+    if (isFinished || isChecked || isReviewingMatching || ![GAME_MODES.CHECKPOINT, GAME_MODES.RACE].includes(gameMode)) return undefined;
     const timer = window.setInterval(() => {
       setTimeLeft((value) => {
         if (value <= 1) {
           window.clearInterval(timer);
-          window.setTimeout(() => checkAnswer(createEmptyAnswer(currentQuestion)), 0);
+          window.setTimeout(() => checkAnswer(createEmptyAnswer(currentQuestion), { reason: "timeout" }), 0);
           return 0;
         }
         return value - 1;
       });
     }, 1000);
     return () => window.clearInterval(timer);
-  }, [checkAnswer, currentQuestion, gameMode, isChecked, isFinished]);
+  }, [checkAnswer, currentQuestion, gameMode, isChecked, isFinished, isReviewingMatching]);
 
   useEffect(() => {
     const isTimedMode = [GAME_MODES.CHECKPOINT, GAME_MODES.RACE].includes(gameMode);
-    if (!isTimedMode || isChecked || isFinished || timeLeft <= 0 || timeLeft > 3) return;
+    if (!isTimedMode || isChecked || isFinished || isReviewingMatching || timeLeft <= 0 || timeLeft > 3) return;
     if (clockAlertQuestionRef.current === questionIndex) return;
     clockAlertQuestionRef.current = questionIndex;
     const clockSound = clockSoundRef.current;
     if (!clockSound) return;
     clockSound.currentTime = 0;
     clockSound.play().catch(() => {});
-  }, [gameMode, isChecked, isFinished, questionIndex, timeLeft]);
+  }, [gameMode, isChecked, isFinished, isReviewingMatching, questionIndex, timeLeft]);
 
   useEffect(() => {
-    if (!isChecked && !isFinished) return;
+    if (!isChecked && !isFinished && !isReviewingMatching) return;
     const clockSound = clockSoundRef.current;
     if (!clockSound) return;
     clockSound.pause();
     clockSound.currentTime = 0;
-  }, [isChecked, isFinished]);
+  }, [isChecked, isFinished, isReviewingMatching]);
 
   useEffect(() => {
-    if (isChecked && gameMode === GAME_MODES.LIVES && lives === 0) finish();
-    if (isChecked && gameMode === GAME_MODES.CHECKPOINT && timeLeft === 0) finish();
-  }, [finish, gameMode, isChecked, lives, timeLeft]);
+    if (!isTerminalGameOver) return undefined;
+    const finishTimer = window.setTimeout(finish, 1200);
+    return () => window.clearTimeout(finishTimer);
+  }, [finish, isTerminalGameOver]);
+
+  useEffect(() => {
+    if (isChecked && timeLeft === 0 && [GAME_MODES.CHECKPOINT, GAME_MODES.RACE].includes(gameMode)) {
+      setFeedbackReaction("timeout");
+    }
+  }, [gameMode, isChecked, timeLeft]);
 
   useEffect(() => {
     if (!isFinished || completionSent.current) return;
@@ -172,21 +269,62 @@ function QuizPlayer({ quiz, gameMode, gameRules = {}, initialSession, onExit, on
   }, [answer, correctAnswers, gameMode, gameRules, isChecked, isCorrect, isFinished, lives, onProgress, questionIndex, questions, quiz.iconId, quiz.id, quiz.title, showReference, timeLeft]);
 
   const canSubmit = currentQuestion.type === QUESTION_TYPES.MATCHING
-    ? currentQuestion.leftItems.every((item) => answer[item.id])
-    : Boolean(String(answer).trim());
+    ? !isReviewingMatching && currentQuestion.leftItems.every((item) => answer[item.id])
+    : currentQuestion.type === QUESTION_TYPES.TRUE_FALSE
+      ? typeof answer === "boolean"
+      : Boolean(String(answer).trim());
 
-  const goNext = () => {
-    if (questionIndex >= questions.length - 1) {
-      finish();
-      return;
+  const goNext = useCallback(() => {
+    if (questionTransition !== "idle" || isReviewingMatching) return;
+    playGameSound(nextQuestionSoundRef.current);
+    setQuestionTransition("out");
+    queueSequenceStep(() => {
+      if (questionIndex >= questions.length - 1) {
+        finish();
+        return;
+      }
+      const nextIndex = questionIndex + 1;
+      setQuestionIndex(nextIndex);
+      setAnswer(createEmptyAnswer(questions[nextIndex]));
+      setIsChecked(false);
+      setIsCorrect(false);
+      setShowReference(false);
+      setMatchingReview({});
+      setActiveMatchingItem(null);
+      setFeedbackReaction(null);
+      setQuestionTransition("in");
+      if (gameMode === GAME_MODES.RACE) setTimeLeft(getRaceTimeForQuestion(questions[nextIndex], gameRules.secondsByQuestionType));
+      queueSequenceStep(() => setQuestionTransition("idle"), 360);
+    }, 230);
+  }, [finish, gameMode, gameRules.secondsByQuestionType, isReviewingMatching, questionIndex, questionTransition, questions, queueSequenceStep]);
+
+  useEffect(() => {
+    if (!isChecked || !isCorrect || isFinished || isReviewingMatching || isTerminalGameOver || questionTransition !== "idle") {
+      setAutomaticNextSeconds(null);
+      return undefined;
     }
-    const nextIndex = questionIndex + 1;
-    setQuestionIndex(nextIndex);
-    setAnswer(createEmptyAnswer(questions[nextIndex]));
-    setIsChecked(false);
-    setIsCorrect(false);
-    setShowReference(false);
-    if (gameMode === GAME_MODES.RACE) setTimeLeft(getRaceTimeForQuestion(questions[nextIndex], gameRules.secondsByQuestionType));
+    setAutomaticNextSeconds(3);
+    const countdownInterval = window.setInterval(() => {
+      setAutomaticNextSeconds((seconds) => Math.max(1, seconds - 1));
+    }, 1000);
+    const automaticNextTimer = window.setTimeout(goNext, 3000);
+    return () => {
+      window.clearInterval(countdownInterval);
+      window.clearTimeout(automaticNextTimer);
+    };
+  }, [goNext, isChecked, isCorrect, isFinished, isReviewingMatching, isTerminalGameOver, questionTransition]);
+
+  const assignMatchingPair = (rightItemId) => {
+    if (!activeMatchingItem || isChecked || isReviewingMatching) return;
+    setAnswer((current) => {
+      const nextAnswer = { ...current };
+      Object.entries(nextAnswer).forEach(([leftItemId, assignedRightItemId]) => {
+        if (assignedRightItemId === rightItemId) delete nextAnswer[leftItemId];
+      });
+      nextAnswer[activeMatchingItem] = rightItemId;
+      return nextAnswer;
+    });
+    setActiveMatchingItem(null);
   };
 
   if (isFinished) {
@@ -197,6 +335,13 @@ function QuizPlayer({ quiz, gameMode, gameRules = {}, initialSession, onExit, on
         <h2 id="quiz-result-title">{score}%</h2>
         <strong>{score >= 80 ? "¡Excelente trabajo!" : score >= 60 ? "Vas por buen camino" : "Sigamos practicando"}</strong>
         <p>Acertaste {correctAnswers} de {questions.length} preguntas en modo {modeLabels[gameMode]}.</p>
+        <div className={`quiz-result__record ${isNewBestScore ? "is-new" : ""}`}>
+          {isNewBestScore
+            ? `Nueva mejor nota guardada: ${recordedBestScore}%`
+            : isTiedBestScore
+              ? `Igualaste tu mejor nota: ${recordedBestScore}%`
+              : `Tu mejor nota registrada sigue siendo ${recordedBestScore}%`}
+        </div>
         <div className="quiz-result__actions">
           <button type="button" className="quiz-play-secondary" onClick={onExit}>Volver a la biblioteca</button>
           <button type="button" className="quiz-play-primary" onClick={onRetry}>Volver a intentar</button>
@@ -225,7 +370,7 @@ function QuizPlayer({ quiz, gameMode, gameRules = {}, initialSession, onExit, on
           )}
           {[GAME_MODES.CHECKPOINT, GAME_MODES.RACE].includes(gameMode) && (
             <span className="quiz-play__timer">
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <svg className={timeLeft > 0 && timeLeft <= 3 && !isChecked && !isReviewingMatching ? "is-ending" : undefined} width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                 <circle cx="12" cy="13" r="8" /><path d="M12 9v4l2.5 1.5M9 2h6M12 5V2" />
               </svg>
               {timeLeft}s
@@ -241,7 +386,7 @@ function QuizPlayer({ quiz, gameMode, gameRules = {}, initialSession, onExit, on
         <strong>{questionIndex + 1} / {questions.length}</strong>
       </div>
 
-      <article className="quiz-question">
+      <article className={`quiz-question ${questionTransition === "out" ? "is-swiping-out" : ""} ${questionTransition === "in" ? "is-swiping-in" : ""} ${isChecked && questionTransition === "idle" ? isCorrect ? "is-answer-correct" : "is-answer-wrong" : ""}`}>
         <div className="quiz-question__meta">
           <span>Pregunta {questionIndex + 1} de {questions.length}</span>
           <span>{questionTypeLabels[currentQuestion.type]}</span>
@@ -264,6 +409,25 @@ function QuizPlayer({ quiz, gameMode, gameRules = {}, initialSession, onExit, on
           </div>
         )}
 
+        {currentQuestion.type === QUESTION_TYPES.TRUE_FALSE && (
+          <div className="quiz-true-false-answer">
+            {[
+              { value: true, label: "Verdadero", mark: "V" },
+              { value: false, label: "Falso", mark: "F" },
+            ].map((option) => (
+              <button
+                className={`${answer === option.value ? "is-selected" : ""} ${isChecked && currentQuestion.correctAnswer === option.value ? "is-correct" : ""} ${isChecked && answer === option.value && currentQuestion.correctAnswer !== option.value ? "is-wrong" : ""}`}
+                type="button"
+                key={String(option.value)}
+                disabled={isChecked}
+                onClick={() => setAnswer(option.value)}
+              >
+                <span>{option.mark}</span>{option.label}
+              </button>
+            ))}
+          </div>
+        )}
+
         {currentQuestion.type === QUESTION_TYPES.FILL_BLANK && (
           <label className="quiz-text-answer">
             <span>Tu respuesta</span>
@@ -273,38 +437,84 @@ function QuizPlayer({ quiz, gameMode, gameRules = {}, initialSession, onExit, on
 
         {currentQuestion.type === QUESTION_TYPES.MATCHING && (
           <div className="quiz-matching-answer">
-            {currentQuestion.leftItems.map((item) => (
-              <label key={item.id}>
-                <span>{item.text}</span>
-                <select disabled={isChecked} value={answer[item.id] ?? ""} onChange={(event) => setAnswer((current) => ({ ...current, [item.id]: event.target.value }))}>
-                  <option value="">Elige su pareja</option>
-                  {currentQuestion.rightItems.map((rightItem) => <option key={rightItem.id} value={rightItem.id}>{rightItem.text}</option>)}
-                </select>
-              </label>
-            ))}
+            <p className="quiz-matching-answer__hint">
+              {activeMatchingItem ? "Ahora elige su pareja en la columna derecha" : "Elige un elemento de la izquierda y luego su pareja"}
+            </p>
+            <div className="quiz-matching-answer__board">
+              <div className="quiz-matching-answer__column">
+                <span className="quiz-matching-answer__heading">Elementos</span>
+                {currentQuestion.leftItems.map((item, index) => {
+                  const reviewState = matchingReview[item.id];
+                  return (
+                    <button
+                      className={`${activeMatchingItem === item.id ? "is-active" : ""} ${answer[item.id] ? "is-paired" : ""} ${reviewState ? `is-${reviewState}` : ""}`}
+                      type="button"
+                      key={item.id}
+                      disabled={isChecked || isReviewingMatching}
+                      onClick={() => setActiveMatchingItem((current) => current === item.id ? null : item.id)}
+                    >
+                      <b>{answer[item.id] ? index + 1 : activeMatchingItem === item.id ? "?" : "·"}</b>
+                      <span>{item.text}</span>
+                      {reviewState && <i aria-hidden="true">{reviewState === "checking" ? "…" : reviewState === "correct" ? "✓" : "×"}</i>}
+                    </button>
+                  );
+                })}
+              </div>
+
+              <div className="quiz-matching-answer__connector" aria-hidden="true"><span>↔</span></div>
+
+              <div className="quiz-matching-answer__column">
+                <span className="quiz-matching-answer__heading">Parejas</span>
+                {currentQuestion.rightItems.map((rightItem) => {
+                  const pairedIndex = currentQuestion.leftItems.findIndex((leftItem) => answer[leftItem.id] === rightItem.id);
+                  const pairedLeftItem = pairedIndex >= 0 ? currentQuestion.leftItems[pairedIndex] : null;
+                  const reviewState = pairedLeftItem ? matchingReview[pairedLeftItem.id] : null;
+                  return (
+                    <button
+                      className={`${pairedLeftItem ? "is-paired" : ""} ${activeMatchingItem ? "is-available" : ""} ${reviewState ? `is-${reviewState}` : ""}`}
+                      type="button"
+                      key={rightItem.id}
+                      disabled={isChecked || isReviewingMatching || !activeMatchingItem}
+                      onClick={() => assignMatchingPair(rightItem.id)}
+                    >
+                      <b>{pairedIndex >= 0 ? pairedIndex + 1 : "·"}</b>
+                      <span>{rightItem.text}</span>
+                      {reviewState && <i aria-hidden="true">{reviewState === "checking" ? "…" : reviewState === "correct" ? "✓" : "×"}</i>}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
           </div>
         )}
 
         {currentQuestion.type === QUESTION_TYPES.SHORT_ANSWER && (
           <div className="quiz-short-answer">
-            <label className="quiz-text-answer">
-              <span>Tu respuesta</span>
-              <textarea rows="5" value={typeof answer === "string" ? answer : ""} disabled={showReference || isChecked} onChange={(event) => setAnswer(event.target.value)} />
-            </label>
+            {isChecked ? (
+              <div className="quiz-submitted-answer">
+                <span>Respuesta registrada</span>
+                <p>{typeof answer === "string" && answer.trim() ? answer : "Respuesta revisada manualmente"}</p>
+              </div>
+            ) : (
+              <label className="quiz-text-answer">
+                <span>Tu respuesta</span>
+                <textarea rows="5" value={typeof answer === "string" ? answer : ""} disabled={showReference} onChange={(event) => setAnswer(event.target.value)} />
+              </label>
+            )}
             {showReference && !isChecked && (
               <div className="quiz-reference-answer">
                 <span>Respuesta de referencia</span>
                 <p>{currentQuestion.referenceAnswer}</p>
                 <div>
-                  <button type="button" onClick={() => checkAnswer(false)}>Necesito repasarla</button>
-                  <button type="button" onClick={() => checkAnswer(true)}>La tuve bien</button>
+                  <button type="button" onClick={() => applyAnswerResult(false)}>Necesito repasarla</button>
+                  <button type="button" onClick={() => applyAnswerResult(true)}>La tuve bien</button>
                 </div>
               </div>
             )}
           </div>
         )}
 
-        {isChecked && (
+        {isChecked && currentQuestion.type !== QUESTION_TYPES.MATCHING && (
           <div className={`quiz-feedback ${isCorrect ? "is-correct" : "is-wrong"}`}>
             <strong>{isCorrect ? "¡Correcto!" : "No fue la respuesta correcta"}</strong>
             {currentQuestion.explanation && <p>{currentQuestion.explanation}</p>}
@@ -315,12 +525,17 @@ function QuizPlayer({ quiz, gameMode, gameRules = {}, initialSession, onExit, on
           {!isChecked && currentQuestion.type === QUESTION_TYPES.SHORT_ANSWER ? (
             <button className="quiz-play-primary" type="button" disabled={!canSubmit || showReference} onClick={() => setShowReference(true)}>Comparar respuesta</button>
           ) : !isChecked ? (
-            <button className="quiz-play-primary" type="button" disabled={!canSubmit} onClick={() => checkAnswer()}>Comprobar</button>
+            <button className="quiz-play-primary" type="button" disabled={!canSubmit || isReviewingMatching} onClick={() => checkAnswer()}>{isReviewingMatching ? "Revisando…" : "Comprobar"}</button>
           ) : (
-            <button className="quiz-play-primary" type="button" onClick={goNext}>{questionIndex === questions.length - 1 ? "Ver resultado" : "Siguiente"} →</button>
+            <button className="quiz-play-primary" type="button" disabled={questionTransition !== "idle" || isTerminalGameOver} onClick={goNext}>
+              {questionIndex === questions.length - 1 ? "Ver resultado" : "Siguiente"}
+              {automaticNextSeconds && <span className="quiz-play-primary__countdown">{automaticNextSeconds}s</span>}
+              →
+            </button>
           )}
         </div>
       </article>
+      <GameFeedbackReaction type={isChecked && questionTransition === "idle" ? feedbackReaction : null} theme={theme} />
     </section>
   );
 }

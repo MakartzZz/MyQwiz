@@ -7,6 +7,7 @@ import {
 
 const checkpointQuestionTypes = new Set([
   QUESTION_TYPES.MULTIPLE_CHOICE,
+  QUESTION_TYPES.TRUE_FALSE,
   QUESTION_TYPES.FILL_BLANK,
 ]);
 
@@ -35,7 +36,7 @@ export const canUseGameMode = (quiz, gameMode) => {
     if (hasUnsupportedQuestion) {
       return {
         available: false,
-        reason: "Este modo solo admite preguntas de selección múltiple y completar.",
+        reason: "Este modo solo admite selección múltiple, verdadero o falso y completar.",
       };
     }
   }

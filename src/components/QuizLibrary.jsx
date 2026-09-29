@@ -26,11 +26,16 @@ function CardActionIcon({ name }) {
 
 function QuizCard({ quiz, onOpen, onPlay, onRename, onDuplicate, onDelete, onExport }) {
   const isReady = quiz.status === "ready";
+  const bestScore = Number.isFinite(quiz.stats?.bestScore) ? quiz.stats.bestScore : null;
 
   return (
     <article className="quiz-library-card">
       <div className="quiz-library-card__top">
         <span className={`quiz-status ${quiz.status === "ready" ? "is-ready" : ""}`}>{quiz.status === "ready" ? "Listo" : "Borrador"}</span>
+        <span className={`quiz-best-score ${bestScore === null ? "is-empty" : ""}`}>
+          <small>Mejor nota</small>
+          <strong>{bestScore === null ? "—" : `${bestScore}%`}</strong>
+        </span>
       </div>
       <div className="quiz-library-card__identity">
         <span className="quiz-library-card__icon"><QuizIcon iconId={quiz.iconId} size={27} /></span>
@@ -79,7 +84,7 @@ function QuizGroup({ title, description, quizzes, ...actions }) {
   );
 }
 
-function QuizLibrary({ quizzes, onCreate, onOpen, onPlay, onRename, onDuplicate, onDelete, onExport }) {
+function QuizLibrary({ quizzes, onOpen, onPlay, onRename, onDuplicate, onDelete, onExport }) {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedIcon, setSelectedIcon] = useState("all");
 
@@ -96,8 +101,8 @@ function QuizLibrary({ quizzes, onCreate, onOpen, onPlay, onRename, onDuplicate,
     return (
       <div className="empty-library">
         <div className="empty-library__illustration"><span>?</span><i>✓</i></div>
-        <div><h3>Aquí vivirán tus quizzes</h3><p>Crea tu primer banco de preguntas y vuelve a practicarlo siempre que quieras.</p></div>
-        <button className="secondary-button" type="button" onClick={onCreate}>Nuevo quiz</button>
+        <h3>Aquí vivirán tus quizzes</h3>
+        <p>Crea tu primer banco de preguntas y vuelve a practicarlo siempre que quieras.</p>
       </div>
     );
   }

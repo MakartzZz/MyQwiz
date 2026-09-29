@@ -59,7 +59,7 @@
 
 .main-content { width: min(100% - 250px, 1300px); min-height: 100vh; margin-left: 250px; padding: 34px clamp(28px, 4vw, 64px) 54px; }
 .main-content--themes { position: relative; width: calc(100% - 250px); max-width: none; overflow: hidden; background: var(--theme-page-bg); }
-.main-content--workspace { position: relative; width: calc(100% - 250px); max-width: none; overflow: hidden; background: var(--page-background, var(--page-bg)); isolation: isolate; }
+.main-content--workspace { position: relative; width: calc(100% - 250px); max-width: none; overflow: clip; background: var(--page-background, var(--page-bg)); isolation: isolate; }
 .main-content--workspace::before { position: absolute; z-index: -2; inset: -24%; background-image: linear-gradient(118deg, transparent 0 46%, color-mix(in srgb, var(--purple) 11%, transparent) 46% 48%, transparent 48% 100%), radial-gradient(circle, color-mix(in srgb, var(--ink) 14%, transparent) 1.2px, transparent 1.5px); background-position: 0 0, 0 0; background-size: 190px 190px, 28px 28px; content: ""; transform: rotate(-4deg); animation: workspace-pattern-shift 24s linear infinite; }
 .main-content--workspace::after { position: absolute; z-index: -1; right: -4vw; bottom: -16vh; color: color-mix(in srgb, var(--purple) 13%, transparent); font: 900 clamp(22rem, 38vw, 45rem)/.7 "Archivo", sans-serif; letter-spacing: -.14em; pointer-events: none; transform: rotate(-10deg); animation: workspace-symbol-float 8s ease-in-out infinite alternate; }
 .main-content--home::after { content: "?"; }

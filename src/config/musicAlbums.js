@@ -42,11 +42,24 @@ export const musicAlbums = [
     ],
   },
   {
-    id: "lluvia-en-la-ventana",
-    title: "Lluvia en la Ventana",
-    description: "Piano minimalista y una tarde de lluvia.",
-    cover: "/music/lluvia-en-la-ventana/cover.png",
-    tracks: [],
+    id: "ritmo-trivia",
+    title: "Ritmo Trivia",
+    description: "Beats vibrantes para pensar, responder y seguir el ritmo.",
+    cover: "/music/ritmo-trivia/cover.png",
+    tracks: [
+      { title: "Trivia Groove", src: "/music/ritmo-trivia/01-trivia-groove.mp3" },
+      { title: "Trivia Pulse", src: "/music/ritmo-trivia/02-trivia-pulse.mp3" },
+    ],
+  },
+  {
+    id: "trivia-lounge",
+    title: "Trivia Lounge",
+    description: "Jazz elegante y ritmo lounge para pensar sin perder el swing.",
+    cover: "/music/trivia-lounge/cover.png",
+    tracks: [
+      { title: "Lounge Shuffle", src: "/music/trivia-lounge/01-lounge-shuffle.mp3" },
+      { title: "Casino Lounge", src: "/music/trivia-lounge/02-casino-lounge.mp3" },
+    ],
   },
   {
     id: "impulso-solar",

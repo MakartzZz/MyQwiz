@@ -1,4 +1,5 @@
 import { sileo } from "sileo";
+import { playNotificationSound } from "./uiSounds.js";
 
 const createOptions = (title, description, options = {}) => ({
   title,
@@ -6,29 +7,35 @@ const createOptions = (title, description, options = {}) => ({
   ...options,
 });
 
+const announce = (showNotification, options = {}) => {
+  const { sound = true, ...notificationOptions } = options;
+  if (sound) playNotificationSound();
+  return showNotification(notificationOptions);
+};
+
 export const systemNotifications = {
-  success(title, description, options) {
-    return sileo.success(createOptions(title, description, options));
+  success(title, description, options = {}) {
+    return announce((notificationOptions) => sileo.success(createOptions(title, description, notificationOptions)), options);
   },
 
-  error(title, description, options) {
-    return sileo.error(createOptions(title, description, options));
+  error(title, description, options = {}) {
+    return announce((notificationOptions) => sileo.error(createOptions(title, description, notificationOptions)), options);
   },
 
-  warning(title, description, options) {
-    return sileo.warning(createOptions(title, description, options));
+  warning(title, description, options = {}) {
+    return announce((notificationOptions) => sileo.warning(createOptions(title, description, notificationOptions)), options);
   },
 
-  info(title, description, options) {
-    return sileo.info(createOptions(title, description, options));
+  info(title, description, options = {}) {
+    return announce((notificationOptions) => sileo.info(createOptions(title, description, notificationOptions)), options);
   },
 
   action(title, description, button, options = {}) {
-    return sileo.action(createOptions(title, description, { ...options, button }));
+    return announce((notificationOptions) => sileo.action(createOptions(title, description, { ...notificationOptions, button })), options);
   },
 
-  promise(task, messages) {
-    return sileo.promise(task, messages);
+  promise(task, messages, options = {}) {
+    return announce(() => sileo.promise(task, messages), options);
   },
 
   dismiss(notificationId) {

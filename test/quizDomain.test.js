@@ -6,6 +6,7 @@ import { createQuestion, createQuiz, duplicateQuiz } from "../src/domain/quizFac
 import { calculateScore, evaluateQuestionAnswer, prepareQuizForPlay, shuffleItems } from "../src/domain/quizGameplay.js";
 import { migrateQuiz } from "../src/domain/quizMigration.js";
 import { validateQuiz } from "../src/domain/quizValidation.js";
+import { buildQuizPrompt } from "../src/services/quizPrompt.js";
 import { areQuizzesEquivalent, parseQuizImport, serializeQuiz } from "../src/services/quizTransfer.js";
 
 test("createQuiz generates a versioned draft without fixing a game mode", () => {
@@ -29,12 +30,14 @@ test("createQuiz generates a versioned draft without fixing a game mode", () => 
 
 test("every supported question type receives its required initial structure", () => {
   const multipleChoice = createQuestion(QUESTION_TYPES.MULTIPLE_CHOICE);
+  const trueFalse = createQuestion(QUESTION_TYPES.TRUE_FALSE);
   const matching = createQuestion(QUESTION_TYPES.MATCHING);
   const fillBlank = createQuestion(QUESTION_TYPES.FILL_BLANK);
   const shortAnswer = createQuestion(QUESTION_TYPES.SHORT_ANSWER);
 
   assert.equal(multipleChoice.options.length, 4);
   assert.equal(multipleChoice.options.filter((option) => option.isCorrect).length, 1);
+  assert.equal(trueFalse.correctAnswer, true);
   assert.equal(matching.pairs.length, 2);
   assert.deepEqual(fillBlank.acceptedAnswers, [""]);
   assert.equal(shortAnswer.similarityThreshold, 0.7);
@@ -75,10 +78,11 @@ test("validation reports malformed imported answers without throwing", () => {
   assert.equal(validateQuiz(quiz, { requirePlayable: true }).valid, false);
 });
 
-test("checkpoint mode only accepts multiple-choice and fill-blank quizzes", () => {
+test("checkpoint mode accepts quick-answer question types", () => {
   const compatibleQuiz = createQuiz({ title: "Compatible" });
   compatibleQuiz.questions.push(
     createQuestion(QUESTION_TYPES.MULTIPLE_CHOICE),
+    createQuestion(QUESTION_TYPES.TRUE_FALSE),
     createQuestion(QUESTION_TYPES.FILL_BLANK),
   );
 
@@ -93,6 +97,10 @@ test("race mode assigns time according to the question type", () => {
   assert.equal(
     getRaceTimeForQuestion(createQuestion(QUESTION_TYPES.MULTIPLE_CHOICE)),
     15,
+  );
+  assert.equal(
+    getRaceTimeForQuestion(createQuestion(QUESTION_TYPES.TRUE_FALSE)),
+    10,
   );
   assert.equal(
     getRaceTimeForQuestion(createQuestion(QUESTION_TYPES.FILL_BLANK)),
@@ -157,6 +165,7 @@ test("exporting and importing preserves every question type and the quiz icon", 
   const quiz = createQuiz({ title: "Repaso completo", iconId: QUIZ_ICONS.MEDICINE });
   quiz.questions.push(
     createQuestion(QUESTION_TYPES.MULTIPLE_CHOICE),
+    createQuestion(QUESTION_TYPES.TRUE_FALSE),
     createQuestion(QUESTION_TYPES.FILL_BLANK),
     createQuestion(QUESTION_TYPES.MATCHING),
     createQuestion(QUESTION_TYPES.SHORT_ANSWER),
@@ -165,8 +174,10 @@ test("exporting and importing preserves every question type and the quiz icon", 
   const imported = parseQuizImport(serializeQuiz(quiz));
 
   assert.equal(imported.iconId, QUIZ_ICONS.MEDICINE);
+  assert.equal(imported.questions[1].correctAnswer, true);
   assert.deepEqual(imported.questions.map((question) => question.type), [
     QUESTION_TYPES.MULTIPLE_CHOICE,
+    QUESTION_TYPES.TRUE_FALSE,
     QUESTION_TYPES.FILL_BLANK,
     QUESTION_TYPES.MATCHING,
     QUESTION_TYPES.SHORT_ANSWER,
@@ -180,6 +191,16 @@ test("import rejects JSON files that are not MyQwiz exports", () => {
   );
 });
 
+test("import accepts JSON copied from a Markdown code block", () => {
+  const quiz = createQuiz({ title: "Copiado desde IA", iconId: QUIZ_ICONS.TECHNOLOGY });
+  const copiedContent = `\`\`\`json\n${serializeQuiz(quiz)}\n\`\`\``;
+
+  const imported = parseQuizImport(copiedContent);
+
+  assert.equal(imported.title, "Copiado desde IA");
+  assert.equal(imported.iconId, QUIZ_ICONS.TECHNOLOGY);
+});
+
 test("semantic duplicate detection ignores identifiers but detects content changes", () => {
   const original = createQuiz({ title: "Anatomía", iconId: QUIZ_ICONS.ANATOMY });
   const question = createQuestion(QUESTION_TYPES.FILL_BLANK);
@@ -191,6 +212,19 @@ test("semantic duplicate detection ignores identifiers but detects content chang
   assert.equal(areQuizzesEquivalent(original, copy), true);
 
   copy.questions[0].acceptedAnswers = ["tibia"];
+  assert.equal(areQuizzesEquivalent(original, copy), false);
+});
+
+test("semantic duplicate detection compares true-or-false answers", () => {
+  const original = createQuiz({ title: "Afirmaciones" });
+  const question = createQuestion(QUESTION_TYPES.TRUE_FALSE);
+  question.prompt = "El agua hierve a 100 °C al nivel del mar.";
+  original.questions.push(question);
+
+  const copy = duplicateQuiz(original);
+  assert.equal(areQuizzesEquivalent(original, copy), true);
+
+  copy.questions[0].correctAnswer = false;
   assert.equal(areQuizzesEquivalent(original, copy), false);
 });
 
@@ -240,8 +274,67 @@ test("fill blank evaluation respects the case-sensitive setting", () => {
   assert.equal(evaluateQuestionAnswer(question, "san josé"), false);
 });
 
+test("true or false keeps boolean answers through validation and gameplay", () => {
+  const quiz = createQuiz({ title: "Verdadero o falso" });
+  const question = createQuestion(QUESTION_TYPES.TRUE_FALSE);
+  question.prompt = "La Tierra gira alrededor del Sol.";
+  question.correctAnswer = false;
+  quiz.questions.push(question);
+
+  assert.equal(validateQuiz(quiz, { requirePlayable: true }).valid, true);
+  assert.equal(evaluateQuestionAnswer(question, false), true);
+  assert.equal(evaluateQuestionAnswer(question, true), false);
+
+  question.correctAnswer = "false";
+  assert.equal(validateQuiz(quiz, { requirePlayable: true }).valid, false);
+});
+
 test("score calculation rounds to a whole percentage", () => {
   assert.equal(calculateScore(2, 3), 67);
   assert.equal(calculateScore(0, 0), 0);
   assert.deepEqual(shuffleItems([1], () => 0), [1]);
+});
+
+test("prompt generator includes the requested distribution and MyQwiz schema", () => {
+  const prompt = buildQuizPrompt({
+    title: "Sistema solar",
+    topic: "Nivel de primaria, planetas y órbitas.",
+    iconId: QUIZ_ICONS.SCIENCE,
+    delivery: "text",
+    educationLevel: "university",
+    sourceMode: "ai",
+    questionCounts: {
+      [QUESTION_TYPES.MULTIPLE_CHOICE]: 4,
+      [QUESTION_TYPES.TRUE_FALSE]: 2,
+      [QUESTION_TYPES.FILL_BLANK]: 2,
+      [QUESTION_TYPES.MATCHING]: 0,
+      [QUESTION_TYPES.SHORT_ANSWER]: 1,
+    },
+  });
+
+  assert.match(prompt, /Total exacto: 9 preguntas/);
+  assert.match(prompt, /4 de Selección múltiple/);
+  assert.match(prompt, /2 de Verdadero o falso/);
+  assert.match(prompt, /"correctAnswer": true/);
+  assert.match(prompt, /"fileType": "myqwiz-quiz"/);
+  assert.match(prompt, /"iconId": "science"/);
+  assert.match(prompt, /Universidad/);
+  assert.match(prompt, /planetas y órbitas/);
+  assert.doesNotMatch(prompt, /Estructura para Asociar/);
+});
+
+test("document-based prompt tells the AI to use only attached sources", () => {
+  const prompt = buildQuizPrompt({
+    title: "Mis apuntes",
+    iconId: QUIZ_ICONS.GENERAL,
+    delivery: "file",
+    educationLevel: "postgraduate",
+    sourceMode: "documents",
+    questionCounts: { [QUESTION_TYPES.MULTIPLE_CHOICE]: 3 },
+  });
+
+  assert.match(prompt, /Voy a adjuntar uno o varios documentos/);
+  assert.match(prompt, /fuente principal/);
+  assert.match(prompt, /Posgrado/);
+  assert.match(prompt, /mis-apuntes\.myqwiz\.json/);
 });

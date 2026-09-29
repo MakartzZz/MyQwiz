@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
+import { useModalOpenSound } from "../hooks/useModalOpenSound.js";
 
 function QuizManageModal({ quiz, mode, onClose, onConfirm }) {
   const [title, setTitle] = useState(quiz?.title ?? "");
+  useModalOpenSound(Boolean(quiz));
 
   useEffect(() => {
     setTitle(quiz?.title ?? "");

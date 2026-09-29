@@ -29,6 +29,12 @@ export const createQuestion = (type = QUESTION_TYPES.MULTIPLE_CHOICE) => {
         })),
       };
 
+    case QUESTION_TYPES.TRUE_FALSE:
+      return {
+        ...baseQuestion,
+        correctAnswer: true,
+      };
+
     case QUESTION_TYPES.MATCHING:
       return {
         ...baseQuestion,

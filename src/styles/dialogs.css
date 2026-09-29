@@ -14,6 +14,15 @@
 .quiz-manage-modal__warning { margin: 0; padding: 17px; border-left: 4px solid #c6554d; color: var(--muted); background: var(--page-bg); font-size: .8rem; line-height: 1.6; }
 .quiz-manage-modal__warning strong { color: var(--ink); }
 .quiz-import-conflict__message { margin: 0; padding: 15px 17px; border-left: 4px solid var(--coral); color: var(--muted); background: var(--page-bg); font-size: .78rem; line-height: 1.6; }
+.quiz-import-modal { width: min(720px, 100%); }
+.quiz-import-modal__file { display: grid; padding: 15px; grid-template-columns: auto 1fr auto; align-items: center; gap: 14px; border: 1px solid var(--line); background: var(--page-bg); }
+.quiz-import-modal__file > span { display: grid; width: 54px; height: 54px; place-items: center; color: var(--on-primary); background: var(--purple); font-size: .62rem; font-weight: 900; clip-path: polygon(6% 0, 100% 7%, 94% 100%, 0 93%); }
+.quiz-import-modal__file strong { font-size: .82rem; }
+.quiz-import-modal__file p { margin: 4px 0 0; color: var(--muted); font-size: .7rem; line-height: 1.45; }
+.quiz-import-modal__file button { min-height: 39px; padding: 0 13px; color: var(--on-primary); background: var(--purple); font-size: .68rem; font-weight: 800; clip-path: polygon(4% 0, 100% 6%, 96% 100%, 0 94%); }
+.quiz-import-modal__divider { display: flex; margin: 18px 0; align-items: center; gap: 12px; color: var(--muted); font-size: .64rem; font-weight: 750; letter-spacing: .06em; text-transform: uppercase; }
+.quiz-import-modal__divider::before, .quiz-import-modal__divider::after { height: 1px; flex: 1; background: var(--line); content: ""; }
+.quiz-import-modal__paste textarea { min-height: 210px; font-family: Consolas, "Courier New", monospace; font-size: .7rem; line-height: 1.5; white-space: pre; }
 .quiz-export-modal { width: min(560px, 100%); }
 .export-filename-field { display: flex; min-width: 0; align-items: stretch; border: 1px solid var(--line); border-radius: 7px; overflow: hidden; background: var(--page-bg); }
 .export-filename-field:focus-within { border-color: var(--purple); box-shadow: 0 0 0 3px var(--purple-soft); }

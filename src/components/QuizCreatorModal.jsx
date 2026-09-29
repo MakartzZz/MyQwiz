@@ -1,11 +1,13 @@
 import { useEffect, useState } from "react";
 import { QUIZ_ICONS } from "../domain/quizConstants.js";
+import { useModalOpenSound } from "../hooks/useModalOpenSound.js";
 import { QuizIconPicker } from "./QuizIcon.jsx";
 
 function QuizCreatorModal({ isOpen, onClose, onCreate }) {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [iconId, setIconId] = useState(QUIZ_ICONS.GENERAL);
+  useModalOpenSound(isOpen);
 
   useEffect(() => {
     if (!isOpen) {

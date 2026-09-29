@@ -49,11 +49,10 @@
 .action-card small { overflow: hidden; color: var(--muted); font-size: .69rem; line-height: 1.4; text-overflow: ellipsis; white-space: nowrap; }
 .text-button { display: inline-flex; align-items: center; gap: 7px; color: var(--purple); background: transparent; font-size: .76rem; font-weight: 700; }
 
-.empty-library { display: flex; min-height: 140px; padding: 24px 28px; align-items: center; gap: 22px; border: 1px dashed var(--empty-line); border-radius: 22px; background: var(--empty-bg); }
-.empty-library__illustration { position: relative; display: grid; width: 72px; height: 72px; flex: 0 0 72px; place-items: center; border-radius: 22px; color: var(--purple); background: var(--purple-soft); font: 750 1.7rem "Archivo", sans-serif; transform: rotate(-4deg); }
+.empty-library { display: grid; min-height: 230px; padding: 30px; place-content: center; justify-items: center; gap: 8px; border: 1px dashed var(--empty-line); border-radius: 22px; background: var(--empty-bg); text-align: center; }
+.empty-library__illustration { position: relative; display: grid; width: 72px; height: 72px; margin-bottom: 10px; place-items: center; border-radius: 22px; color: var(--purple); background: var(--purple-soft); font: 750 1.7rem "Archivo", sans-serif; transform: rotate(-4deg); }
 .empty-library__illustration i { position: absolute; display: grid; width: 28px; height: 28px; right: -8px; bottom: -5px; place-items: center; border: 3px solid #fff; border-radius: 9px; color: #fff; background: var(--mint); font: normal 700 .8rem sans-serif; }
-.empty-library > div:nth-child(2) { flex: 1; }
-.empty-library h3 { margin: 0 0 5px; font: 700 1.02rem "Archivo", sans-serif; }
+.empty-library h3 { margin: 0; font: 700 1.02rem "Archivo", sans-serif; }
 .empty-library p { max-width: 600px; margin: 0; color: var(--muted); font-size: .76rem; line-height: 1.55; }
 .secondary-button { min-height: 42px; flex: 0 0 auto; color: var(--on-primary, #fff); background: var(--purple); box-shadow: 0 9px 18px rgba(40, 52, 43, .22); font-size: .75rem; }
 .secondary-button:disabled { cursor: not-allowed; opacity: .48; box-shadow: none; }

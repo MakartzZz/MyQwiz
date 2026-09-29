@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
+import { useModalOpenSound } from "../hooks/useModalOpenSound.js";
 
 function QuizExportModal({ quiz, onClose, onExport, onDrive }) {
   const [filename, setFilename] = useState(quiz?.title ?? "");
+  useModalOpenSound(Boolean(quiz));
 
   useEffect(() => {
     setFilename(quiz?.title ?? "");

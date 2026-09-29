@@ -6,6 +6,7 @@ import SubjectSelect from "./SubjectSelect.jsx";
 
 const questionTypeOptions = [
   { id: QUESTION_TYPES.MULTIPLE_CHOICE, label: "Selección múltiple", hint: "Una opción correcta" },
+  { id: QUESTION_TYPES.TRUE_FALSE, label: "Verdadero o falso", hint: "Elige el valor de la afirmación" },
   { id: QUESTION_TYPES.FILL_BLANK, label: "Completar", hint: "Una o más respuestas aceptadas" },
   { id: QUESTION_TYPES.MATCHING, label: "Asociar", hint: "Relaciona parejas" },
   { id: QUESTION_TYPES.SHORT_ANSWER, label: "Respuesta breve", hint: "Compara una respuesta redactada" },
@@ -63,6 +64,22 @@ const QuestionFields = ({ question, onChange }) => {
             options: [...question.options, { id: createId("option"), text: "", isCorrect: false }],
           })}
         >+ Agregar opción</button>
+      </div>
+    );
+  }
+
+  if (question.type === QUESTION_TYPES.TRUE_FALSE) {
+    return (
+      <div className="question-editor__answers">
+        <span className="question-editor__label">Respuesta correcta</span>
+        <div className="true-false-editor">
+          <button className={question.correctAnswer === true ? "is-selected" : ""} type="button" onClick={() => onChange({ correctAnswer: true })} aria-pressed={question.correctAnswer === true}>
+            <span>V</span> Verdadero
+          </button>
+          <button className={question.correctAnswer === false ? "is-selected" : ""} type="button" onClick={() => onChange({ correctAnswer: false })} aria-pressed={question.correctAnswer === false}>
+            <span>F</span> Falso
+          </button>
+        </div>
       </div>
     );
   }
@@ -235,11 +252,10 @@ function QuizEditor({ quiz, onBack, onSave, onValidationError }) {
     <section className="quiz-editor" aria-labelledby="quiz-editor-title">
       <div className="quiz-editor__toolbar">
         <button className="settings-back" type="button" onClick={leaveEditor}>← Volver a la biblioteca</button>
-        <div className={`quiz-editor__save-state ${draft.status === "ready" ? "is-ready" : ""}`} aria-live="polite">
-          {draft.status === "ready" ? "Listo para jugar" : isSaved ? "Borrador guardado" : "Autoguardado pendiente"}
-        </div>
         {draft.status !== "ready" && <button className="editor-ready-button" type="button" onClick={markAsReady}>Marcar como listo</button>}
-        <button className="secondary-button" type="button" onClick={saveDraft} disabled={isSaved || !draft.title.trim()}>Guardar borrador</button>
+        <button className="secondary-button quiz-editor__save-button" type="button" onClick={saveDraft} disabled={isSaved || !draft.title.trim()} aria-live="polite">
+          {isSaved ? (draft.status === "ready" ? "Quiz guardado" : "Borrador guardado") : "Guardar borrador"}
+        </button>
       </div>
 
       <div className="quiz-editor__header">

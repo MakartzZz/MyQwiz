@@ -5,6 +5,12 @@ export const MYQWIZ_FILE_TYPE = "myqwiz-quiz";
 export const MYQWIZ_EXPORT_VERSION = 1;
 export const MAX_QUIZ_FILE_SIZE = 5 * 1024 * 1024;
 
+const unwrapMarkdownCodeBlock = (content) => content
+  .trim()
+  .replace(/^```(?:json)?\s*/i, "")
+  .replace(/\s*```$/, "")
+  .trim();
+
 export const createQuizExport = (quiz) => ({
   fileType: MYQWIZ_FILE_TYPE,
   exportVersion: MYQWIZ_EXPORT_VERSION,
@@ -18,7 +24,7 @@ export const parseQuizImport = (fileContent) => {
   let parsed;
 
   try {
-    parsed = JSON.parse(fileContent);
+    parsed = JSON.parse(unwrapMarkdownCodeBlock(fileContent));
   } catch {
     throw new Error("El archivo no contiene un JSON válido.");
   }
@@ -59,6 +65,9 @@ const comparableQuestion = (question) => {
 
   if (question.options) {
     comparable.options = question.options.map(({ text, isCorrect }) => ({ text, isCorrect }));
+  }
+  if (question.correctAnswer !== undefined) {
+    comparable.correctAnswer = question.correctAnswer;
   }
   if (question.pairs) {
     comparable.pairs = question.pairs.map(({ left, right }) => ({ left, right }));

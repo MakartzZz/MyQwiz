@@ -46,6 +46,10 @@ export const evaluateQuestionAnswer = (question, answer) => {
     return question.options.some((option) => option.id === answer && option.isCorrect);
   }
 
+  if (question.type === QUESTION_TYPES.TRUE_FALSE) {
+    return answer === question.correctAnswer;
+  }
+
   if (question.type === QUESTION_TYPES.FILL_BLANK) {
     const response = normalizeAnswer(answer, question.caseSensitive);
     return question.acceptedAnswers.some((accepted) => (

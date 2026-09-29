@@ -42,7 +42,13 @@ const MusicBackdrop = ({ isChanging }) => (
   </div>
 );
 
-function MusicSelector({ albums, activeAlbumId, currentTrack, isPlaying, isChanging, onChange, onToggle, onNext }) {
+const volumeLevels = [
+  { value: 0.07, label: "Bajo", percentage: 7 },
+  { value: 0.13, label: "Medio", percentage: 13 },
+  { value: 0.2, label: "Máximo", percentage: 20 },
+];
+
+function MusicSelector({ albums, activeAlbumId, currentTrack, isPlaying, isChanging, volume, onChange, onToggle, onPrevious, onNext, onVolumeChange }) {
   const activeAlbum = albums.find((album) => album.id === activeAlbumId) ?? albums[0];
 
   return (
@@ -65,6 +71,9 @@ function MusicSelector({ albums, activeAlbumId, currentTrack, isPlaying, isChang
           <small>{currentTrack ? activeAlbum.title : "Este álbum todavía no tiene pistas"}</small>
         </div>
         <div className="music-player-bar__controls">
+          <button type="button" onClick={onPrevious} disabled={!currentTrack || isChanging} aria-label="Pista anterior">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="6" y="5" width="2" height="14" /><path d="m18 5-9 7 9 7V5Z" /></svg>
+          </button>
           <button type="button" onClick={onToggle} disabled={!currentTrack || isChanging} aria-label={isPlaying ? "Pausar música" : "Reproducir música"}>
             <PlayerIcon playing={isPlaying} />
           </button>
@@ -72,7 +81,24 @@ function MusicSelector({ albums, activeAlbumId, currentTrack, isPlaying, isChang
             <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="m6 5 9 7-9 7V5Z" /><rect x="16" y="5" width="2" height="14" /></svg>
           </button>
         </div>
-        <span className="music-player-bar__volume">Volumen suave · 20%</span>
+        <div className="music-player-bar__volume">
+          <span>Volumen</span>
+          <div role="group" aria-label="Nivel de volumen de la música">
+            {volumeLevels.map((level, index) => (
+              <button
+                className={volume === level.value ? "is-active" : ""}
+                type="button"
+                key={level.value}
+                aria-label={`${level.label}, ${level.percentage}%`}
+                aria-pressed={volume === level.value}
+                title={`${level.label} · ${level.percentage}%`}
+                onClick={() => onVolumeChange(level.value)}
+              >
+                {Array.from({ length: 3 }, (_, barIndex) => <i className={barIndex <= index ? "is-filled" : ""} key={barIndex} />)}
+              </button>
+            ))}
+          </div>
+        </div>
       </div>
 
       <div className="music-album-grid">

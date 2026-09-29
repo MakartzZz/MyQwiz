@@ -40,6 +40,10 @@ const validateQuestion = (question, index, errors, requirePlayable) => {
     }
   }
 
+  if (question.type === QUESTION_TYPES.TRUE_FALSE && typeof question.correctAnswer !== "boolean") {
+    addError(errors, `${path}.correctAnswer`, "La respuesta correcta debe ser verdadero o falso.", "invalid_true_false_answer");
+  }
+
   if (question.type === QUESTION_TYPES.MATCHING) {
     if (!Array.isArray(question.pairs) || question.pairs.length < 2) {
       addError(errors, `${path}.pairs`, "Se necesitan al menos dos parejas.", "missing_pairs");

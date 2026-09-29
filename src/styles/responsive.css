@@ -14,6 +14,9 @@
   .settings-options { grid-template-rows: 245px 104px; }
   .question-type-picker { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .question-type-picker > div { grid-column: 1 / -1; padding: 4px; }
+  .prompt-room__workspace { grid-template-columns: 1fr; }
+  .prompt-output { position: static; min-height: 520px; }
+  .prompt-output__empty { min-height: 390px; }
   .theme-ribbon { opacity: .72; }
   .theme-ribbon--one { right: -1%; }
   .theme-ribbon--two { right: 10%; }
@@ -48,7 +51,6 @@
   .hero-card p { font-size: .82rem; }
   .quick-grid { grid-template-columns: 1fr; }
   .action-card:last-child { grid-column: auto; }
-  .empty-library { flex-direction: column; align-items: flex-start; }
   .secondary-button { width: 100%; }
   .text-button { display: none; }
   .library-section .section-heading { align-items: flex-start; flex-direction: column; }
@@ -67,12 +69,25 @@
   .quiz-play__topbar > div:nth-child(2) { justify-items: start; }
   .quiz-question { min-height: 470px; padding: 22px 17px; }
   .quiz-answer-options { grid-template-columns: 1fr; }
-  .quiz-matching-answer label { grid-template-columns: 1fr; gap: 5px; }
+  .quiz-true-false-answer { grid-template-columns: 1fr; }
+  .quiz-matching-answer__board { grid-template-columns: 1fr; }
+  .quiz-matching-answer__connector { padding: 0; }
+  .quiz-matching-answer__connector > span { transform: rotate(90deg); }
   .quiz-result__actions { width: 100%; flex-direction: column-reverse; }
   .quiz-library-filters { grid-template-columns: 1fr; }
   .quiz-library-result-count { grid-column: auto; }
   .quiz-export-modal__drive { align-items: stretch; flex-direction: column; }
   .quiz-export-modal__drive button { width: 100%; }
+  .quiz-import-modal__file { grid-template-columns: auto 1fr; }
+  .quiz-import-modal__file button { width: 100%; grid-column: 1 / -1; }
+  .prompt-builder, .prompt-output { padding: 18px; }
+  .prompt-builder__base-fields, .prompt-builder__delivery { grid-template-columns: 1fr; }
+  .prompt-builder__delivery legend { grid-column: auto; }
+  .prompt-builder__levels > div { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .prompt-type { grid-template-columns: 1fr; }
+  .prompt-type__counter { justify-self: start; }
+  .prompt-output__heading { align-items: stretch; flex-direction: column; }
+  .prompt-output__heading button { width: 100%; }
   .quiz-library-card:last-child { grid-column: auto; }
   .overview-grid { grid-template-columns: 1fr; }
   .overview-card--recent { flex-wrap: wrap; }
@@ -85,19 +100,18 @@
   .music-album-grid { grid-auto-columns: 180px; }
   .music-player-bar { grid-template-columns: auto 1fr; }
   .music-player-bar__controls { grid-column: 1 / -1; }
-  .music-player-bar__volume { display: none; }
+  .music-player-bar__volume { grid-column: 1 / -1; justify-items: start; }
   .theme-card { width: min(100%, 320px); height: 440px; grid-column: auto; justify-self: center; }
   .settings-option { padding: 16px; }
   .settings-home { padding: 8px 0 0; }
   .settings-options { grid-template-columns: 1fr; grid-template-rows: 245px 245px repeat(3, 96px); }
   .settings-option--featured,
   .settings-option--music,
-  .settings-option--sound,
-  .settings-option--help,
-  .settings-option--accessibility { grid-column: auto; grid-row: auto; }
-  .quiz-editor__toolbar { position: static; flex-wrap: wrap; }
-  .quiz-editor__save-state { order: 3; width: 100%; margin-left: 0; }
-  .quiz-editor__toolbar .secondary-button { margin-left: auto; }
+  .settings-option-frame { grid-column: auto; grid-row: auto; }
+  .quiz-editor__toolbar { --toolbar-shape: polygon(2% 0, 100% 3%, 98% 100%, 0 97%); position: sticky; padding: 12px 18px; flex-wrap: wrap; }
+  .quiz-editor__toolbar .editor-ready-button { margin-left: auto; }
+  .quiz-editor__toolbar .quiz-editor__save-button { margin-left: 0; }
+  .quiz-editor__toolbar .settings-back + .quiz-editor__save-button { margin-left: auto; }
   .quiz-editor__header { grid-template-columns: 1fr; padding: 18px; }
   .quiz-icon-picker > div { grid-template-columns: repeat(4, minmax(0, 1fr)); }
   .question-type-picker { grid-template-columns: 1fr; }
