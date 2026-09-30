@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { DEFAULT_THEME, isValidTheme, THEME_STORAGE_KEY } from "../config/themes.js";
+import { canPlayInterfaceSounds, getSoundScale, readUserPreferences } from "../services/userPreferences.js";
 
 const readStoredTheme = () => {
   try {
@@ -47,12 +48,13 @@ export function useTheme() {
     }
 
     const changeSound = changeSoundRef.current;
-    if (changeSound) {
+    if (changeSound && canPlayInterfaceSounds()) {
       changeSound.currentTime = 0;
+      changeSound.volume = 0.35 * getSoundScale();
       changeSound.play().catch(() => {});
     }
 
-    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches || readUserPreferences().reduceMotion;
     const canAnimateTransition = typeof document.startViewTransition === "function" && !prefersReducedMotion;
 
     if (!canAnimateTransition) {

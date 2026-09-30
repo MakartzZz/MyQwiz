@@ -1,5 +1,10 @@
 import { useCallback, useEffect, useRef, useState } from "react";
+import { Play, SwatchBook } from "lucide-react";
 import { Toaster } from "sileo";
+import myQwizWordmarkMidnight from "./assets/branding/myqwiz-wordmark-midnight.png";
+import myQwizWordmarkPink from "./assets/branding/myqwiz-wordmark-pink.png";
+import myQwizWordmarkSky from "./assets/branding/myqwiz-wordmark-sky.png";
+import myQwizWordmarkViolet from "./assets/branding/myqwiz-wordmark-violet.png";
 import QuizCreatorModal from "./components/QuizCreatorModal.jsx";
 import QuizEditor from "./components/QuizEditor.jsx";
 import QuizExportModal from "./components/QuizExportModal.jsx";
@@ -11,16 +16,29 @@ import QuizManageModal from "./components/QuizManageModal.jsx";
 import QuizPlayer from "./components/QuizPlayer.jsx";
 import MusicSelector from "./components/MusicSelector.jsx";
 import PromptRoom from "./components/PromptRoom.jsx";
+import { QuizIcon } from "./components/QuizIcon.jsx";
+import { AccessibilitySettings, HelpSettings, SoundSettings } from "./components/SettingsPanels.jsx";
+import BlinkingCharacter from "./components/BlinkingCharacter.jsx";
+import SidebarMascot from "./components/SidebarMascot.jsx";
 import ThemeSwitcher from "./components/ThemeSwitcher.jsx";
 import { themes } from "./config/themes.js";
 import { DEFAULT_MUSIC_ALBUM, MUSIC_ALBUM_STORAGE_KEY, musicAlbums } from "./config/musicAlbums.js";
+import { QUESTION_TYPES } from "./domain/quizConstants.js";
 import { useQuizLibrary } from "./hooks/useQuizLibrary.js";
 import { useTheme } from "./hooks/useTheme.js";
 import { systemNotifications } from "./services/systemNotifications.js";
+import { applyUserPreferences, canPlayGameplaySounds, canPlayInterfaceSounds, getSoundScale, readUserPreferences, saveUserPreferences } from "./services/userPreferences.js";
 import { quizSessionStorage } from "./services/quizSessionStorage.js";
-import { playConfirmSound } from "./services/uiSounds.js";
+import { playButtonPressSound, playConfirmSound, playTypingSound } from "./services/uiSounds.js";
 import { areQuizzesEquivalent, downloadQuizFile, MAX_QUIZ_FILE_SIZE, normalizeQuizTitle, parseQuizImport } from "./services/quizTransfer.js";
 import "./App.css";
+
+const wordmarkByTheme = {
+  violet: myQwizWordmarkViolet,
+  sky: myQwizWordmarkSky,
+  midnight: myQwizWordmarkMidnight,
+  pink: myQwizWordmarkPink,
+};
 
 const Icon = ({ name, size = 20 }) => {
   const paths = {
@@ -36,7 +54,6 @@ const Icon = ({ name, size = 20 }) => {
     close: <><path d="m6 6 12 12" /><path d="m18 6-12 12" /></>,
     trophy: <><path d="M8 21h8" /><path d="M12 17v4" /><path d="M7 4h10v5a5 5 0 0 1-10 0Z" /><path d="M7 6H4v2a4 4 0 0 0 4 4" /><path d="M17 6h3v2a4 4 0 0 1-4 4" /></>,
     clock: <><circle cx="12" cy="12" r="9" /><path d="M12 7v5l3 2" /></>,
-    palette: <><circle cx="12" cy="12" r="9" /><circle cx="8" cy="9" r="1" /><circle cx="12" cy="7" r="1" /><circle cx="16" cy="9" r="1" /><path d="M15 16h2a2 2 0 0 0 0-4h-1" /></>,
     back: <><path d="m15 18-6-6 6-6" /></>,
     volume: <><path d="M11 5 6 9H3v6h3l5 4Z" /><path d="M15 9a4 4 0 0 1 0 6" /><path d="M18 6a8 8 0 0 1 0 12" /></>,
     music: <><path d="M9 18V5l10-2v13" /><circle cx="6" cy="18" r="3" /><circle cx="16" cy="16" r="3" /></>,
@@ -48,6 +65,43 @@ const Icon = ({ name, size = 20 }) => {
     <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
       {paths[name]}
     </svg>
+  );
+};
+
+const AutoScrollTitle = ({ children }) => {
+  const frameRef = useRef(null);
+  const textRef = useRef(null);
+  const [scrollDistance, setScrollDistance] = useState(0);
+
+  useEffect(() => {
+    const frame = frameRef.current;
+    const text = textRef.current;
+    if (!frame || !text) return undefined;
+
+    const measureOverflow = () => {
+      setScrollDistance(Math.max(0, Math.ceil(text.scrollWidth - frame.clientWidth) + 8));
+    };
+
+    measureOverflow();
+    if (typeof ResizeObserver === "undefined") return undefined;
+
+    const observer = new ResizeObserver(measureOverflow);
+    observer.observe(frame);
+    observer.observe(text);
+
+    return () => observer.disconnect();
+  }, [children]);
+
+  return (
+    <strong className="score-card__title" ref={frameRef} title={children}>
+      <span
+        ref={textRef}
+        className={scrollDistance > 0 ? "is-overflowing" : ""}
+        style={scrollDistance > 0 ? { "--title-scroll-distance": `${scrollDistance}px` } : undefined}
+      >
+        {children}
+      </span>
+    </strong>
   );
 };
 
@@ -64,14 +118,15 @@ const sectionTitles = {
   Ajustes: "Configura tu experiencia.",
 };
 
-const formatShortDate = (date) => new Intl.DateTimeFormat("es-CR", {
-  day: "numeric",
-  month: "short",
-  year: "numeric",
-}).format(new Date(date));
-
 const MUSIC_VOLUME_STORAGE_KEY = "myqwiz:music-volume";
 const MUSIC_VOLUME_LEVELS = [0.07, 0.13, 0.2];
+const SCORE_QUESTION_TYPES = [
+  { id: QUESTION_TYPES.MULTIPLE_CHOICE, label: "Selección" },
+  { id: QUESTION_TYPES.TRUE_FALSE, label: "V/F" },
+  { id: QUESTION_TYPES.FILL_BLANK, label: "Completar" },
+  { id: QUESTION_TYPES.MATCHING, label: "Asociar" },
+  { id: QUESTION_TYPES.SHORT_ANSWER, label: "Breve" },
+];
 
 const readStoredMusicVolume = () => {
   const storedVolume = Number(window.localStorage.getItem(MUSIC_VOLUME_STORAGE_KEY));
@@ -93,7 +148,10 @@ function App() {
   const [importConflict, setImportConflict] = useState(null);
   const [isImportModalOpen, setIsImportModalOpen] = useState(false);
   const [exportingQuiz, setExportingQuiz] = useState(null);
+  const [userPreferences, setUserPreferences] = useState(readUserPreferences);
+  const [scoreCardCapacity, setScoreCardCapacity] = useState(4);
   const importInputRef = useRef(null);
+  const scoreboardRef = useRef(null);
   const [settingsView, setSettingsView] = useState("index");
   const [selectedAlbumId, setSelectedAlbumId] = useState(() => (
     window.localStorage.getItem(MUSIC_ALBUM_STORAGE_KEY) ?? DEFAULT_MUSIC_ALBUM
@@ -108,28 +166,59 @@ function App() {
   const { theme, changeTheme } = useTheme();
   const { quizzes, createDraft, saveDraft, duplicateDraft, deleteDraft, importDraft, recordAttempt } = useQuizLibrary();
 
-  const recentQuiz = quizzes[0] ?? null;
   const editingQuiz = quizzes.find((quiz) => quiz.id === editingQuizId) ?? null;
   const playingQuiz = quizzes.find((quiz) => quiz.id === playingQuizId) ?? null;
   const activeTheme = themes.find((item) => item.id === theme) ?? themes[0];
   const selectedAlbum = musicAlbums.find((album) => album.id === selectedAlbumId) ?? musicAlbums[0];
   const currentMusicTrack = selectedAlbum.tracks[currentTrackIndex] ?? selectedAlbum.tracks[0] ?? null;
   const isThemeScreen = activeSection === "Ajustes" && settingsView === "themes";
-  const isSettingsHome = activeSection === "Ajustes" && settingsView === "index";
+  const isSettingsHome = activeSection === "Ajustes" && !["themes", "music"].includes(settingsView);
+  const hidesSettingsHeading = activeSection === "Ajustes" && ["themes", "sound", "help", "accessibility"].includes(settingsView);
   const isMusicScreen = activeSection === "Ajustes" && settingsView === "music";
   const isHomeScreen = activeSection === "Inicio";
   const isQuizScreen = activeSection === "Mis quizzes";
   const isQuizActivityScreen = isQuizScreen && Boolean(editingQuiz || playingQuiz);
-  const bestQuiz = quizzes
+  const scoredQuizzes = quizzes
     .filter((quiz) => Number.isFinite(quiz.stats?.bestScore))
-    .sort((first, second) => second.stats.bestScore - first.stats.bestScore)[0] ?? null;
+    .sort((first, second) => (
+      second.stats.bestScore - first.stats.bestScore
+      || new Date(second.stats.lastPlayedAt ?? 0) - new Date(first.stats.lastPlayedAt ?? 0)
+    ));
+  const visibleScoredQuizzes = scoredQuizzes.slice(0, scoreCardCapacity);
   const resumableQuiz = savedGameSession
     ? quizzes.find((quiz) => quiz.id === savedGameSession.quizId) ?? null
     : null;
 
-  const chooseAction = (message) => {
-    systemNotifications.info("Próximamente", message);
+  const changeUserPreferences = (changes) => {
+    setUserPreferences((current) => saveUserPreferences({ ...current, ...changes }));
   };
+
+  useEffect(() => {
+    applyUserPreferences(userPreferences);
+  }, [userPreferences]);
+
+  useEffect(() => {
+    const scoreboard = scoreboardRef.current;
+    if (!scoreboard || typeof ResizeObserver === "undefined") return undefined;
+
+    const updateCapacity = (width) => {
+      if (window.matchMedia("(max-width: 600px)").matches) {
+        setScoreCardCapacity(Math.max(1, Math.min(5, scoredQuizzes.length)));
+        return;
+      }
+
+      const cardWidth = 210;
+      const gap = 12;
+      const capacity = Math.max(1, Math.floor((width + gap) / (cardWidth + gap)));
+      setScoreCardCapacity(capacity);
+    };
+
+    updateCapacity(scoreboard.getBoundingClientRect().width);
+    const observer = new ResizeObserver(([entry]) => updateCapacity(entry.contentRect.width));
+    observer.observe(scoreboard);
+
+    return () => observer.disconnect();
+  }, [activeSection, scoredQuizzes.length]);
 
   useEffect(() => {
     const sound = new Audio("/sounds/music-change.mp3");
@@ -235,8 +324,9 @@ function App() {
     const playHoverSound = (event) => {
       if (event.pointerType === "touch" || !(event.target instanceof Element)) return;
       const button = event.target.closest("button");
-      if (!button || button.disabled || (event.relatedTarget instanceof Node && button.contains(event.relatedTarget))) return;
+      if (!button || button.disabled || !canPlayInterfaceSounds() || (event.relatedTarget instanceof Node && button.contains(event.relatedTarget))) return;
       hoverSound.currentTime = 0;
+      hoverSound.volume = 0.18 * getSoundScale();
       hoverSound.play().catch(() => {});
     };
 
@@ -245,6 +335,40 @@ function App() {
       document.removeEventListener("pointerover", playHoverSound);
       hoverSound.pause();
     };
+  }, []);
+
+  useEffect(() => {
+    const playPressSound = (event) => {
+      if (!(event.target instanceof Element)) return;
+      const button = event.target.closest("button");
+      if (!button || button.disabled) return;
+
+      const ownedSound = button.dataset.buttonSound;
+      if (ownedSound === "interface") return;
+      if (ownedSound === "gameplay" && canPlayGameplaySounds()) return;
+
+      playButtonPressSound();
+    };
+
+    document.addEventListener("click", playPressSound);
+    return () => document.removeEventListener("click", playPressSound);
+  }, []);
+
+  useEffect(() => {
+    const textInputTypes = new Set(["text", "search", "email", "url", "tel", "number", "password"]);
+    const playFieldTypingSound = (event) => {
+      const target = event.target;
+      const isTextInput = target instanceof HTMLInputElement && textInputTypes.has(target.type);
+      const isEditable = isTextInput || target instanceof HTMLTextAreaElement || target instanceof HTMLElement && target.isContentEditable;
+      if (!isEditable) return;
+
+      const inputType = event.inputType ?? "";
+      if (!inputType.startsWith("insert") && !inputType.startsWith("delete")) return;
+      playTypingSound();
+    };
+
+    document.addEventListener("beforeinput", playFieldTypingSound);
+    return () => document.removeEventListener("beforeinput", playFieldTypingSound);
   }, []);
 
   const selectSection = (label) => {
@@ -477,8 +601,8 @@ function App() {
       />
       <aside className={`sidebar ${isMenuOpen ? "is-open" : ""}`}>
         <div className="brand" aria-label="MyQwiz">
-          <img className="brand__mark" src="/myqwiz-icon.svg" alt="" />
-          <span>My<span>Qwiz</span></span>
+          <SidebarMascot />
+          <img className="brand__wordmark" src={wordmarkByTheme[theme]} alt="" />
         </div>
 
         <nav className="main-nav" aria-label="Navegación principal">
@@ -498,7 +622,7 @@ function App() {
 
         <div className="sidebar-widgets">
           {resumableQuiz && (
-            <button className="sidebar-card sidebar-card--resume" type="button" onClick={resumeQuizGame}>
+            <button className="sidebar-card sidebar-card--resume" type="button" data-button-sound="interface" onClick={resumeQuizGame}>
               <span className="sidebar-card__top">
                 <span className="sidebar-card__copy">
                   <small>Continuar</small>
@@ -542,7 +666,7 @@ function App() {
       {isMenuOpen && <button className="menu-backdrop" aria-label="Cerrar menú" onClick={() => setIsMenuOpen(false)} />}
 
       <main className={`main-content ${isThemeScreen ? "main-content--themes" : ""} ${isSettingsHome ? "main-content--settings" : ""} ${isMusicScreen ? "main-content--music" : ""} ${isHomeScreen || isQuizScreen ? "main-content--workspace" : ""} ${isHomeScreen ? "main-content--home" : ""} ${isQuizScreen ? "main-content--library" : ""}`}>
-        {!isThemeScreen && !isQuizActivityScreen && (
+        {!hidesSettingsHeading && !isQuizActivityScreen && (
           <header className="topbar">
             <button className="menu-button" type="button" aria-label={isMenuOpen ? "Cerrar menú" : "Abrir menú"} onClick={() => setIsMenuOpen(!isMenuOpen)}>
               <Icon name={isMenuOpen ? "close" : "menu"} />
@@ -566,45 +690,64 @@ function App() {
                 </button>
               </div>
               <div className="hero-visual" aria-hidden="true">
-                <img
+                <BlinkingCharacter
                   className={`hero-character hero-character--${theme}`}
                   src={activeTheme.character}
-                  alt=""
+                  blinkSrc={activeTheme.blinkCharacter}
+                  theme={theme}
                 />
               </div>
             </section>
 
             <section className="home-overview" aria-labelledby="overview-title">
               <div className="section-heading">
-                <div><span className="eyebrow">Resumen</span><h2 id="overview-title">Tu recorrido</h2></div>
+                <div><span className="eyebrow">Resultados</span><h2 id="overview-title">Tus mejores quizzes</h2></div>
               </div>
 
-              <div className="overview-grid">
-                <article className="overview-card">
-                  <span className="overview-card__icon"><Icon name="trophy" /></span>
-                  <div className="overview-card__copy">
-                    <span>Mejor puntuación</span>
-                    {bestQuiz ? (
-                      <><strong>{bestQuiz.stats.bestScore}%</strong><p>{bestQuiz.title}</p></>
-                    ) : (
-                      <><strong>—</strong><p>Completa un quiz para registrar tu mejor marca.</p></>
-                    )}
-                  </div>
-                </article>
+              <div className="scoreboard">
+                <div
+                  className={`scoreboard__list ${visibleScoredQuizzes.length ? "" : "is-empty"}`}
+                  ref={scoreboardRef}
+                  style={{ "--score-card-count": Math.max(visibleScoredQuizzes.length, 1) }}
+                >
+                  {visibleScoredQuizzes.length ? visibleScoredQuizzes.map((quiz, index) => {
+                    const isPerfect = quiz.stats.bestScore === 100;
+                    const questionTypeCounts = SCORE_QUESTION_TYPES
+                      .map((type) => ({
+                        ...type,
+                        count: quiz.questions.filter((question) => question.type === type.id).length,
+                      }))
+                      .filter((type) => type.count > 0);
 
-                <article className="overview-card overview-card--recent">
-                  <span className="overview-card__icon"><Icon name="clock" /></span>
-                  <div className="overview-card__copy">
-                    <span>Agregado recientemente</span>
-                    {recentQuiz ? (
-                      <><strong>{recentQuiz.title}</strong><p>{formatShortDate(recentQuiz.createdAt)} · {recentQuiz.questions.length} preguntas</p></>
-                    ) : (
-                      <><strong>Sin quizzes todavía</strong><p>Tu creación más reciente aparecerá aquí.</p></>
-                    )}
-                  </div>
-                  {recentQuiz && <button type="button" onClick={() => openQuizDraft(recentQuiz)}>Continuar <Icon name="arrow" size={16} /></button>}
-                </article>
-
+                    return (
+                      <article className={`score-card ${isPerfect ? "is-perfect" : ""}`} key={quiz.id}>
+                        <span className="score-card__position">#{index + 1}</span>
+                        <span className="score-card__subject"><QuizIcon iconId={quiz.iconId} size={22} /></span>
+                        <div className="score-card__copy">
+                          <AutoScrollTitle>{quiz.title}</AutoScrollTitle>
+                          <span>{quiz.questions.length} preguntas</span>
+                        </div>
+                        <div className="score-card__types" aria-label="Preguntas por tipo">
+                          {questionTypeCounts.map((type) => (
+                            <span key={type.id}><i>{type.label}</i><b>{type.count}</b></span>
+                          ))}
+                        </div>
+                        <div className="score-card__score">
+                          <strong>{quiz.stats.bestScore}%</strong>
+                          <span>Mejor nota</span>
+                        </div>
+                        <button type="button" onClick={() => openQuizGame(quiz)} aria-label={`Jugar ${quiz.title}`} title="Jugar quiz">
+                          <Play size={18} fill="currentColor" />
+                        </button>
+                      </article>
+                    );
+                  }) : (
+                    <div className="scoreboard__empty">
+                      <Icon name="trophy" size={22} />
+                      <div><strong>Aún no hay resultados</strong><span>Completa un quiz y tu mejor nota aparecerá aquí.</span></div>
+                    </div>
+                  )}
+                </div>
               </div>
             </section>
           </>
@@ -643,7 +786,7 @@ function App() {
                 <div className="library-heading-actions">
                   <button className="text-button" type="button" onClick={() => setIsCreatorOpen(true)}><Icon name="plus" size={17} /> Crear quiz</button>
                   <button className="text-button" type="button" onClick={openQuizImport}><Icon name="file" size={17} /> Importar</button>
-                  <button className="text-button" type="button" onClick={() => selectSection("Sala de prompts")}><Icon name="sparkle" size={17} /> Generación asistida</button>
+                  <button className="text-button" type="button" onClick={() => selectSection("Sala de prompts")}><Icon name="sparkle" size={17} /> Sala de prompts</button>
                 </div>
               </div>
               <QuizLibrary
@@ -690,16 +833,40 @@ function App() {
                 onVolumeChange={changeMusicVolume}
               />
             </div>
+          ) : settingsView === "sound" ? (
+            <div className="settings-detail">
+              <button className="settings-back" type="button" onClick={() => setSettingsView("index")}><Icon name="back" size={18} /> Volver a Ajustes</button>
+              <SoundSettings preferences={userPreferences} onChange={changeUserPreferences} />
+            </div>
+          ) : settingsView === "help" ? (
+            <div className="settings-detail">
+              <button className="settings-back" type="button" onClick={() => setSettingsView("index")}><Icon name="back" size={18} /> Volver a Ajustes</button>
+              <HelpSettings
+                onCreate={beginQuizCreation}
+                onImport={() => { setActiveSection("Mis quizzes"); openQuizImport(); }}
+                onPromptRoom={() => selectSection("Sala de prompts")}
+              />
+            </div>
+          ) : settingsView === "accessibility" ? (
+            <div className="settings-detail">
+              <button className="settings-back" type="button" onClick={() => setSettingsView("index")}><Icon name="back" size={18} /> Volver a Ajustes</button>
+              <AccessibilitySettings preferences={userPreferences} onChange={changeUserPreferences} />
+            </div>
           ) : (
             <section className="settings-home" aria-label="Categorías de ajustes">
               <div className="settings-options">
                 <button className="settings-option settings-option--featured" type="button" onClick={() => setSettingsView("themes")}>
-                  <span className="settings-option__icon"><Icon name="palette" size={25} /></span>
+                  <span className="settings-option__icon"><SwatchBook size={25} strokeWidth={2} aria-hidden="true" /></span>
                   <span className="settings-option__copy">
                     <strong>Tema</strong>
                     <small>{activeTheme.label}</small>
                   </span>
-                  <img className={`settings-option__character settings-option__character--${theme}`} src={activeTheme.character} alt="" />
+                  <BlinkingCharacter
+                    className={`settings-option__character settings-option__character--${theme}`}
+                    src={activeTheme.character}
+                    blinkSrc={activeTheme.blinkCharacter}
+                    theme={theme}
+                  />
                   <Icon name="arrow" size={20} />
                 </button>
                 <button className={`settings-option settings-option--music ${isMusicPlaying ? "is-playing" : ""}`} type="button" onClick={() => setSettingsView("music")}>
@@ -715,21 +882,21 @@ function App() {
                   <Icon name="arrow" size={20} />
                 </button>
                 <div className="settings-option-frame settings-option-frame--sound">
-                  <button className="settings-option settings-option--sound" type="button" onClick={() => chooseAction("Aquí podrás configurar los efectos y avisos sonoros.")}>
+                  <button className="settings-option settings-option--sound" type="button" onClick={() => setSettingsView("sound")}>
                     <span className="settings-option__icon"><Icon name="volume" size={25} /></span>
                     <strong>Sonido</strong>
                     <Icon name="arrow" size={20} />
                   </button>
                 </div>
                 <div className="settings-option-frame settings-option-frame--help">
-                  <button className="settings-option settings-option--help" type="button" onClick={() => chooseAction("Los tutoriales y recursos de ayuda se agregarán aquí.")}>
+                  <button className="settings-option settings-option--help" type="button" onClick={() => setSettingsView("help")}>
                     <span className="settings-option__icon"><Icon name="help" size={25} /></span>
                     <strong>Tutoriales y ayuda</strong>
                     <Icon name="arrow" size={20} />
                   </button>
                 </div>
                 <div className="settings-option-frame settings-option-frame--accessibility">
-                  <button className="settings-option settings-option--accessibility" type="button" onClick={() => chooseAction("Aquí podrás ajustar movimiento, contraste y otras ayudas visuales.")}>
+                  <button className="settings-option settings-option--accessibility" type="button" onClick={() => setSettingsView("accessibility")}>
                     <span className="settings-option__icon"><Icon name="accessibility" size={25} /></span>
                     <strong>Accesibilidad</strong>
                     <Icon name="arrow" size={20} />

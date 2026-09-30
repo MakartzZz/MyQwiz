@@ -1,0 +1,90 @@
+.blinking-character {
+  --character-aspect: .667;
+  --blink-x: 47%;
+  --blink-y: 39%;
+  --blink-width: 31%;
+  --blink-height: 15%;
+  position: relative;
+  display: block;
+  aspect-ratio: var(--character-aspect);
+}
+
+.blinking-character[data-character-theme="sky"] {
+  --character-aspect: .72;
+  --blink-x: 38%;
+  --blink-y: 39%;
+  --blink-width: 29%;
+  --blink-height: 14%;
+}
+
+.blinking-character[data-character-theme="midnight"] {
+  --character-aspect: .716;
+  --blink-x: 36%;
+  --blink-y: 39%;
+  --blink-width: 16%;
+  --blink-height: 12%;
+}
+
+.blinking-character[data-character-theme="pink"] {
+  --character-aspect: .716;
+  --blink-x: 40%;
+  --blink-y: 41%;
+  --blink-width: 27%;
+  --blink-height: 14%;
+}
+
+.blinking-character__motion {
+  position: absolute;
+  inset: 0;
+  transform-origin: 50% 100%;
+  animation: character-idle-breathe 3.8s cubic-bezier(.45, 0, .55, 1) infinite;
+  will-change: transform;
+}
+
+.blinking-character[data-character-theme="sky"] .blinking-character__motion { animation-delay: -.9s; }
+.blinking-character[data-character-theme="midnight"] .blinking-character__motion { animation-delay: -1.8s; }
+.blinking-character[data-character-theme="pink"] .blinking-character__motion { animation-delay: -2.7s; }
+
+.blinking-character__frame {
+  position: absolute;
+  display: block;
+  width: 100%;
+  height: 100%;
+  inset: 0;
+  object-fit: contain;
+  object-position: center bottom;
+  pointer-events: none;
+  user-select: none;
+}
+
+.blinking-character__frame--base { z-index: 0; }
+
+.blinking-character__frame--blink {
+  z-index: 1;
+  opacity: 0;
+  -webkit-mask-image: radial-gradient(ellipse var(--blink-width) var(--blink-height) at var(--blink-x) var(--blink-y), #000 68%, transparent 82%);
+  mask-image: radial-gradient(ellipse var(--blink-width) var(--blink-height) at var(--blink-x) var(--blink-y), #000 68%, transparent 82%);
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+}
+
+/* M.A.Z. tiene los ojos más separados y en diagonal. Su recorte necesita
+   cubrir ambos extremos completos para que el frame abierto no asome. */
+.blinking-character[data-character-theme="violet"] .blinking-character__frame--blink {
+  -webkit-mask-image: radial-gradient(ellipse 36% 18% at 45% 39%, #000 88%, transparent 100%);
+  mask-image: radial-gradient(ellipse 36% 18% at 45% 39%, #000 88%, transparent 100%);
+}
+
+.blinking-character.is-blinking .blinking-character__frame--blink { opacity: 1; }
+
+@keyframes character-idle-breathe {
+  0%, 100% { transform: translateY(0) scaleX(1) scaleY(1); }
+  38% { transform: translateY(1px) scaleX(1.008) scaleY(.992); }
+  68% { transform: translateY(-2px) scaleX(.995) scaleY(1.012); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .blinking-character__motion { animation: none; }
+}
+
+:root[data-reduce-motion="true"] .blinking-character__motion { animation: none; }

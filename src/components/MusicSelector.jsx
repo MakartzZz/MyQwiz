@@ -108,6 +108,7 @@ function MusicSelector({ albums, activeAlbumId, currentTrack, isPlaying, isChang
             <button
               className={`music-album-card ${isActive ? "is-selected" : ""}`}
               type="button"
+              data-button-sound="interface"
               key={album.id}
               aria-pressed={isActive}
               onClick={() => onChange(album.id)}

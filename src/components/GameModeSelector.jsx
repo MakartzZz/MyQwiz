@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { DEFAULT_GAME_RULES, GAME_MODES, QUESTION_TYPES } from "../domain/quizConstants.js";
 import { getGameModeOptionsForQuiz } from "../domain/gameModes.js";
 import { playConfirmSound } from "../services/uiSounds.js";
+import { canPlayGameplaySounds, getSoundScale, readUserPreferences } from "../services/userPreferences.js";
 import { QuizIcon, quizIconOptions } from "./QuizIcon.jsx";
 
 const ModeIcon = ({ mode }) => {
@@ -76,27 +77,30 @@ function GameModeSelector({ quiz, onBack, onStart }) {
 
   const selectGameMode = (modeId, card) => {
     setSelectedMode(modeId);
-    card?.animate(
-      [
-        { scale: 1 },
-        { scale: 1.055, offset: .48 },
-        { scale: .985, offset: .76 },
-        { scale: 1 },
-      ],
-      { duration: 360, easing: "cubic-bezier(.2, .9, .3, 1.3)" },
-    );
-    card?.querySelector(".game-mode-card__icon")?.animate(
-      [
-        { scale: 1 },
-        { scale: 1.3, offset: .5 },
-        { scale: 1 },
-      ],
-      { duration: 320, delay: 45, easing: "cubic-bezier(.2, .9, .3, 1.35)" },
-    );
+    if (!readUserPreferences().reduceMotion) {
+      card?.animate(
+        [
+          { scale: 1 },
+          { scale: 1.055, offset: .48 },
+          { scale: .985, offset: .76 },
+          { scale: 1 },
+        ],
+        { duration: 360, easing: "cubic-bezier(.2, .9, .3, 1.3)" },
+      );
+      card?.querySelector(".game-mode-card__icon")?.animate(
+        [
+          { scale: 1 },
+          { scale: 1.3, offset: .5 },
+          { scale: 1 },
+        ],
+        { duration: 320, delay: 45, easing: "cubic-bezier(.2, .9, .3, 1.35)" },
+      );
+    }
     activeModeSoundRef.current?.pause();
     const sound = modeSoundsRef.current[modeId];
-    if (!sound) return;
+    if (!sound || !canPlayGameplaySounds()) return;
     sound.currentTime = 0;
+    sound.volume = 0.6 * getSoundScale();
     activeModeSoundRef.current = sound;
     sound.play().catch(() => {});
   };
@@ -136,7 +140,7 @@ function GameModeSelector({ quiz, onBack, onStart }) {
             <strong>{selected?.label ?? "Sin modo disponible"}</strong>
             <p>{selected?.description}</p>
           </div>
-          <button type="button" disabled={!selectedMode} onClick={startGame}>
+          <button type="button" data-button-sound="interface" disabled={!selectedMode} onClick={startGame}>
             Comenzar <span aria-hidden="true">→</span>
           </button>
         </div>
@@ -154,6 +158,7 @@ function GameModeSelector({ quiz, onBack, onStart }) {
           <button
             className={`game-mode-card ${selectedMode === mode.id ? "is-selected" : ""}`}
             type="button"
+            data-button-sound="gameplay"
             key={mode.id}
             disabled={!mode.available}
             aria-pressed={selectedMode === mode.id}

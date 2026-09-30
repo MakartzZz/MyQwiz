@@ -4,8 +4,8 @@
   "description": "Crea quizzes y estudia a tu ritmo.",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#f7f5ff",
-  "theme_color": "#18320f",
+  "background_color": "#edf1eb",
+  "theme_color": "#344530",
   "icons": [
     {
       "src": "/myqwiz-icon.svg",

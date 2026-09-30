@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { DEFAULT_GAME_RULES, GAME_MODES, QUESTION_TYPES } from "../domain/quizConstants.js";
 import { getRaceTimeForQuestion } from "../domain/gameModes.js";
 import { calculateScore, evaluateQuestionAnswer, prepareQuizForPlay } from "../domain/quizGameplay.js";
+import { canPlayGameplaySounds, getSoundScale } from "../services/userPreferences.js";
 import GameFeedbackReaction from "./GameFeedbackReaction.jsx";
 import { QuizIcon } from "./QuizIcon.jsx";
 
@@ -26,9 +27,9 @@ const createEmptyAnswer = (question) => {
 };
 
 const playGameSound = (sound) => {
-  if (!sound) return;
+  if (!sound || !canPlayGameplaySounds()) return;
   const playback = sound.cloneNode();
-  playback.volume = sound.volume;
+  playback.volume = Math.min(1, sound.volume * getSoundScale());
   playback.play().catch(() => {});
 };
 
@@ -506,8 +507,8 @@ function QuizPlayer({ quiz, theme, gameMode, gameRules = {}, initialSession, onE
                 <span>Respuesta de referencia</span>
                 <p>{currentQuestion.referenceAnswer}</p>
                 <div>
-                  <button type="button" onClick={() => applyAnswerResult(false)}>Necesito repasarla</button>
-                  <button type="button" onClick={() => applyAnswerResult(true)}>La tuve bien</button>
+                  <button type="button" data-button-sound="gameplay" onClick={() => applyAnswerResult(false)}>Necesito repasarla</button>
+                  <button type="button" data-button-sound="gameplay" onClick={() => applyAnswerResult(true)}>La tuve bien</button>
                 </div>
               </div>
             )}
@@ -525,9 +526,9 @@ function QuizPlayer({ quiz, theme, gameMode, gameRules = {}, initialSession, onE
           {!isChecked && currentQuestion.type === QUESTION_TYPES.SHORT_ANSWER ? (
             <button className="quiz-play-primary" type="button" disabled={!canSubmit || showReference} onClick={() => setShowReference(true)}>Comparar respuesta</button>
           ) : !isChecked ? (
-            <button className="quiz-play-primary" type="button" disabled={!canSubmit || isReviewingMatching} onClick={() => checkAnswer()}>{isReviewingMatching ? "Revisando…" : "Comprobar"}</button>
+            <button className="quiz-play-primary" type="button" data-button-sound="gameplay" disabled={!canSubmit || isReviewingMatching} onClick={() => checkAnswer()}>{isReviewingMatching ? "Revisando…" : "Comprobar"}</button>
           ) : (
-            <button className="quiz-play-primary" type="button" disabled={questionTransition !== "idle" || isTerminalGameOver} onClick={goNext}>
+            <button className="quiz-play-primary" type="button" data-button-sound="gameplay" disabled={questionTransition !== "idle" || isTerminalGameOver} onClick={goNext}>
               {questionIndex === questions.length - 1 ? "Ver resultado" : "Siguiente"}
               {automaticNextSeconds && <span className="quiz-play-primary__countdown">{automaticNextSeconds}s</span>}
               →
