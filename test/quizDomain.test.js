@@ -2,8 +2,8 @@ import assert from "node:assert/strict";
 import test from "node:test";
 import { DEFAULT_GAME_RULES, GAME_MODES, QUESTION_TYPES, QUIZ_ICONS, QUIZ_SCHEMA_VERSION } from "../src/domain/quizConstants.js";
 import { canUseGameMode, getRaceTimeForQuestion } from "../src/domain/gameModes.js";
-import { createQuestion, createQuiz, duplicateQuiz } from "../src/domain/quizFactory.js";
-import { calculateScore, evaluateQuestionAnswer, prepareQuizForPlay, shuffleItems } from "../src/domain/quizGameplay.js";
+import { createQuestion, createQuiz, duplicateQuiz, prepareQuizForReady } from "../src/domain/quizFactory.js";
+import { calculateScore, calculateShortAnswerSimilarity, evaluateQuestionAnswer, prepareQuizForPlay, shuffleItems } from "../src/domain/quizGameplay.js";
 import { migrateQuiz } from "../src/domain/quizMigration.js";
 import { validateQuiz } from "../src/domain/quizValidation.js";
 import { buildQuizPrompt } from "../src/services/quizPrompt.js";
@@ -41,7 +41,22 @@ test("every supported question type receives its required initial structure", ()
   assert.equal(matching.pairs.length, 2);
   assert.deepEqual(fillBlank.acceptedAnswers, [""]);
   assert.equal(shortAnswer.similarityThreshold, 0.7);
-  assert.equal(shortAnswer.allowSelfAssessment, true);
+  assert.equal("allowSelfAssessment" in shortAnswer, false);
+});
+
+test("the expanded subject catalog is accepted by quiz validation", () => {
+  const addedSubjects = [
+    QUIZ_ICONS.VIDEOGAMES,
+    QUIZ_ICONS.MUSIC,
+    QUIZ_ICONS.ART,
+    QUIZ_ICONS.BIOLOGY,
+    QUIZ_ICONS.PHYSICS,
+    QUIZ_ICONS.CINEMA,
+  ];
+
+  addedSubjects.forEach((iconId) => {
+    assert.equal(validateQuiz(createQuiz({ title: "Nueva categoría", iconId })).valid, true);
+  });
 });
 
 test("playable validation detects an empty quiz", () => {
@@ -159,6 +174,34 @@ test("duplicating a quiz preserves its content with fresh identifiers", () => {
   assert.notEqual(duplicate.questions[0].id, original.questions[0].id);
   assert.notEqual(duplicate.questions[0].options[0].id, original.questions[0].options[0].id);
   assert.deepEqual(duplicate.stats, { attempts: 0, bestScore: null, lastPlayedAt: null });
+});
+
+test("publishing an edited scored quiz clears its previous results", () => {
+  const quiz = createQuiz({ title: "Historia editada" });
+  quiz.status = "draft";
+  quiz.stats = {
+    attempts: 4,
+    bestScore: 90,
+    lastPlayedAt: "2026-09-30T12:00:00.000Z",
+  };
+
+  const readyQuiz = prepareQuizForReady(quiz);
+
+  assert.equal(readyQuiz.status, "ready");
+  assert.deepEqual(readyQuiz.stats, {
+    attempts: 0,
+    bestScore: null,
+    lastPlayedAt: null,
+  });
+  assert.equal(quiz.stats.bestScore, 90);
+});
+
+test("publishing an unplayed draft keeps its empty results", () => {
+  const quiz = createQuiz({ title: "Quiz nuevo" });
+  const readyQuiz = prepareQuizForReady(quiz);
+
+  assert.equal(readyQuiz.status, "ready");
+  assert.deepEqual(readyQuiz.stats, quiz.stats);
 });
 
 test("exporting and importing preserves every question type and the quiz icon", () => {
@@ -293,6 +336,26 @@ test("score calculation rounds to a whole percentage", () => {
   assert.equal(calculateScore(2, 3), 67);
   assert.equal(calculateScore(0, 0), 0);
   assert.deepEqual(shuffleItems([1], () => 0), [1]);
+});
+
+test("short-answer similarity ignores accents and reports exact matches", () => {
+  assert.equal(
+    calculateShortAnswerSimilarity("La fotosintesis convierte luz en energia", "La fotosíntesis convierte luz en energía"),
+    100,
+  );
+  assert.equal(calculateShortAnswerSimilarity("", "Una respuesta de referencia"), 0);
+});
+
+test("short-answer similarity rewards matching key concepts without grading automatically", () => {
+  const similarity = calculateShortAnswerSimilarity(
+    "Las plantas usan luz para producir energía mediante fotosíntesis.",
+    "La fotosíntesis permite que las plantas transformen la energía de la luz en energía química.",
+    ["fotosíntesis", "plantas", "luz", "energía"],
+  );
+
+  assert.ok(similarity >= 70);
+  assert.equal(evaluateQuestionAnswer({ type: QUESTION_TYPES.SHORT_ANSWER }, true), true);
+  assert.equal(evaluateQuestionAnswer({ type: QUESTION_TYPES.SHORT_ANSWER }, false), false);
 });
 
 test("prompt generator includes the requested distribution and MyQwiz schema", () => {

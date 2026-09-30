@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { DEFAULT_GAME_RULES, GAME_MODES, QUESTION_TYPES } from "../domain/quizConstants.js";
 import { getGameModeOptionsForQuiz } from "../domain/gameModes.js";
+import { playBufferedSound, stopBufferedSound } from "../services/soundBuffer.js";
 import { playConfirmSound } from "../services/uiSounds.js";
 import { canPlayGameplaySounds, getSoundScale, readUserPreferences } from "../services/userPreferences.js";
 import { QuizIcon, quizIconOptions } from "./QuizIcon.jsx";
@@ -44,13 +45,12 @@ const questionTypeLabels = {
 
 const clampSeconds = (value, minimum = 0) => Math.max(minimum, Number.parseInt(value, 10) || minimum);
 
-function GameModeSelector({ quiz, onBack, onStart }) {
+function GameModeSelector({ quiz, onBack, onStart, backLabel = "Volver a la biblioteca" }) {
   const modes = useMemo(() => getGameModeOptionsForQuiz(quiz), [quiz]);
   const firstAvailableMode = modes.find((mode) => mode.available)?.id ?? null;
   const [selectedMode, setSelectedMode] = useState(firstAvailableMode);
   const [checkpointRules, setCheckpointRules] = useState({ ...DEFAULT_GAME_RULES.checkpoint });
   const [raceTimes, setRaceTimes] = useState({ ...DEFAULT_GAME_RULES.race.secondsByQuestionType });
-  const modeSoundsRef = useRef({});
   const activeModeSoundRef = useRef(null);
   const selected = modes.find((mode) => mode.id === selectedMode);
   const subject = quizIconOptions.find((option) => option.id === quiz.iconId)?.label ?? "General";
@@ -59,18 +59,8 @@ function GameModeSelector({ quiz, onBack, onStart }) {
   ), [quiz.questions]);
 
   useEffect(() => {
-    modeSoundsRef.current = Object.fromEntries(
-      Object.entries(modeSoundPaths).map(([mode, path]) => {
-        const sound = new Audio(path);
-        sound.preload = "auto";
-        sound.volume = 0.6;
-        return [mode, sound];
-      }),
-    );
-
     return () => {
-      Object.values(modeSoundsRef.current).forEach((sound) => sound.pause());
-      modeSoundsRef.current = {};
+      stopBufferedSound(activeModeSoundRef.current);
       activeModeSoundRef.current = null;
     };
   }, []);
@@ -96,13 +86,10 @@ function GameModeSelector({ quiz, onBack, onStart }) {
         { duration: 320, delay: 45, easing: "cubic-bezier(.2, .9, .3, 1.35)" },
       );
     }
-    activeModeSoundRef.current?.pause();
-    const sound = modeSoundsRef.current[modeId];
-    if (!sound || !canPlayGameplaySounds()) return;
-    sound.currentTime = 0;
-    sound.volume = 0.6 * getSoundScale();
-    activeModeSoundRef.current = sound;
-    sound.play().catch(() => {});
+    stopBufferedSound(activeModeSoundRef.current);
+    const soundPath = modeSoundPaths[modeId];
+    if (!soundPath || !canPlayGameplaySounds()) return;
+    activeModeSoundRef.current = playBufferedSound(soundPath, { volume: 0.6 * getSoundScale() });
   };
 
   const startGame = () => {
@@ -118,7 +105,7 @@ function GameModeSelector({ quiz, onBack, onStart }) {
   return (
     <section className="game-setup" aria-labelledby="game-setup-title">
       <button className="game-setup__back" type="button" onClick={onBack}>
-        <span aria-hidden="true">←</span> Volver a la biblioteca
+        <span aria-hidden="true">←</span> {backLabel}
       </button>
 
       <div className="game-setup__intro">

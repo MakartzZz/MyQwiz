@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { DEFAULT_THEME, isValidTheme, THEME_STORAGE_KEY } from "../config/themes.js";
+import { playBufferedSound, stopBufferedSound } from "../services/soundBuffer.js";
 import { canPlayInterfaceSounds, getSoundScale, readUserPreferences } from "../services/userPreferences.js";
 
 const readStoredTheme = () => {
@@ -21,15 +22,7 @@ export function useTheme() {
   const changeSoundRef = useRef(null);
 
   useEffect(() => {
-    const sound = new Audio("/sounds/theme-change.mp3");
-    sound.preload = "auto";
-    sound.volume = 0.35;
-    changeSoundRef.current = sound;
-
-    return () => {
-      sound.pause();
-      changeSoundRef.current = null;
-    };
+    return () => stopBufferedSound(changeSoundRef.current);
   }, []);
 
   useLayoutEffect(() => {
@@ -47,11 +40,9 @@ export function useTheme() {
       return;
     }
 
-    const changeSound = changeSoundRef.current;
-    if (changeSound && canPlayInterfaceSounds()) {
-      changeSound.currentTime = 0;
-      changeSound.volume = 0.35 * getSoundScale();
-      changeSound.play().catch(() => {});
+    if (canPlayInterfaceSounds()) {
+      stopBufferedSound(changeSoundRef.current);
+      changeSoundRef.current = playBufferedSound("/sounds/theme-change.mp3", { volume: 0.35 * getSoundScale() });
     }
 
     const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches || readUserPreferences().reduceMotion;

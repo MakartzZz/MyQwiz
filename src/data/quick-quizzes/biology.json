@@ -1,0 +1,487 @@
+{
+  "category": "biology",
+  "questions": [
+    {
+      "id": "q1",
+      "prompt": "¿Cuál es la unidad básica de los seres vivos?",
+      "options": [
+        "Tejido",
+        "Órgano",
+        "Célula",
+        "Átomo"
+      ],
+      "correct": 2,
+      "explanation": "La célula es la unidad estructural y funcional de la vida."
+    },
+    {
+      "id": "q2",
+      "prompt": "¿Qué pigmento permite a las plantas captar luz?",
+      "options": [
+        "Hemoglobina",
+        "Clorofila",
+        "Melanina",
+        "Queratina"
+      ],
+      "correct": 1,
+      "explanation": "La clorofila absorbe energía luminosa."
+    },
+    {
+      "id": "q3",
+      "prompt": "¿Qué molécula almacena información genética?",
+      "options": [
+        "ATP",
+        "ADN",
+        "Glucosa",
+        "Colágeno"
+      ],
+      "correct": 1,
+      "explanation": "El ADN contiene las instrucciones genéticas."
+    },
+    {
+      "id": "q4",
+      "prompt": "¿Qué orgánulo produce gran parte del ATP celular?",
+      "options": [
+        "Lisosoma",
+        "Mitocondria",
+        "Núcleo",
+        "Vacuola"
+      ],
+      "correct": 1,
+      "explanation": "La respiración celular ocurre principalmente en las mitocondrias."
+    },
+    {
+      "id": "q5",
+      "prompt": "¿Qué relación beneficia a ambas especies participantes?",
+      "options": [
+        "Parasitismo",
+        "Mutualismo",
+        "Depredación",
+        "Competencia"
+      ],
+      "correct": 1,
+      "explanation": "En el mutualismo ambas especies obtienen beneficios."
+    },
+    {
+      "id": "q6",
+      "prompt": "¿Qué base nitrogenada sustituye a la timina en el ARN?",
+      "options": [
+        "Adenina",
+        "Uracilo",
+        "Citosina",
+        "Guanina"
+      ],
+      "correct": 1,
+      "explanation": "El ARN utiliza uracilo en lugar de timina."
+    },
+    {
+      "id": "q7",
+      "prompt": "¿Qué proceso genera gametos con la mitad de cromosomas?",
+      "options": [
+        "Mitosis",
+        "Meiosis",
+        "Fisión",
+        "Gemación"
+      ],
+      "correct": 1,
+      "explanation": "La meiosis reduce a la mitad el número cromosómico."
+    },
+    {
+      "id": "q8",
+      "prompt": "¿Qué nivel trófico ocupan los organismos autótrofos?",
+      "options": [
+        "Productores",
+        "Consumidores primarios",
+        "Descomponedores",
+        "Depredadores"
+      ],
+      "correct": 0,
+      "explanation": "Los autótrofos producen materia orgánica y forman la base trófica."
+    },
+    {
+      "id": "q9",
+      "prompt": "¿Qué enzima separa las hebras de ADN durante la replicación?",
+      "options": [
+        "Ligasa",
+        "Helicasa",
+        "Amilasa",
+        "Pepsina"
+      ],
+      "correct": 1,
+      "explanation": "La helicasa rompe los puentes de hidrógeno entre las hebras."
+    },
+    {
+      "id": "q10",
+      "prompt": "¿Cuál de estos organismos es unicelular?",
+      "options": [
+        "Levadura",
+        "Pino",
+        "Lombriz",
+        "Helecho"
+      ],
+      "correct": 0,
+      "explanation": "Las levaduras son hongos unicelulares."
+    },
+    {
+      "id": "q11",
+      "prompt": "¿Qué tejido vegetal transporta agua desde las raíces?",
+      "options": [
+        "Floema",
+        "Xilema",
+        "Epidermis",
+        "Meristemo"
+      ],
+      "correct": 1,
+      "explanation": "El xilema conduce agua y minerales hacia las partes aéreas."
+    },
+    {
+      "id": "q12",
+      "prompt": "¿Qué reino incluye a los hongos?",
+      "options": [
+        "Plantae",
+        "Fungi",
+        "Protista",
+        "Animalia"
+      ],
+      "correct": 1,
+      "explanation": "Los hongos pertenecen al reino Fungi."
+    },
+    {
+      "id": "q13",
+      "prompt": "¿Qué estructura controla el paso de sustancias hacia la célula?",
+      "options": [
+        "Membrana plasmática",
+        "Nucleolo",
+        "Centriolo",
+        "Cromatina"
+      ],
+      "correct": 0,
+      "explanation": "La membrana plasmática regula el intercambio con el medio."
+    },
+    {
+      "id": "q14",
+      "prompt": "¿Qué proceso convierte glucosa en energía utilizable por la célula?",
+      "options": [
+        "Respiración celular",
+        "Transcripción",
+        "Ósmosis",
+        "Fagocitosis"
+      ],
+      "correct": 0,
+      "explanation": "La respiración celular libera energía de la glucosa para producir ATP."
+    },
+    {
+      "id": "q15",
+      "prompt": "¿Qué molécula lleva aminoácidos al ribosoma?",
+      "options": [
+        "ARNm",
+        "ARNt",
+        "ADN",
+        "ATP sintasa"
+      ],
+      "correct": 1,
+      "explanation": "El ARN de transferencia transporta aminoácidos al ribosoma."
+    },
+    {
+      "id": "q16",
+      "prompt": "¿Qué interacción ocurre cuando una especie se beneficia y la otra no se afecta?",
+      "options": [
+        "Parasitismo",
+        "Comensalismo",
+        "Competencia",
+        "Depredación"
+      ],
+      "correct": 1,
+      "explanation": "En el comensalismo una especie se beneficia sin afectar a la otra."
+    },
+    {
+      "id": "q17",
+      "prompt": "¿Qué fase de la mitosis separa las cromátidas hermanas?",
+      "options": [
+        "Profase",
+        "Metafase",
+        "Anafase",
+        "Telofase"
+      ],
+      "correct": 2,
+      "explanation": "Durante la anafase las cromátidas migran a polos opuestos."
+    },
+    {
+      "id": "q18",
+      "prompt": "¿Qué mecanismo evolutivo cambia frecuencias génicas por azar?",
+      "options": [
+        "Selección artificial",
+        "Deriva genética",
+        "Mutualismo",
+        "Convergencia"
+      ],
+      "correct": 1,
+      "explanation": "La deriva genética produce cambios aleatorios, sobre todo en poblaciones pequeñas."
+    },
+    {
+      "id": "q19",
+      "type": "true-false",
+      "prompt": "La selección natural actúa directamente sobre los fenotipos.",
+      "correct": true,
+      "explanation": "Las diferencias fenotípicas heredables influyen en supervivencia y reproducción."
+    },
+    {
+      "id": "q20",
+      "prompt": "¿Qué enzima sintetiza ARN usando ADN como molde?",
+      "options": [
+        "ADN ligasa",
+        "ARN polimerasa",
+        "Helicasa",
+        "Peptidasa"
+      ],
+      "correct": 1,
+      "explanation": "La ARN polimerasa cataliza la transcripción."
+    },
+    {
+      "id": "q21",
+      "prompt": "¿Qué proceso produce anticuerpos con mayor afinidad durante una respuesta inmune?",
+      "options": [
+        "Maduración de afinidad",
+        "Glucólisis",
+        "Traducción",
+        "Fisión binaria"
+      ],
+      "correct": 0,
+      "explanation": "La maduración de afinidad selecciona linfocitos B con anticuerpos más afines."
+    },
+    {
+      "id": "q22",
+      "prompt": "¿Qué modelo explica la formación de mitocondrias a partir de bacterias ancestrales?",
+      "options": [
+        "Teoría endosimbiótica",
+        "Equilibrio puntuado",
+        "Herencia mezclada",
+        "Generación espontánea"
+      ],
+      "correct": 0,
+      "explanation": "La teoría endosimbiótica propone un origen bacteriano para mitocondrias."
+    },
+    {
+      "id": "q23",
+      "type": "true-false",
+      "prompt": "En el código genético estándar, varios codones pueden codificar el mismo aminoácido.",
+      "correct": true,
+      "explanation": "El código genético es degenerado o redundante."
+    },
+    {
+      "id": "q24",
+      "type": "true-false",
+      "prompt": "La recombinación genética durante la meiosis ocurre principalmente en la profase I.",
+      "correct": true,
+      "explanation": "El entrecruzamiento sucede durante la profase I meiótica."
+    },
+    {
+      "id": "q25",
+      "prompt": "¿Qué ecuación describe el equilibrio de frecuencias alélicas en una población ideal?",
+      "options": [
+        "Hardy-Weinberg",
+        "Michaelis-Menten",
+        "Nernst",
+        "Arrhenius"
+      ],
+      "correct": 0,
+      "explanation": "El principio de Hardy-Weinberg modela frecuencias génicas sin fuerzas evolutivas."
+    },
+    {
+      "id": "q26",
+      "prompt": "¿Qué grupo de animales posee plumas?",
+      "options": [
+        "Aves",
+        "Mamíferos",
+        "Anfibios",
+        "Reptiles"
+      ],
+      "correct": 0,
+      "explanation": "Las plumas son una característica propia de las aves."
+    },
+    {
+      "id": "q27",
+      "prompt": "¿Qué gas libera la fotosíntesis?",
+      "options": [
+        "Oxígeno",
+        "Metano",
+        "Helio",
+        "Nitrógeno"
+      ],
+      "correct": 0,
+      "explanation": "La fotosíntesis oxigénica libera oxígeno."
+    },
+    {
+      "id": "q28",
+      "prompt": "¿Qué tipo de división celular permite crecer y reparar tejidos?",
+      "options": [
+        "Mitosis",
+        "Meiosis",
+        "Conjugación",
+        "Gemación únicamente"
+      ],
+      "correct": 0,
+      "explanation": "La mitosis genera células somáticas equivalentes."
+    },
+    {
+      "id": "q29",
+      "prompt": "¿Qué órgano vegetal contiene normalmente los estomas?",
+      "options": [
+        "Hoja",
+        "Raíz profunda",
+        "Semilla seca",
+        "Polen"
+      ],
+      "correct": 0,
+      "explanation": "Los estomas se encuentran principalmente en la epidermis de las hojas."
+    },
+    {
+      "id": "q30",
+      "prompt": "¿Qué moléculas reconocen antígenos de forma específica?",
+      "options": [
+        "Anticuerpos",
+        "Triglicéridos",
+        "Celulosa",
+        "ATP"
+      ],
+      "correct": 0,
+      "explanation": "Los anticuerpos se unen específicamente a determinados antígenos."
+    },
+    {
+      "id": "q31",
+      "prompt": "¿Qué proceso genera nuevas combinaciones de alelos entre cromosomas homólogos?",
+      "options": [
+        "Entrecruzamiento",
+        "Traducción",
+        "Ósmosis",
+        "Fisión binaria"
+      ],
+      "correct": 0,
+      "explanation": "El entrecruzamiento meiótico intercambia segmentos entre homólogos."
+    },
+    {
+      "id": "q32",
+      "prompt": "¿Qué complejo celular degrada proteínas marcadas con ubiquitina?",
+      "options": [
+        "Proteasoma",
+        "Ribosoma",
+        "Centrosoma",
+        "Nucleosoma"
+      ],
+      "correct": 0,
+      "explanation": "El proteasoma reconoce y degrada proteínas ubiquitinadas."
+    },
+    {
+      "id": "q33",
+      "prompt": "¿Qué señal induce frecuentemente apoptosis mediante liberación de citocromo c?",
+      "options": [
+        "Daño mitocondrial",
+        "Síntesis de celulosa",
+        "Fotosíntesis",
+        "Fijación de nitrógeno"
+      ],
+      "correct": 0,
+      "explanation": "La vía intrínseca de apoptosis implica liberación mitocondrial de citocromo c."
+    },
+    {
+      "id": "q34",
+      "prompt": "¿Qué técnica amplifica una secuencia específica de ADN?",
+      "options": [
+        "PCR",
+        "ELISA",
+        "Cromatografía de gases",
+        "Diálisis"
+      ],
+      "correct": 0,
+      "explanation": "La PCR produce muchas copias de una región de ADN."
+    },
+    {
+      "id": "q35",
+      "prompt": "¿Qué modelo evolutivo propone largos periodos de estabilidad interrumpidos por cambios rápidos?",
+      "options": [
+        "Equilibrio puntuado",
+        "Lamarckismo estricto",
+        "Catastrofismo químico",
+        "Fijismo"
+      ],
+      "correct": 0,
+      "explanation": "El equilibrio puntuado alterna estasis con episodios rápidos de cambio."
+    }
+  ],
+  "quizzes": [
+    {
+      "id": "vida-1",
+      "title": "La vida por dentro",
+      "description": "Células, plantas, hongos y organización básica de la vida.",
+      "difficulty": "Inicial",
+      "questionIds": [
+        "q1",
+        "q2",
+        "q10",
+        "q11",
+        "q12"
+      ]
+    },
+    {
+      "id": "vida-2",
+      "title": "Células activas",
+      "description": "Genética, orgánulos, energía y clasificación de seres vivos.",
+      "difficulty": "Fácil",
+      "questionIds": [
+        "q3",
+        "q4",
+        "q13",
+        "q14",
+        "q15",
+        "q26"
+      ]
+    },
+    {
+      "id": "vida-3",
+      "title": "Energía y ecosistemas",
+      "description": "Ecología, ARN, mitosis, fotosíntesis y evolución.",
+      "difficulty": "Intermedio",
+      "questionIds": [
+        "q5",
+        "q6",
+        "q16",
+        "q17",
+        "q18",
+        "q27",
+        "q28"
+      ]
+    },
+    {
+      "id": "vida-4",
+      "title": "Genes y evolución",
+      "description": "Meiosis, niveles tróficos, genética, selección e inmunidad.",
+      "difficulty": "Avanzado",
+      "questionIds": [
+        "q7",
+        "q8",
+        "q19",
+        "q20",
+        "q21",
+        "q29",
+        "q30",
+        "q31"
+      ]
+    },
+    {
+      "id": "vida-5",
+      "title": "Biología experta",
+      "description": "Replicación, biología molecular, evolución e inmunidad avanzada.",
+      "difficulty": "Experto",
+      "questionIds": [
+        "q9",
+        "q22",
+        "q23",
+        "q24",
+        "q25",
+        "q32",
+        "q33",
+        "q34",
+        "q35"
+      ]
+    }
+  ]
+}

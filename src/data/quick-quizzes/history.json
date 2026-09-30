@@ -1,0 +1,487 @@
+{
+  "category": "history",
+  "questions": [
+    {
+      "id": "q1",
+      "prompt": "¿En qué civilización se construyeron las pirámides de Guiza?",
+      "options": [
+        "Romana",
+        "Egipcia",
+        "Maya",
+        "Persa"
+      ],
+      "correct": 1,
+      "explanation": "Las pirámides de Guiza fueron levantadas en el antiguo Egipto."
+    },
+    {
+      "id": "q2",
+      "prompt": "¿En qué año llegó Cristóbal Colón a América?",
+      "options": [
+        "1453",
+        "1492",
+        "1519",
+        "1776"
+      ],
+      "correct": 1,
+      "explanation": "La expedición de Colón llegó al Caribe en 1492."
+    },
+    {
+      "id": "q3",
+      "prompt": "¿Qué ciudad fue sepultada por el Vesubio en el año 79?",
+      "options": [
+        "Atenas",
+        "Pompeya",
+        "Esparta",
+        "Cartago"
+      ],
+      "correct": 1,
+      "explanation": "Pompeya quedó cubierta por la erupción del Vesubio."
+    },
+    {
+      "id": "q4",
+      "prompt": "¿Qué revolución comenzó en Francia en 1789?",
+      "options": [
+        "Industrial",
+        "Gloriosa",
+        "Francesa",
+        "Rusa"
+      ],
+      "correct": 2,
+      "explanation": "La Revolución francesa comenzó en 1789."
+    },
+    {
+      "id": "q5",
+      "prompt": "¿Quién fue el primer emperador romano?",
+      "options": [
+        "Julio César",
+        "Augusto",
+        "Nerón",
+        "Trajano"
+      ],
+      "correct": 1,
+      "explanation": "Augusto inauguró el periodo imperial romano."
+    },
+    {
+      "id": "q6",
+      "prompt": "¿Qué imperio tuvo su capital en Constantinopla?",
+      "options": [
+        "Bizantino",
+        "Azteca",
+        "Carolingio",
+        "Inca"
+      ],
+      "correct": 0,
+      "explanation": "Constantinopla fue la capital del Imperio bizantino."
+    },
+    {
+      "id": "q7",
+      "prompt": "¿Qué tratado puso fin oficialmente a la Primera Guerra Mundial con Alemania?",
+      "options": [
+        "Tordesillas",
+        "Versalles",
+        "Utrecht",
+        "Westfalia"
+      ],
+      "correct": 1,
+      "explanation": "El Tratado de Versalles se firmó en 1919."
+    },
+    {
+      "id": "q8",
+      "prompt": "¿Quién impulsó la Reforma protestante con sus 95 tesis?",
+      "options": [
+        "Martín Lutero",
+        "Erasmo",
+        "Calvino",
+        "Copérnico"
+      ],
+      "correct": 0,
+      "explanation": "Martín Lutero publicó sus 95 tesis en 1517."
+    },
+    {
+      "id": "q9",
+      "prompt": "¿Qué dinastía china construyó gran parte de la actual Ciudad Prohibida?",
+      "options": [
+        "Han",
+        "Tang",
+        "Ming",
+        "Qing"
+      ],
+      "correct": 2,
+      "explanation": "La Ciudad Prohibida fue construida principalmente durante la dinastía Ming."
+    },
+    {
+      "id": "q10",
+      "prompt": "¿Qué pueblo creó la democracia directa en Atenas?",
+      "options": [
+        "Romanos",
+        "Griegos",
+        "Fenicios",
+        "Persas"
+      ],
+      "correct": 1,
+      "explanation": "La democracia ateniense surgió en la antigua Grecia."
+    },
+    {
+      "id": "q11",
+      "prompt": "¿Qué ruta comercial conectó China con el Mediterráneo?",
+      "options": [
+        "Ruta de la Seda",
+        "Ruta del Ámbar",
+        "Camino Real",
+        "Ruta de las Especias Atlántica"
+      ],
+      "correct": 0,
+      "explanation": "La Ruta de la Seda conectó Asia oriental y el Mediterráneo."
+    },
+    {
+      "id": "q12",
+      "prompt": "¿Quién lideró la independencia de la India mediante la resistencia no violenta?",
+      "options": [
+        "Nehru",
+        "Gandhi",
+        "Mandela",
+        "Jinnah"
+      ],
+      "correct": 1,
+      "explanation": "Mahatma Gandhi promovió la desobediencia civil no violenta."
+    },
+    {
+      "id": "q13",
+      "prompt": "¿Qué cultura mesoamericana construyó Chichén Itzá?",
+      "options": [
+        "Inca",
+        "Maya",
+        "Moche",
+        "Olmeca"
+      ],
+      "correct": 1,
+      "explanation": "Chichén Itzá fue una importante ciudad maya."
+    },
+    {
+      "id": "q14",
+      "prompt": "¿En qué siglo comenzó la Revolución Industrial en Gran Bretaña?",
+      "options": [
+        "XVI",
+        "XVII",
+        "XVIII",
+        "XX"
+      ],
+      "correct": 2,
+      "explanation": "La Revolución Industrial comenzó durante el siglo XVIII."
+    },
+    {
+      "id": "q15",
+      "prompt": "¿Qué guerra enfrentó al norte y al sur de Estados Unidos?",
+      "options": [
+        "Guerra de Secesión",
+        "Guerra de los Cien Años",
+        "Guerra de Crimea",
+        "Guerra de los Bóeres"
+      ],
+      "correct": 0,
+      "explanation": "La Guerra de Secesión estadounidense se libró entre 1861 y 1865."
+    },
+    {
+      "id": "q16",
+      "prompt": "¿Qué imperio administró extensos territorios mediante satrapías?",
+      "options": [
+        "Persa aqueménida",
+        "Azteca",
+        "Carolingio",
+        "Mali"
+      ],
+      "correct": 0,
+      "explanation": "El Imperio aqueménida organizó provincias llamadas satrapías."
+    },
+    {
+      "id": "q17",
+      "prompt": "¿Qué congreso reorganizó Europa tras las guerras napoleónicas?",
+      "options": [
+        "Congreso de Viena",
+        "Congreso de Berlín",
+        "Concilio de Trento",
+        "Paz de Augsburgo"
+      ],
+      "correct": 0,
+      "explanation": "El Congreso de Viena redefinió fronteras europeas desde 1814."
+    },
+    {
+      "id": "q18",
+      "prompt": "¿Qué documento inglés de 1215 limitó el poder del monarca?",
+      "options": [
+        "Bill of Rights",
+        "Carta Magna",
+        "Acta de Unión",
+        "Petición de Derechos"
+      ],
+      "correct": 1,
+      "explanation": "La Carta Magna impuso límites al rey Juan en 1215."
+    },
+    {
+      "id": "q19",
+      "type": "true-false",
+      "prompt": "La imprenta de tipos móviles de Gutenberg apareció antes de la Reforma protestante.",
+      "correct": true,
+      "explanation": "La imprenta europea de Gutenberg precedió por décadas a las 95 tesis de 1517."
+    },
+    {
+      "id": "q20",
+      "prompt": "¿Qué sistema de escritura descifró Jean-François Champollion?",
+      "options": [
+        "Lineal B",
+        "Jeroglíficos egipcios",
+        "Cuneiforme sumerio",
+        "Glifos mayas"
+      ],
+      "correct": 1,
+      "explanation": "Champollion descifró los jeroglíficos con ayuda de la piedra de Rosetta."
+    },
+    {
+      "id": "q21",
+      "prompt": "¿Qué conferencia de 1884-1885 reguló el reparto colonial de África?",
+      "options": [
+        "Conferencia de Yalta",
+        "Conferencia de Berlín",
+        "Conferencia de Bandung",
+        "Conferencia de Potsdam"
+      ],
+      "correct": 1,
+      "explanation": "La Conferencia de Berlín fijó reglas para la ocupación colonial europea."
+    },
+    {
+      "id": "q22",
+      "prompt": "¿Qué rebelión china buscó expulsar influencias extranjeras alrededor de 1900?",
+      "options": [
+        "Rebelión Taiping",
+        "Rebelión de los Bóxers",
+        "Rebelión de An Lushan",
+        "Revuelta de los Turbantes Amarillos"
+      ],
+      "correct": 1,
+      "explanation": "La Rebelión de los Bóxers se dirigió contra la presencia extranjera."
+    },
+    {
+      "id": "q23",
+      "type": "true-false",
+      "prompt": "El Imperio de Mali alcanzó su apogeo bajo Mansa Musa.",
+      "correct": true,
+      "explanation": "Mansa Musa gobernó durante una etapa de gran riqueza y expansión."
+    },
+    {
+      "id": "q24",
+      "type": "true-false",
+      "prompt": "La Paz de Westfalia puso fin a las guerras napoleónicas.",
+      "correct": false,
+      "explanation": "Westfalia terminó la Guerra de los Treinta Años en 1648."
+    },
+    {
+      "id": "q25",
+      "prompt": "¿Qué tratado dividió territorios ultramarinos entre Castilla y Portugal en 1494?",
+      "options": [
+        "Tordesillas",
+        "Utrecht",
+        "Verdún",
+        "Nankín"
+      ],
+      "correct": 0,
+      "explanation": "El Tratado de Tordesillas trazó una línea de reparto atlántico."
+    },
+    {
+      "id": "q26",
+      "prompt": "¿Qué pueblo construyó una extensa red de caminos con centro en Cusco?",
+      "options": [
+        "Inca",
+        "Fenicio",
+        "Vikingo",
+        "Hitita"
+      ],
+      "correct": 0,
+      "explanation": "El Imperio inca articuló los Andes mediante el Qhapaq Ñan."
+    },
+    {
+      "id": "q27",
+      "prompt": "¿Qué hecho marcó el inicio de la Segunda Guerra Mundial en Europa?",
+      "options": [
+        "Invasión de Polonia",
+        "Caída de Constantinopla",
+        "Revolución rusa",
+        "Guerra de Crimea"
+      ],
+      "correct": 0,
+      "explanation": "Alemania invadió Polonia en septiembre de 1939."
+    },
+    {
+      "id": "q28",
+      "prompt": "¿Qué movimiento luchó por el voto femenino?",
+      "options": [
+        "Sufragismo",
+        "Mercantilismo",
+        "Feudalismo",
+        "Ludismo"
+      ],
+      "correct": 0,
+      "explanation": "El sufragismo defendió derechos políticos para las mujeres."
+    },
+    {
+      "id": "q29",
+      "prompt": "¿Qué batalla de 1815 puso fin al gobierno de los Cien Días de Napoleón?",
+      "options": [
+        "Waterloo",
+        "Austerlitz",
+        "Trafalgar",
+        "Leipzig"
+      ],
+      "correct": 0,
+      "explanation": "Napoleón fue derrotado definitivamente en Waterloo."
+    },
+    {
+      "id": "q30",
+      "prompt": "¿Qué política soviética de Gorbachov significaba reestructuración?",
+      "options": [
+        "Perestroika",
+        "Glásnost",
+        "Détente",
+        "Kominform"
+      ],
+      "correct": 0,
+      "explanation": "Perestroika designó reformas económicas y administrativas."
+    },
+    {
+      "id": "q31",
+      "prompt": "¿Qué reino africano controló Tombuctú antes del Imperio songhai?",
+      "options": [
+        "Mali",
+        "Aksum",
+        "Kongo",
+        "Benín"
+      ],
+      "correct": 0,
+      "explanation": "Tombuctú floreció bajo el Imperio de Mali antes del dominio songhai."
+    },
+    {
+      "id": "q32",
+      "prompt": "¿Qué emperador bizantino ordenó compilar el Corpus Juris Civilis?",
+      "options": [
+        "Justiniano I",
+        "Constantino XI",
+        "Basilio II",
+        "León III"
+      ],
+      "correct": 0,
+      "explanation": "Justiniano I impulsó la gran compilación del derecho romano."
+    },
+    {
+      "id": "q33",
+      "prompt": "¿Qué levantamiento de 1857 desafió el dominio británico en India?",
+      "options": [
+        "Rebelión de los cipayos",
+        "Rebelión Taiping",
+        "Motín del té",
+        "Revuelta decembrista"
+      ],
+      "correct": 0,
+      "explanation": "La rebelión de los cipayos transformó el gobierno británico de India."
+    },
+    {
+      "id": "q34",
+      "prompt": "¿Qué doctrina estadounidense de 1823 rechazaba nuevas intervenciones europeas en América?",
+      "options": [
+        "Doctrina Monroe",
+        "Destino Manifiesto",
+        "New Deal",
+        "Gran Garrote"
+      ],
+      "correct": 0,
+      "explanation": "La Doctrina Monroe proclamó América para los americanos."
+    },
+    {
+      "id": "q35",
+      "prompt": "¿Qué acuerdo de 1998 ayudó a terminar el conflicto de Irlanda del Norte?",
+      "options": [
+        "Acuerdo de Viernes Santo",
+        "Tratado de Maastricht",
+        "Pacto de Varsovia",
+        "Acuerdo de Camp David"
+      ],
+      "correct": 0,
+      "explanation": "El Acuerdo de Viernes Santo estableció un marco político de paz."
+    }
+  ],
+  "quizzes": [
+    {
+      "id": "tiempo-1",
+      "title": "Primer viaje al pasado",
+      "description": "Egipto, exploración, Roma y revoluciones conocidas.",
+      "difficulty": "Inicial",
+      "questionIds": [
+        "q1",
+        "q2",
+        "q3",
+        "q4",
+        "q10"
+      ]
+    },
+    {
+      "id": "tiempo-2",
+      "title": "Momentos que cambiaron todo",
+      "description": "Grecia, rutas comerciales, independencias y primeras industrias.",
+      "difficulty": "Fácil",
+      "questionIds": [
+        "q5",
+        "q11",
+        "q12",
+        "q13",
+        "q14",
+        "q26"
+      ]
+    },
+    {
+      "id": "tiempo-3",
+      "title": "Imperios y revoluciones",
+      "description": "Imperios, guerras civiles y reorganización de Europa.",
+      "difficulty": "Intermedio",
+      "questionIds": [
+        "q6",
+        "q15",
+        "q16",
+        "q17",
+        "q18",
+        "q27",
+        "q28"
+      ]
+    },
+    {
+      "id": "tiempo-4",
+      "title": "Europa entre épocas",
+      "description": "Tratados, reformas, imperios y transformaciones políticas.",
+      "difficulty": "Avanzado",
+      "questionIds": [
+        "q7",
+        "q8",
+        "q19",
+        "q20",
+        "q21",
+        "q29",
+        "q30",
+        "q31"
+      ]
+    },
+    {
+      "id": "tiempo-5",
+      "title": "Archivo histórico",
+      "description": "Dinastías, colonialismo, rebeliones y diplomacia mundial.",
+      "difficulty": "Experto",
+      "questionIds": [
+        "q9",
+        "q22",
+        "q23",
+        "q24",
+        "q25",
+        "q32",
+        "q33",
+        "q34",
+        "q35"
+      ]
+    }
+  ]
+}

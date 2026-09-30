@@ -19,6 +19,7 @@ const MusicGlyph = ({ name }) => (
 );
 
 const musicGlyphs = ["note", "headphones", "wave", "disc", "piano", "note", "wave", "headphones", "disc", "piano"];
+const musicRibbonGlyphs = Array.from({ length: 3 }, () => musicGlyphs).flat();
 
 const MusicBackdrop = ({ isChanging }) => (
   <div className={`music-backdrop ${isChanging ? "is-changing" : ""}`} aria-hidden="true">
@@ -33,7 +34,7 @@ const MusicBackdrop = ({ isChanging }) => (
         <div className="music-ribbon__track">
           {[0, 1].map((group) => (
             <span className="music-ribbon__group" key={group}>
-              {musicGlyphs.map((glyph, index) => <MusicGlyph name={glyph} key={`${glyph}-${index}`} />)}
+              {musicRibbonGlyphs.map((glyph, index) => <MusicGlyph name={glyph} key={`${glyph}-${index}`} />)}
             </span>
           ))}
         </div>

@@ -1,0 +1,487 @@
+{
+  "category": "physics",
+  "questions": [
+    {
+      "id": "q1",
+      "prompt": "¿Cuál es la unidad de fuerza en el Sistema Internacional?",
+      "options": [
+        "Julio",
+        "Newton",
+        "Vatio",
+        "Pascal"
+      ],
+      "correct": 1,
+      "explanation": "La fuerza se mide en newtons."
+    },
+    {
+      "id": "q2",
+      "prompt": "Si un objeto está en reposo, ¿cuál es su velocidad?",
+      "options": [
+        "0 m/s",
+        "1 m/s",
+        "9,8 m/s",
+        "Depende de su masa"
+      ],
+      "correct": 0,
+      "explanation": "Respecto al sistema de referencia, un objeto en reposo tiene velocidad cero."
+    },
+    {
+      "id": "q3",
+      "prompt": "¿Qué forma de energía tiene un objeto elevado?",
+      "options": [
+        "Cinética",
+        "Potencial gravitatoria",
+        "Térmica",
+        "Sonora"
+      ],
+      "correct": 1,
+      "explanation": "Su posición en un campo gravitatorio le da energía potencial."
+    },
+    {
+      "id": "q4",
+      "prompt": "¿Qué ley afirma que F = m·a?",
+      "options": [
+        "Primera de Newton",
+        "Segunda de Newton",
+        "Ley de Ohm",
+        "Ley de Hooke"
+      ],
+      "correct": 1,
+      "explanation": "La segunda ley de Newton relaciona fuerza, masa y aceleración."
+    },
+    {
+      "id": "q5",
+      "prompt": "¿Qué magnitud se mide en vatios?",
+      "options": [
+        "Energía",
+        "Potencia",
+        "Presión",
+        "Carga"
+      ],
+      "correct": 1,
+      "explanation": "El vatio mide la rapidez de transferencia de energía."
+    },
+    {
+      "id": "q6",
+      "prompt": "¿Qué ocurre con la corriente si aumenta la resistencia y el voltaje permanece constante?",
+      "options": [
+        "Aumenta",
+        "Disminuye",
+        "No cambia",
+        "Se hace infinita"
+      ],
+      "correct": 1,
+      "explanation": "Por la ley de Ohm, I = V/R."
+    },
+    {
+      "id": "q7",
+      "prompt": "¿Qué tipo de onda necesita un medio material para propagarse?",
+      "options": [
+        "Electromagnética",
+        "Mecánica",
+        "Luminosa",
+        "Radioeléctrica"
+      ],
+      "correct": 1,
+      "explanation": "Las ondas mecánicas requieren materia para transmitirse."
+    },
+    {
+      "id": "q8",
+      "prompt": "¿Cuál es aproximadamente la aceleración de la gravedad en la Tierra?",
+      "options": [
+        "3,0 m/s²",
+        "9,8 m/s²",
+        "24 m/s²",
+        "98 m/s²"
+      ],
+      "correct": 1,
+      "explanation": "Cerca de la superficie terrestre g ≈ 9,8 m/s²."
+    },
+    {
+      "id": "q9",
+      "prompt": "¿Qué principio explica el empuje hacia arriba sobre un cuerpo sumergido?",
+      "options": [
+        "Pascal",
+        "Arquímedes",
+        "Bernoulli",
+        "Coulomb"
+      ],
+      "correct": 1,
+      "explanation": "El principio de Arquímedes relaciona el empuje con el fluido desplazado."
+    },
+    {
+      "id": "q10",
+      "prompt": "¿Qué instrumento mide la temperatura?",
+      "options": [
+        "Dinamómetro",
+        "Termómetro",
+        "Amperímetro",
+        "Calorímetro"
+      ],
+      "correct": 1,
+      "explanation": "El termómetro mide la temperatura."
+    },
+    {
+      "id": "q11",
+      "prompt": "¿Qué sucede con un objeto cuando la fuerza neta es cero?",
+      "options": [
+        "Siempre acelera",
+        "Mantiene su estado de movimiento",
+        "Pierde toda su masa",
+        "Se calienta"
+      ],
+      "correct": 1,
+      "explanation": "Por inercia, permanece en reposo o con velocidad constante."
+    },
+    {
+      "id": "q12",
+      "prompt": "¿Qué unidad mide la energía en el Sistema Internacional?",
+      "options": [
+        "Julio",
+        "Pascal",
+        "Tesla",
+        "Candela"
+      ],
+      "correct": 0,
+      "explanation": "La energía se mide en julios."
+    },
+    {
+      "id": "q13",
+      "prompt": "¿Qué fenómeno produce un eco?",
+      "options": [
+        "Reflexión del sonido",
+        "Refracción de la luz",
+        "Conducción térmica",
+        "Inducción eléctrica"
+      ],
+      "correct": 0,
+      "explanation": "El eco es sonido reflejado que regresa al oyente."
+    },
+    {
+      "id": "q14",
+      "prompt": "¿Qué magnitud relaciona distancia recorrida y tiempo?",
+      "options": [
+        "Velocidad media",
+        "Masa",
+        "Presión",
+        "Carga"
+      ],
+      "correct": 0,
+      "explanation": "La velocidad media es desplazamiento o distancia dividida por tiempo, según el contexto."
+    },
+    {
+      "id": "q15",
+      "prompt": "¿Cuál es la unidad de carga eléctrica?",
+      "options": [
+        "Culombio",
+        "Ohmio",
+        "Vatio",
+        "Weber"
+      ],
+      "correct": 0,
+      "explanation": "La carga eléctrica se mide en culombios."
+    },
+    {
+      "id": "q16",
+      "prompt": "¿Qué ocurre con la presión de un fluido al aumentar la profundidad?",
+      "options": [
+        "Disminuye",
+        "Aumenta",
+        "Se anula",
+        "No cambia nunca"
+      ],
+      "correct": 1,
+      "explanation": "La presión hidrostática aumenta con la profundidad."
+    },
+    {
+      "id": "q17",
+      "prompt": "¿Qué lente converge rayos paralelos?",
+      "options": [
+        "Cóncava",
+        "Convexa",
+        "Plana opaca",
+        "Cilíndrica siempre divergente"
+      ],
+      "correct": 1,
+      "explanation": "Una lente convexa convergente reúne rayos paralelos en un foco."
+    },
+    {
+      "id": "q18",
+      "prompt": "¿Qué principio relaciona presión y velocidad en un fluido ideal?",
+      "options": [
+        "Bernoulli",
+        "Pascal exclusivamente",
+        "Coulomb",
+        "Huygens"
+      ],
+      "correct": 0,
+      "explanation": "El principio de Bernoulli relaciona presión, velocidad y altura."
+    },
+    {
+      "id": "q19",
+      "type": "true-false",
+      "prompt": "En ausencia de resistencia del aire, todos los cuerpos caen con la misma aceleración gravitatoria.",
+      "correct": true,
+      "explanation": "La aceleración de caída libre no depende de la masa del objeto."
+    },
+    {
+      "id": "q20",
+      "prompt": "¿Qué transformación de Lorentz aparece al comparar relojes en movimiento relativo?",
+      "options": [
+        "Dilatación temporal",
+        "Convección",
+        "Resonancia acústica",
+        "Capilaridad"
+      ],
+      "correct": 0,
+      "explanation": "La relatividad especial predice dilatación temporal entre marcos relativos."
+    },
+    {
+      "id": "q21",
+      "prompt": "¿Qué principio impide conocer simultáneamente posición y momento con precisión ilimitada?",
+      "options": [
+        "Principio de incertidumbre",
+        "Principio de Pascal",
+        "Ley de Snell",
+        "Teorema de Gauss clásico"
+      ],
+      "correct": 0,
+      "explanation": "El principio de incertidumbre de Heisenberg limita esas precisiones simultáneas."
+    },
+    {
+      "id": "q22",
+      "prompt": "¿Qué partícula tiene espín entero y puede compartir estado cuántico?",
+      "options": [
+        "Fermión",
+        "Bosón",
+        "Protón exclusivamente",
+        "Electrón"
+      ],
+      "correct": 1,
+      "explanation": "Los bosones poseen espín entero y no obedecen la exclusión de Pauli."
+    },
+    {
+      "id": "q23",
+      "type": "true-false",
+      "prompt": "La velocidad de la luz en el vacío es la misma para todos los observadores inerciales.",
+      "correct": true,
+      "explanation": "Es uno de los postulados de la relatividad especial."
+    },
+    {
+      "id": "q24",
+      "type": "true-false",
+      "prompt": "Un sistema aislado puede reducir espontáneamente su entropía total de forma sostenida.",
+      "correct": false,
+      "explanation": "La segunda ley establece que su entropía no disminuye espontáneamente."
+    },
+    {
+      "id": "q25",
+      "prompt": "¿Qué ecuación conecta la función de onda con la evolución temporal de un sistema cuántico?",
+      "options": [
+        "Ecuación de Schrödinger",
+        "Ecuación de continuidad clásica",
+        "Ley de Hooke",
+        "Ecuación de Bernoulli"
+      ],
+      "correct": 0,
+      "explanation": "La ecuación de Schrödinger gobierna la evolución de la función de onda."
+    },
+    {
+      "id": "q26",
+      "prompt": "¿Qué máquina simple es una rampa?",
+      "options": [
+        "Plano inclinado",
+        "Polea",
+        "Torno",
+        "Palanca"
+      ],
+      "correct": 0,
+      "explanation": "Una rampa es un plano inclinado."
+    },
+    {
+      "id": "q27",
+      "prompt": "¿Qué cantidad se conserva en una colisión aislada?",
+      "options": [
+        "Momento lineal",
+        "Velocidad de cada objeto",
+        "Energía cinética siempre",
+        "Temperatura"
+      ],
+      "correct": 0,
+      "explanation": "El momento lineal total se conserva si no actúan fuerzas externas netas."
+    },
+    {
+      "id": "q28",
+      "prompt": "¿Qué color de luz visible posee mayor frecuencia?",
+      "options": [
+        "Violeta",
+        "Rojo",
+        "Naranja",
+        "Amarillo"
+      ],
+      "correct": 0,
+      "explanation": "La luz violeta tiene mayor frecuencia que la roja."
+    },
+    {
+      "id": "q29",
+      "prompt": "¿Qué ley relaciona voltaje, corriente y resistencia?",
+      "options": [
+        "Ley de Ohm",
+        "Ley de Kepler",
+        "Ley de Boyle",
+        "Ley de Faraday térmica"
+      ],
+      "correct": 0,
+      "explanation": "La ley de Ohm se expresa como V = IR."
+    },
+    {
+      "id": "q30",
+      "prompt": "¿Qué efecto cambia la frecuencia observada por movimiento relativo?",
+      "options": [
+        "Efecto Doppler",
+        "Efecto Joule",
+        "Efecto fotoeléctrico únicamente",
+        "Efecto túnel"
+      ],
+      "correct": 0,
+      "explanation": "El efecto Doppler altera la frecuencia percibida."
+    },
+    {
+      "id": "q31",
+      "prompt": "¿Qué teorema relaciona el flujo eléctrico cerrado con la carga encerrada?",
+      "options": [
+        "Ley de Gauss",
+        "Ley de Hooke",
+        "Ley de Snell",
+        "Ley de Hubble"
+      ],
+      "correct": 0,
+      "explanation": "La ley de Gauss vincula flujo eléctrico y carga encerrada."
+    },
+    {
+      "id": "q32",
+      "prompt": "¿Qué fenómeno permite a una partícula atravesar una barrera clásicamente prohibida?",
+      "options": [
+        "Efecto túnel",
+        "Convección",
+        "Interferencia macroscópica",
+        "Capilaridad"
+      ],
+      "correct": 0,
+      "explanation": "El efecto túnel surge de la naturaleza cuántica de la partícula."
+    },
+    {
+      "id": "q33",
+      "prompt": "¿Qué simetría conduce a conservación de energía según Noether?",
+      "options": [
+        "Invariancia temporal",
+        "Rotación espacial únicamente",
+        "Cambio de escala",
+        "Reflexión de carga"
+      ],
+      "correct": 0,
+      "explanation": "La invariancia ante traslaciones temporales implica conservación de energía."
+    },
+    {
+      "id": "q34",
+      "prompt": "¿Qué horizonte rodea un agujero negro no rotante?",
+      "options": [
+        "Horizonte de sucesos",
+        "Heliopausa",
+        "Magnetopausa",
+        "Límite de Roche"
+      ],
+      "correct": 0,
+      "explanation": "El horizonte de sucesos marca el límite causal del agujero negro."
+    },
+    {
+      "id": "q35",
+      "prompt": "¿Qué estadística siguen partículas indistinguibles de espín semientero?",
+      "options": [
+        "Fermi-Dirac",
+        "Bose-Einstein",
+        "Maxwell clásica siempre",
+        "Poisson espacial"
+      ],
+      "correct": 0,
+      "explanation": "Los fermiones siguen la estadística de Fermi-Dirac."
+    }
+  ],
+  "quizzes": [
+    {
+      "id": "fuerzas-1",
+      "title": "Física en movimiento",
+      "description": "Fuerza, reposo, energía y mediciones cotidianas.",
+      "difficulty": "Inicial",
+      "questionIds": [
+        "q1",
+        "q2",
+        "q3",
+        "q10",
+        "q11"
+      ]
+    },
+    {
+      "id": "fuerzas-2",
+      "title": "Empuja y acelera",
+      "description": "Movimiento, sonido, leyes de Newton y potencia.",
+      "difficulty": "Fácil",
+      "questionIds": [
+        "q4",
+        "q12",
+        "q13",
+        "q14",
+        "q15",
+        "q26"
+      ]
+    },
+    {
+      "id": "fuerzas-3",
+      "title": "Trabajo y electricidad",
+      "description": "Electricidad, fluidos, ondas y óptica.",
+      "difficulty": "Intermedio",
+      "questionIds": [
+        "q5",
+        "q6",
+        "q16",
+        "q17",
+        "q18",
+        "q27",
+        "q28"
+      ]
+    },
+    {
+      "id": "fuerzas-4",
+      "title": "Ondas y gravedad",
+      "description": "Ondas, gravedad, fluidos, electricidad y relatividad.",
+      "difficulty": "Avanzado",
+      "questionIds": [
+        "q7",
+        "q8",
+        "q19",
+        "q20",
+        "q21",
+        "q29",
+        "q30",
+        "q31"
+      ]
+    },
+    {
+      "id": "fuerzas-5",
+      "title": "Desafío de física",
+      "description": "Flotación, campos, cuántica, entropía y agujeros negros.",
+      "difficulty": "Experto",
+      "questionIds": [
+        "q9",
+        "q22",
+        "q23",
+        "q24",
+        "q25",
+        "q32",
+        "q33",
+        "q34",
+        "q35"
+      ]
+    }
+  ]
+}

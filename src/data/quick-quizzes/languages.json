@@ -1,0 +1,487 @@
+{
+  "category": "languages",
+  "questions": [
+    {
+      "id": "q1",
+      "prompt": "¿Cómo se dice “gracias” en inglés?",
+      "options": [
+        "Please",
+        "Thanks",
+        "Hello",
+        "Sorry"
+      ],
+      "correct": 1,
+      "explanation": "“Thanks” significa gracias."
+    },
+    {
+      "id": "q2",
+      "prompt": "¿Cuál es el plural de “child” en inglés?",
+      "options": [
+        "Childs",
+        "Childes",
+        "Children",
+        "Childrens"
+      ],
+      "correct": 2,
+      "explanation": "“Children” es un plural irregular."
+    },
+    {
+      "id": "q3",
+      "prompt": "¿Qué idioma se habla principalmente en Brasil?",
+      "options": [
+        "Español",
+        "Portugués",
+        "Francés",
+        "Italiano"
+      ],
+      "correct": 1,
+      "explanation": "El idioma oficial de Brasil es el portugués."
+    },
+    {
+      "id": "q4",
+      "prompt": "¿Cuál de estas palabras es un falso amigo en inglés para “actual”?",
+      "options": [
+        "Current",
+        "Real",
+        "Actual",
+        "Present"
+      ],
+      "correct": 2,
+      "explanation": "En inglés, “actual” significa real, no actual en el sentido temporal."
+    },
+    {
+      "id": "q5",
+      "prompt": "¿Qué artículo corresponde a “libro” en alemán?",
+      "options": [
+        "der",
+        "die",
+        "das",
+        "den"
+      ],
+      "correct": 2,
+      "explanation": "“Buch” es neutro: das Buch."
+    },
+    {
+      "id": "q6",
+      "prompt": "¿Qué significa “bonjour” en francés?",
+      "options": [
+        "Buenas noches",
+        "Adiós",
+        "Buenos días",
+        "Gracias"
+      ],
+      "correct": 2,
+      "explanation": "“Bonjour” es un saludo diurno."
+    },
+    {
+      "id": "q7",
+      "prompt": "¿Cuál es el infinitivo latino del que deriva “ver”?",
+      "options": [
+        "videre",
+        "audire",
+        "dicere",
+        "scribere"
+      ],
+      "correct": 0,
+      "explanation": "El verbo español ver procede del latín videre."
+    },
+    {
+      "id": "q8",
+      "prompt": "¿Qué sistema de escritura usa el japonés junto con hiragana y katakana?",
+      "options": [
+        "Hangul",
+        "Kanji",
+        "Cirílico",
+        "Devanagari"
+      ],
+      "correct": 1,
+      "explanation": "El japonés combina kanji con dos silabarios."
+    },
+    {
+      "id": "q9",
+      "prompt": "¿A qué familia lingüística pertenece el finés?",
+      "options": [
+        "Romance",
+        "Germánica",
+        "Urálica",
+        "Eslava"
+      ],
+      "correct": 2,
+      "explanation": "El finés pertenece a la familia urálica."
+    },
+    {
+      "id": "q10",
+      "prompt": "¿Cómo se dice “buenos días” en francés?",
+      "options": [
+        "Bonsoir",
+        "Bonjour",
+        "Merci",
+        "Au revoir"
+      ],
+      "correct": 1,
+      "explanation": "Bonjour se usa como saludo durante el día."
+    },
+    {
+      "id": "q11",
+      "prompt": "¿Qué idioma tiene más hablantes nativos?",
+      "options": [
+        "Inglés",
+        "Mandarín",
+        "Francés",
+        "Árabe"
+      ],
+      "correct": 1,
+      "explanation": "El mandarín es la lengua con más hablantes nativos."
+    },
+    {
+      "id": "q12",
+      "prompt": "¿Cuál es el plural de “mouse” en inglés cuando significa animal?",
+      "options": [
+        "Mouses",
+        "Mices",
+        "Mice",
+        "Mouse"
+      ],
+      "correct": 2,
+      "explanation": "El plural irregular de mouse es mice."
+    },
+    {
+      "id": "q13",
+      "prompt": "¿Qué significa “biblioteca” en italiano?",
+      "options": [
+        "Libreria",
+        "Biblioteca",
+        "Scuola",
+        "Stazione"
+      ],
+      "correct": 1,
+      "explanation": "En italiano, biblioteca conserva el mismo significado."
+    },
+    {
+      "id": "q14",
+      "prompt": "¿Cuál de estas lenguas es romance?",
+      "options": [
+        "Alemán",
+        "Rumano",
+        "Finés",
+        "Húngaro"
+      ],
+      "correct": 1,
+      "explanation": "El rumano deriva del latín y pertenece a las lenguas romances."
+    },
+    {
+      "id": "q15",
+      "prompt": "¿Qué caso gramatical suele marcar el objeto directo en latín?",
+      "options": [
+        "Nominativo",
+        "Acusativo",
+        "Genitivo",
+        "Ablativo"
+      ],
+      "correct": 1,
+      "explanation": "El acusativo suele marcar el objeto directo."
+    },
+    {
+      "id": "q16",
+      "prompt": "¿Qué alfabeto utiliza el ruso?",
+      "options": [
+        "Griego",
+        "Cirílico",
+        "Arábigo",
+        "Devanagari"
+      ],
+      "correct": 1,
+      "explanation": "El ruso se escribe con alfabeto cirílico."
+    },
+    {
+      "id": "q17",
+      "prompt": "¿Qué fenómeno crea una palabra al unir partes de otras, como motel?",
+      "options": [
+        "Calco",
+        "Acrónimo léxico",
+        "Flexión",
+        "Reduplicación"
+      ],
+      "correct": 1,
+      "explanation": "Motel combina motor y hotel, un caso de acrónimo léxico o palabra maleta."
+    },
+    {
+      "id": "q18",
+      "prompt": "¿Qué término designa palabras de sonido parecido y significado diferente?",
+      "options": [
+        "Sinónimos",
+        "Parónimos",
+        "Antónimos",
+        "Hipónimos"
+      ],
+      "correct": 1,
+      "explanation": "Los parónimos tienen forma o sonido semejante pero distinto significado."
+    },
+    {
+      "id": "q19",
+      "type": "true-false",
+      "prompt": "Todas las lenguas romances derivan directamente del griego clásico.",
+      "correct": false,
+      "explanation": "Las lenguas romances derivan principalmente del latín vulgar."
+    },
+    {
+      "id": "q20",
+      "prompt": "¿Qué lengua construida creó L. L. Zamenhof?",
+      "options": [
+        "Volapük",
+        "Esperanto",
+        "Interlingua",
+        "Klingon"
+      ],
+      "correct": 1,
+      "explanation": "Zamenhof publicó el esperanto en 1887."
+    },
+    {
+      "id": "q21",
+      "prompt": "¿Qué cambio lingüístico convirtió el latín vita en español vida?",
+      "options": [
+        "Metátesis",
+        "Sonorización",
+        "Apócope",
+        "Prótesis"
+      ],
+      "correct": 1,
+      "explanation": "La consonante intervocálica t se sonorizó en d."
+    },
+    {
+      "id": "q22",
+      "prompt": "¿Qué lengua pertenece a la rama semítica?",
+      "options": [
+        "Árabe",
+        "Persa",
+        "Turco",
+        "Kurdo"
+      ],
+      "correct": 0,
+      "explanation": "El árabe pertenece a la familia afroasiática, rama semítica."
+    },
+    {
+      "id": "q23",
+      "type": "true-false",
+      "prompt": "El euskera es una lengua indoeuropea.",
+      "correct": false,
+      "explanation": "El euskera es una lengua aislada y no se clasifica como indoeuropea."
+    },
+    {
+      "id": "q24",
+      "type": "true-false",
+      "prompt": "Un morfema puede aportar significado gramatical sin ser una palabra independiente.",
+      "correct": true,
+      "explanation": "Muchos morfemas, como terminaciones verbales, no funcionan solos."
+    },
+    {
+      "id": "q25",
+      "prompt": "¿Qué sistema de escritura representa principalmente consonantes?",
+      "options": [
+        "Abjad",
+        "Silabario",
+        "Alfabeto pleno",
+        "Logografía"
+      ],
+      "correct": 0,
+      "explanation": "Un abjad representa sobre todo consonantes, como el árabe tradicional."
+    },
+    {
+      "id": "q26",
+      "prompt": "¿Cómo se dice “casa” en portugués?",
+      "options": [
+        "Casa",
+        "Maison",
+        "Haus",
+        "Dom"
+      ],
+      "correct": 0,
+      "explanation": "Casa se escribe igual en portugués y español."
+    },
+    {
+      "id": "q27",
+      "prompt": "¿Qué palabra inglesa significa “aunque”?",
+      "options": [
+        "Although",
+        "Always",
+        "Already",
+        "Almost"
+      ],
+      "correct": 0,
+      "explanation": "Although introduce una concesión y significa aunque."
+    },
+    {
+      "id": "q28",
+      "prompt": "¿Qué género tiene normalmente la palabra francesa “table”?",
+      "options": [
+        "Masculino",
+        "Femenino",
+        "Neutro",
+        "Sin género"
+      ],
+      "correct": 1,
+      "explanation": "La table es un sustantivo femenino en francés."
+    },
+    {
+      "id": "q29",
+      "prompt": "¿Qué proceso elimina sonidos al final de una palabra?",
+      "options": [
+        "Apócope",
+        "Prótesis",
+        "Epéntesis",
+        "Metátesis"
+      ],
+      "correct": 0,
+      "explanation": "La apócope suprime uno o más sonidos finales."
+    },
+    {
+      "id": "q30",
+      "prompt": "¿Qué rama estudia los sonidos como unidades distintivas?",
+      "options": [
+        "Fonología",
+        "Semántica",
+        "Pragmática",
+        "Lexicografía"
+      ],
+      "correct": 0,
+      "explanation": "La fonología estudia sistemas de sonidos y fonemas."
+    },
+    {
+      "id": "q31",
+      "prompt": "¿Qué relación existe entre “flor” y “rosa”?",
+      "options": [
+        "Hiperónimo e hipónimo",
+        "Antónimos",
+        "Homófonos",
+        "Parónimos"
+      ],
+      "correct": 0,
+      "explanation": "Flor es hiperónimo y rosa es uno de sus hipónimos."
+    },
+    {
+      "id": "q32",
+      "prompt": "¿Qué lengua indoeuropea conserva un sistema de tres géneros y ocho casos?",
+      "options": [
+        "Sánscrito clásico",
+        "Inglés moderno",
+        "Afrikáans",
+        "Esperanto"
+      ],
+      "correct": 0,
+      "explanation": "El sánscrito clásico presenta una morfología nominal rica con ocho casos."
+    },
+    {
+      "id": "q33",
+      "prompt": "¿Qué ley describe el cambio sistemático de consonantes del protoindoeuropeo al germánico?",
+      "options": [
+        "Ley de Grimm",
+        "Ley de Zipf",
+        "Ley de Murphy",
+        "Ley de Verner únicamente"
+      ],
+      "correct": 0,
+      "explanation": "La ley de Grimm describe una mutación consonántica germánica."
+    },
+    {
+      "id": "q34",
+      "prompt": "¿Qué tipo de lengua expresa muchas funciones mediante afijos claramente segmentables?",
+      "options": [
+        "Aglutinante",
+        "Aislante pura",
+        "No articulada",
+        "Tonal por definición"
+      ],
+      "correct": 0,
+      "explanation": "Las lenguas aglutinantes encadenan morfemas con funciones diferenciadas."
+    },
+    {
+      "id": "q35",
+      "prompt": "¿Qué concepto distingue el significado literal del significado sugerido?",
+      "options": [
+        "Denotación y connotación",
+        "Flexión y derivación",
+        "Tema y rema",
+        "Fonema y alófono"
+      ],
+      "correct": 0,
+      "explanation": "Denotación es significado básico; connotación reúne asociaciones adicionales."
+    }
+  ],
+  "quizzes": [
+    {
+      "id": "palabras-1",
+      "title": "Palabras viajeras",
+      "description": "Saludos y vocabulario cotidiano en lenguas conocidas.",
+      "difficulty": "Inicial",
+      "questionIds": [
+        "q1",
+        "q3",
+        "q6",
+        "q10",
+        "q11"
+      ]
+    },
+    {
+      "id": "palabras-2",
+      "title": "Inglés sin tropiezos",
+      "description": "Inglés irregular, falsos amigos y familias lingüísticas.",
+      "difficulty": "Fácil",
+      "questionIds": [
+        "q2",
+        "q4",
+        "q12",
+        "q13",
+        "q14",
+        "q26"
+      ]
+    },
+    {
+      "id": "palabras-3",
+      "title": "Pasaporte lingüístico",
+      "description": "Gramática, alfabetos y formación de palabras.",
+      "difficulty": "Intermedio",
+      "questionIds": [
+        "q5",
+        "q15",
+        "q16",
+        "q17",
+        "q18",
+        "q27",
+        "q28"
+      ]
+    },
+    {
+      "id": "palabras-4",
+      "title": "Raíces y escrituras",
+      "description": "Etimología, sistemas de escritura y conceptos de lingüística.",
+      "difficulty": "Avanzado",
+      "questionIds": [
+        "q7",
+        "q8",
+        "q19",
+        "q20",
+        "q21",
+        "q29",
+        "q30",
+        "q31"
+      ]
+    },
+    {
+      "id": "palabras-5",
+      "title": "Políglota experto",
+      "description": "Clasificación, evolución histórica, morfología y sistemas de escritura.",
+      "difficulty": "Experto",
+      "questionIds": [
+        "q9",
+        "q22",
+        "q23",
+        "q24",
+        "q25",
+        "q32",
+        "q33",
+        "q34",
+        "q35"
+      ]
+    }
+  ]
+}

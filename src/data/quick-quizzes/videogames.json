@@ -1,0 +1,487 @@
+{
+  "category": "videogames",
+  "questions": [
+    {
+      "id": "q1",
+      "prompt": "¿Cuál es la mascota principal de Nintendo?",
+      "options": [
+        "Sonic",
+        "Mario",
+        "Crash",
+        "Kirby"
+      ],
+      "correct": 1,
+      "explanation": "Mario es el personaje más representativo de Nintendo."
+    },
+    {
+      "id": "q2",
+      "prompt": "¿En qué videojuego aparecen los Creepers?",
+      "options": [
+        "Fortnite",
+        "Minecraft",
+        "Terraria",
+        "Roblox"
+      ],
+      "correct": 1,
+      "explanation": "Los Creepers son enemigos emblemáticos de Minecraft."
+    },
+    {
+      "id": "q3",
+      "prompt": "¿Qué criatura amarilla acompaña frecuentemente a Ash?",
+      "options": [
+        "Agumon",
+        "Pikachu",
+        "Chocobo",
+        "Moogle"
+      ],
+      "correct": 1,
+      "explanation": "Pikachu es el compañero más conocido de Ash."
+    },
+    {
+      "id": "q4",
+      "prompt": "¿Cómo se llama el reino habitual de la saga The Legend of Zelda?",
+      "options": [
+        "Hyrule",
+        "Midgar",
+        "Albion",
+        "Tamriel"
+      ],
+      "correct": 0,
+      "explanation": "Muchas aventuras de Link transcurren en Hyrule."
+    },
+    {
+      "id": "q5",
+      "prompt": "¿Qué compañía creó PlayStation?",
+      "options": [
+        "Sega",
+        "Sony",
+        "Valve",
+        "Atari"
+      ],
+      "correct": 1,
+      "explanation": "PlayStation es una marca de Sony."
+    },
+    {
+      "id": "q6",
+      "prompt": "¿En qué saga aparece el personaje Master Chief?",
+      "options": [
+        "Halo",
+        "Doom",
+        "Mass Effect",
+        "Metroid"
+      ],
+      "correct": 0,
+      "explanation": "Master Chief es el protagonista central de Halo."
+    },
+    {
+      "id": "q7",
+      "prompt": "¿Qué juego popularizó el género battle royale con una isla y construcción?",
+      "options": [
+        "Portal",
+        "Fortnite",
+        "Celeste",
+        "Hades"
+      ],
+      "correct": 1,
+      "explanation": "Fortnite combinó battle royale con construcción."
+    },
+    {
+      "id": "q8",
+      "prompt": "¿Quién dirigió el diseño del primer Super Mario Bros.?",
+      "options": [
+        "Hideo Kojima",
+        "Shigeru Miyamoto",
+        "Sid Meier",
+        "Gabe Newell"
+      ],
+      "correct": 1,
+      "explanation": "Shigeru Miyamoto fue una figura central en su diseño."
+    },
+    {
+      "id": "q9",
+      "prompt": "¿Qué estudio desarrolló originalmente Hollow Knight?",
+      "options": [
+        "Supergiant Games",
+        "Team Cherry",
+        "Motion Twin",
+        "ConcernedApe"
+      ],
+      "correct": 1,
+      "explanation": "Hollow Knight fue creado por Team Cherry."
+    },
+    {
+      "id": "q10",
+      "prompt": "¿Qué personaje azul de Sega corre a gran velocidad?",
+      "options": [
+        "Sonic",
+        "Kirby",
+        "Mega Man",
+        "Crash"
+      ],
+      "correct": 0,
+      "explanation": "Sonic the Hedgehog es la mascota azul de Sega."
+    },
+    {
+      "id": "q11",
+      "prompt": "¿Qué forma tiene normalmente Pac-Man?",
+      "options": [
+        "Un círculo amarillo",
+        "Un cuadrado rojo",
+        "Un triángulo azul",
+        "Una estrella verde"
+      ],
+      "correct": 0,
+      "explanation": "Pac-Man se representa como un círculo amarillo con una abertura."
+    },
+    {
+      "id": "q12",
+      "prompt": "¿En qué saga aparece Lara Croft?",
+      "options": [
+        "Metroid",
+        "Tomb Raider",
+        "Uncharted",
+        "Portal"
+      ],
+      "correct": 1,
+      "explanation": "Lara Croft protagoniza Tomb Raider."
+    },
+    {
+      "id": "q13",
+      "prompt": "¿Qué videojuego usa bloques para construir y sobrevivir?",
+      "options": [
+        "Minecraft",
+        "Tetris Effect",
+        "Celeste",
+        "Overwatch"
+      ],
+      "correct": 0,
+      "explanation": "Minecraft permite construir y sobrevivir en mundos de bloques."
+    },
+    {
+      "id": "q14",
+      "prompt": "¿Qué héroe empuña habitualmente la Espada Maestra?",
+      "options": [
+        "Link",
+        "Cloud",
+        "Kratos",
+        "Samus"
+      ],
+      "correct": 0,
+      "explanation": "Link utiliza la Espada Maestra en varios juegos de Zelda."
+    },
+    {
+      "id": "q15",
+      "prompt": "¿Qué consola sucedió directamente a la Wii?",
+      "options": [
+        "GameCube",
+        "Wii U",
+        "Switch",
+        "Nintendo 64"
+      ],
+      "correct": 1,
+      "explanation": "Wii U fue la sucesora doméstica de Wii."
+    },
+    {
+      "id": "q16",
+      "prompt": "¿Qué estudio creó la saga Dark Souls?",
+      "options": [
+        "FromSoftware",
+        "Naughty Dog",
+        "Valve",
+        "Rare"
+      ],
+      "correct": 0,
+      "explanation": "FromSoftware desarrolló la saga Dark Souls."
+    },
+    {
+      "id": "q17",
+      "prompt": "¿En qué juego se encuentra la ciudad submarina de Rapture?",
+      "options": [
+        "BioShock",
+        "Dishonored",
+        "Fallout 3",
+        "Control"
+      ],
+      "correct": 0,
+      "explanation": "Rapture es el escenario submarino del primer BioShock."
+    },
+    {
+      "id": "q18",
+      "prompt": "¿Qué motor creó Epic Games?",
+      "options": [
+        "Source",
+        "Unreal Engine",
+        "Frostbite",
+        "RE Engine"
+      ],
+      "correct": 1,
+      "explanation": "Epic Games desarrolla Unreal Engine."
+    },
+    {
+      "id": "q19",
+      "type": "true-false",
+      "prompt": "The Legend of Zelda fue publicada originalmente por Nintendo.",
+      "correct": true,
+      "explanation": "Nintendo publicó y desarrolló la saga desde su origen."
+    },
+    {
+      "id": "q20",
+      "prompt": "¿Qué diseñador creó Doom junto con el equipo original de id Software y es conocido por sus niveles?",
+      "options": [
+        "John Romero",
+        "Hideo Kojima",
+        "Sid Meier",
+        "Yu Suzuki"
+      ],
+      "correct": 0,
+      "explanation": "John Romero fue diseñador clave del Doom original."
+    },
+    {
+      "id": "q21",
+      "prompt": "¿Qué juego de 1998 introdujo a Gordon Freeman?",
+      "options": [
+        "Half-Life",
+        "System Shock 2",
+        "Quake II",
+        "Deus Ex"
+      ],
+      "correct": 0,
+      "explanation": "Gordon Freeman debutó en Half-Life."
+    },
+    {
+      "id": "q22",
+      "prompt": "¿Qué estudio desarrolló Disco Elysium?",
+      "options": [
+        "ZA/UM",
+        "Supergiant Games",
+        "Remedy",
+        "Obsidian"
+      ],
+      "correct": 0,
+      "explanation": "Disco Elysium fue desarrollado por ZA/UM."
+    },
+    {
+      "id": "q23",
+      "type": "true-false",
+      "prompt": "La primera PlayStation utilizaba cartuchos como formato principal.",
+      "correct": false,
+      "explanation": "La PlayStation original utilizaba discos compactos."
+    },
+    {
+      "id": "q24",
+      "type": "true-false",
+      "prompt": "Shigeru Miyamoto participó en la creación de Mario y The Legend of Zelda.",
+      "correct": true,
+      "explanation": "Miyamoto fue una figura central en la creación de ambas sagas."
+    },
+    {
+      "id": "q25",
+      "prompt": "¿Qué técnica acelera recorridos de juegos explotando rutas y mecánicas?",
+      "options": [
+        "Speedrunning",
+        "Ray tracing",
+        "Matchmaking",
+        "Grinding"
+      ],
+      "correct": 0,
+      "explanation": "El speedrunning busca completar un juego o reto en el menor tiempo posible."
+    },
+    {
+      "id": "q26",
+      "prompt": "¿Qué consola portátil creó Nintendo antes de Nintendo DS?",
+      "options": [
+        "Game Boy",
+        "PS Vita",
+        "Game Gear",
+        "Neo Geo Pocket de Nintendo"
+      ],
+      "correct": 0,
+      "explanation": "Game Boy fue la línea portátil emblemática de Nintendo."
+    },
+    {
+      "id": "q27",
+      "prompt": "¿En qué género suele controlarse un ejército y administrar recursos en tiempo real?",
+      "options": [
+        "Estrategia en tiempo real",
+        "Novela visual",
+        "Ritmo",
+        "Plataformas"
+      ],
+      "correct": 0,
+      "explanation": "Los RTS combinan producción, recursos y órdenes en tiempo real."
+    },
+    {
+      "id": "q28",
+      "prompt": "¿Qué compañía desarrolló Portal?",
+      "options": [
+        "Valve",
+        "Capcom",
+        "Konami",
+        "Ubisoft"
+      ],
+      "correct": 0,
+      "explanation": "Valve desarrolló Portal."
+    },
+    {
+      "id": "q29",
+      "prompt": "¿Qué protagonista conduce la saga Metroid?",
+      "options": [
+        "Samus Aran",
+        "Zelda",
+        "Aloy",
+        "Bayonetta"
+      ],
+      "correct": 0,
+      "explanation": "Samus Aran es la cazarrecompensas protagonista de Metroid."
+    },
+    {
+      "id": "q30",
+      "prompt": "¿Qué juego de FromSoftware transcurre en Yharnam?",
+      "options": [
+        "Bloodborne",
+        "Sekiro",
+        "Elden Ring",
+        "Armored Core VI"
+      ],
+      "correct": 0,
+      "explanation": "Yharnam es la ciudad principal de Bloodborne."
+    },
+    {
+      "id": "q31",
+      "prompt": "¿Qué término describe contenido creado por jugadores que modifica un juego?",
+      "options": [
+        "Mod",
+        "Parche oficial exclusivamente",
+        "DLC",
+        "Port"
+      ],
+      "correct": 0,
+      "explanation": "Un mod altera o amplía un juego mediante contenido comunitario."
+    },
+    {
+      "id": "q32",
+      "prompt": "¿Qué consola de Sega compitió con Super Nintendo?",
+      "options": [
+        "Mega Drive/Genesis",
+        "Dreamcast",
+        "Saturn",
+        "Master System únicamente en la era 8-bit"
+      ],
+      "correct": 0,
+      "explanation": "Mega Drive o Genesis fue la rival de 16 bits de Super Nintendo."
+    },
+    {
+      "id": "q33",
+      "prompt": "¿Qué diseñador dirigió Metal Gear Solid?",
+      "options": [
+        "Hideo Kojima",
+        "Fumito Ueda",
+        "Satoru Iwata",
+        "Masahiro Sakurai"
+      ],
+      "correct": 0,
+      "explanation": "Hideo Kojima dirigió Metal Gear Solid."
+    },
+    {
+      "id": "q34",
+      "prompt": "¿Qué estudio creó la saga The Last of Us?",
+      "options": [
+        "Naughty Dog",
+        "Insomniac Games",
+        "Bungie",
+        "BioWare"
+      ],
+      "correct": 0,
+      "explanation": "Naughty Dog desarrolló The Last of Us."
+    },
+    {
+      "id": "q35",
+      "prompt": "¿Qué videojuego independiente popularizó al personaje The Knight en Hallownest?",
+      "options": [
+        "Hollow Knight",
+        "Dead Cells",
+        "Cuphead",
+        "Hades"
+      ],
+      "correct": 0,
+      "explanation": "The Knight explora Hallownest en Hollow Knight."
+    }
+  ],
+  "quizzes": [
+    {
+      "id": "partida-1",
+      "title": "Iconos del gaming",
+      "description": "Mascotas y personajes reconocibles de los videojuegos.",
+      "difficulty": "Inicial",
+      "questionIds": [
+        "q1",
+        "q2",
+        "q3",
+        "q10",
+        "q11"
+      ]
+    },
+    {
+      "id": "partida-2",
+      "title": "Mundos inolvidables",
+      "description": "Mundos famosos, héroes y aventuras populares.",
+      "difficulty": "Fácil",
+      "questionIds": [
+        "q4",
+        "q12",
+        "q13",
+        "q14",
+        "q15",
+        "q26"
+      ]
+    },
+    {
+      "id": "partida-3",
+      "title": "Consolas y sagas",
+      "description": "Consolas, compañías, sagas y escenarios memorables.",
+      "difficulty": "Intermedio",
+      "questionIds": [
+        "q5",
+        "q6",
+        "q16",
+        "q17",
+        "q18",
+        "q27",
+        "q28"
+      ]
+    },
+    {
+      "id": "partida-4",
+      "title": "Historia del mando",
+      "description": "Éxitos modernos, creadores, motores e historia del medio.",
+      "difficulty": "Avanzado",
+      "questionIds": [
+        "q7",
+        "q8",
+        "q19",
+        "q20",
+        "q21",
+        "q29",
+        "q30",
+        "q31"
+      ]
+    },
+    {
+      "id": "partida-5",
+      "title": "Jugador experto",
+      "description": "Estudios, formatos, autores y cultura especializada del gaming.",
+      "difficulty": "Experto",
+      "questionIds": [
+        "q9",
+        "q22",
+        "q23",
+        "q24",
+        "q25",
+        "q32",
+        "q33",
+        "q34",
+        "q35"
+      ]
+    }
+  ]
+}

@@ -76,6 +76,26 @@ export function HelpSettings({ onCreate, onImport, onPromptRoom }) {
         <span className="eyebrow">Preguntas frecuentes</span>
         <details><summary>¿Dónde se guardan mis quizzes?</summary><p>Se guardan en el almacenamiento local de este navegador. Exporta los importantes para conservar una copia o moverlos a otro dispositivo.</p></details>
         <details><summary>¿Cómo se registra mi mejor nota?</summary><p>Cada vez que completas un quiz, MyQwiz compara el resultado y conserva automáticamente la puntuación más alta.</p></details>
+        <details className="help-controls">
+          <summary>¿Cómo puedo jugar usando el teclado?</summary>
+          <div className="help-controls__content">
+            <p>Estos controles funcionan en Clásico, Vidas, Punto de control y Carrera.</p>
+            <div><strong>Selección múltiple</strong><span><kbd>WASD</kbd> o las flechas mueven el foco. El primer <kbd>Enter</kbd> selecciona y el segundo confirma.</span></div>
+            <div><strong>Verdadero o falso</strong><span><kbd>A</kbd>/<kbd>D</kbd> o las flechas cambian de opción. Usa dos veces <kbd>Enter</kbd> para seleccionar y confirmar.</span></div>
+            <div><strong>Asociar</strong><span><kbd>W</kbd>/<kbd>S</kbd> o arriba/abajo recorren cada columna. <kbd>Enter</kbd> elige el elemento y luego su pareja; <kbd>Espacio</kbd> confirma al completar todas.</span></div>
+            <div><strong>Completar</strong><span>Escribe la respuesta y utiliza <kbd>Enter</kbd> para comprobarla.</span></div>
+            <div><strong>Navegación general</strong><span><kbd>Tab</kbd> y <kbd>Shift</kbd> + <kbd>Tab</kbd> recorren los demás botones y controles.</span></div>
+          </div>
+        </details>
+        <details className="help-controls">
+          <summary>¿Puedo agregar MyQwiz al escritorio o a la pantalla de inicio?</summary>
+          <div className="help-controls__content">
+            <p>Sí. Al instalar MyQwiz desde el navegador se abre como una aplicación independiente, con una interfaz más limpia y más espacio para jugar.</p>
+            <div><strong>En móviles</strong><span>Abre el menú del navegador y elige <b>Instalar aplicación</b> o <b>Agregar a pantalla de inicio</b>. Al abrirla desde su icono, las barras y controles del navegador dejan de ocupar espacio.</span></div>
+            <div><strong>En computadora</strong><span>Busca la opción <b>Instalar MyQwiz</b> en la barra de direcciones o en el menú del navegador. Tendrás un acceso directo y una ventana propia para la app.</span></div>
+            <div><strong>Si no aparece</strong><span>El nombre de la opción puede variar según el navegador. Prueba desde Chrome, Edge o Safari y revisa su menú principal.</span></div>
+          </div>
+        </details>
         <details><summary>¿Puedo importar contenido creado por una IA?</summary><p>Sí. Puedes descargar el JSON o copiarlo completo y pegarlo directamente en la ventana de importación.</p></details>
       </div>
     </section>

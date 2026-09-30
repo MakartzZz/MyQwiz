@@ -31,9 +31,10 @@
   --hero-shadow: rgba(24, 31, 22, .34);
   --empty-bg: #46563d;
   --empty-line: #7e8a76;
-  --toast-bg: #f0eee7;
-  --toast-text: #293326;
-  --toast-shadow: #263122;
+  --toast-bg: #3d4c35;
+  --toast-text: #f4f1e9;
+  --toast-shadow: #20291f;
+  --toast-line: #718068;
   --backdrop: rgba(17, 23, 16, .56);
   --primary-button-bg: #e1e3dc;
   --primary-button-ink: #293326;
@@ -47,19 +48,26 @@
   --ribbon-three: #939e8e;
   --ribbon-icon: #f0eee7;
   --theme-copy: #526446;
-  --sileo-state-success: #3f7b4d;
-  --sileo-state-loading: #687466;
-  --sileo-state-error: #c64f43;
-  --sileo-state-warning: #bd6a3f;
-  --sileo-state-info: #49623b;
-  --sileo-state-action: #49623b;
+  --sileo-state-success: #9fd39a;
+  --sileo-state-loading: #c4ccc0;
+  --sileo-state-error: #ff9a87;
+  --sileo-state-warning: #f2b66d;
+  --sileo-state-info: #d3dfcd;
+  --sileo-state-action: #d3dfcd;
   --sileo-duration: 560ms;
+  --scrollbar-thumb: var(--purple);
+  --scrollbar-thumb-hover: var(--purple-dark);
+  --scrollbar-track: color-mix(in srgb, var(--page-bg) 78%, var(--surface));
   color: var(--ink);
   background: var(--page-background, var(--page-bg));
 }
 
 :root[data-theme="violet"] {
   --sidebar-bg: #344530;
+  --toast-bg: #3d4c35;
+  --toast-text: #f4f1e9;
+  --toast-shadow: #20291f;
+  --toast-line: #718068;
 }
 
 :root[data-theme="sky"] {
@@ -90,9 +98,10 @@
   --hero-shadow: rgba(31, 137, 181, .2);
   --empty-bg: #ffffff;
   --empty-line: #cde4ec;
-  --toast-bg: #173b4c;
-  --toast-text: #eefaff;
-  --toast-shadow: #0b536f;
+  --toast-bg: #f4fbfe;
+  --toast-text: #17354b;
+  --toast-shadow: #a8cfdd;
+  --toast-line: #b9e5f3;
   --backdrop: rgba(18, 61, 80, .28);
   --primary-button-bg: #ffffff;
   --primary-button-ink: var(--purple-dark);
@@ -106,8 +115,12 @@
   --ribbon-three: #d9f1f8;
   --ribbon-icon: #11698f;
   --theme-copy: #cfeaf3;
-  --sileo-state-info: oklch(0.62 0.14 225);
-  --sileo-state-action: oklch(0.62 0.14 225);
+  --sileo-state-success: #23815f;
+  --sileo-state-loading: #667f8d;
+  --sileo-state-error: #c44f42;
+  --sileo-state-warning: #a86119;
+  --sileo-state-info: #11698f;
+  --sileo-state-action: #11698f;
 }
 
 :root[data-theme="midnight"] {
@@ -138,9 +151,10 @@
   --hero-shadow: rgba(0, 0, 0, .28);
   --empty-bg: #1e2123;
   --empty-line: #4a425c;
-  --toast-bg: #eee9ff;
-  --toast-text: #292016;
+  --toast-bg: #242729;
+  --toast-text: #f3eee7;
   --toast-shadow: #08090a;
+  --toast-line: #55504a;
   --backdrop: rgba(5, 4, 9, .6);
   --primary-button-bg: #eee9df;
   --primary-button-ink: #352716;
@@ -158,8 +172,8 @@
   --sileo-state-loading: oklch(0.7 0.02 290);
   --sileo-state-error: oklch(0.72 0.17 27);
   --sileo-state-warning: oklch(0.82 0.14 78);
-  --sileo-state-info: #a86520;
-  --sileo-state-action: #a86520;
+  --sileo-state-info: #e3a44c;
+  --sileo-state-action: #e3a44c;
 }
 
 :root[data-theme="pink"] {
@@ -190,9 +204,10 @@
   --hero-shadow: rgba(133, 24, 67, .24);
   --empty-bg: #fff8f5;
   --empty-line: #df9db7;
-  --toast-bg: #57152f;
-  --toast-text: #fff3f7;
-  --toast-shadow: #9e174f;
+  --toast-bg: #fff6f8;
+  --toast-text: #541b35;
+  --toast-shadow: #d88aa8;
+  --toast-line: #eeb4c9;
   --backdrop: rgba(91, 20, 49, .35);
   --primary-button-bg: #fff7ec;
   --primary-button-ink: #9e174f;
@@ -215,11 +230,9 @@
 }
 
 [data-sileo-svg] {
-  filter: drop-shadow(4px 5px 0 var(--toast-shadow));
-}
-
-[data-sileo-description] {
-  color: color-mix(in srgb, var(--toast-text) 76%, transparent) !important;
+  filter:
+    drop-shadow(0 0 1px var(--toast-line))
+    drop-shadow(4px 5px 0 var(--toast-shadow));
 }
 
 [data-sileo-title] {
@@ -227,12 +240,32 @@
   font-weight: 750;
 }
 
+[data-sileo-description] {
+  font-family: "Archivo", sans-serif;
+  color: color-mix(in srgb, var(--toast-text) 78%, transparent) !important;
+}
+
 [data-sileo-button] {
   font-family: "Archivo", sans-serif;
   font-weight: 700;
 }
 
-* { box-sizing: border-box; }
+* {
+  box-sizing: border-box;
+  scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
+  scrollbar-width: thin;
+}
+*::-webkit-scrollbar { width: 11px; height: 11px; }
+*::-webkit-scrollbar-track { background: var(--scrollbar-track); }
+*::-webkit-scrollbar-thumb {
+  min-width: 38px;
+  min-height: 38px;
+  border: 3px solid var(--scrollbar-track);
+  border-radius: 4px;
+  background: var(--scrollbar-thumb);
+}
+*::-webkit-scrollbar-thumb:hover { background: var(--scrollbar-thumb-hover); }
+*::-webkit-scrollbar-corner { background: var(--scrollbar-track); }
 html { min-width: 320px; min-height: 100%; }
 body {
   margin: 0;

@@ -1,0 +1,487 @@
+{
+  "category": "art",
+  "questions": [
+    {
+      "id": "q1",
+      "prompt": "¿Quién pintó la Mona Lisa?",
+      "options": [
+        "Miguel Ángel",
+        "Leonardo da Vinci",
+        "Rafael",
+        "Botticelli"
+      ],
+      "correct": 1,
+      "explanation": "Leonardo da Vinci pintó la Mona Lisa."
+    },
+    {
+      "id": "q2",
+      "prompt": "¿Qué color resulta de mezclar azul y amarillo en pintura?",
+      "options": [
+        "Verde",
+        "Violeta",
+        "Naranja",
+        "Rojo"
+      ],
+      "correct": 0,
+      "explanation": "En mezcla sustractiva básica, azul y amarillo producen verde."
+    },
+    {
+      "id": "q3",
+      "prompt": "¿Qué material se usa tradicionalmente en la técnica del carboncillo?",
+      "options": [
+        "Carbón vegetal",
+        "Arcilla",
+        "Cera",
+        "Tiza líquida"
+      ],
+      "correct": 0,
+      "explanation": "El carboncillo artístico se obtiene de madera carbonizada."
+    },
+    {
+      "id": "q4",
+      "prompt": "¿A qué movimiento pertenece Claude Monet?",
+      "options": [
+        "Cubismo",
+        "Impresionismo",
+        "Surrealismo",
+        "Barroco"
+      ],
+      "correct": 1,
+      "explanation": "Monet fue una figura central del impresionismo."
+    },
+    {
+      "id": "q5",
+      "prompt": "¿Quién esculpió el David de mármol conservado en Florencia?",
+      "options": [
+        "Donatello",
+        "Bernini",
+        "Miguel Ángel",
+        "Rodin"
+      ],
+      "correct": 2,
+      "explanation": "Miguel Ángel realizó el David entre 1501 y 1504."
+    },
+    {
+      "id": "q6",
+      "prompt": "¿Qué técnica pinta sobre yeso húmedo?",
+      "options": [
+        "Grabado",
+        "Fresco",
+        "Collage",
+        "Temple seco"
+      ],
+      "correct": 1,
+      "explanation": "El fresco aplica pigmentos sobre una capa de yeso aún húmeda."
+    },
+    {
+      "id": "q7",
+      "prompt": "¿Qué artista impulsó el cubismo junto con Georges Braque?",
+      "options": [
+        "Pablo Picasso",
+        "Salvador Dalí",
+        "Paul Cézanne",
+        "Henri Matisse"
+      ],
+      "correct": 0,
+      "explanation": "Picasso y Braque desarrollaron el cubismo analítico."
+    },
+    {
+      "id": "q8",
+      "prompt": "¿Qué principio visual distribuye el peso de los elementos de una composición?",
+      "options": [
+        "Balance",
+        "Textura",
+        "Matiz",
+        "Saturación"
+      ],
+      "correct": 0,
+      "explanation": "El balance organiza el peso visual dentro de la obra."
+    },
+    {
+      "id": "q9",
+      "prompt": "¿Qué escuela alemana unió arte, artesanía y diseño desde 1919?",
+      "options": [
+        "Bauhaus",
+        "De Stijl",
+        "Dadaísmo",
+        "Fauvismo"
+      ],
+      "correct": 0,
+      "explanation": "La Bauhaus integró disciplinas artísticas, diseño y arquitectura."
+    },
+    {
+      "id": "q10",
+      "prompt": "¿Qué colores se consideran primarios en pintura tradicional?",
+      "options": [
+        "Rojo, amarillo y azul",
+        "Verde, naranja y violeta",
+        "Cian, magenta y negro",
+        "Blanco, gris y negro"
+      ],
+      "correct": 0,
+      "explanation": "El modelo tradicional de pintura usa rojo, amarillo y azul."
+    },
+    {
+      "id": "q11",
+      "prompt": "¿Qué herramienta se usa comúnmente para aplicar pintura sobre un lienzo?",
+      "options": [
+        "Pincel",
+        "Compás",
+        "Cincel",
+        "Telar"
+      ],
+      "correct": 0,
+      "explanation": "El pincel es una herramienta básica de la pintura."
+    },
+    {
+      "id": "q12",
+      "prompt": "¿Quién pintó La noche estrellada?",
+      "options": [
+        "Vincent van Gogh",
+        "Paul Cézanne",
+        "Edgar Degas",
+        "Henri Matisse"
+      ],
+      "correct": 0,
+      "explanation": "Vincent van Gogh pintó La noche estrellada en 1889."
+    },
+    {
+      "id": "q13",
+      "prompt": "¿Qué técnica crea imágenes pegando materiales sobre una superficie?",
+      "options": [
+        "Collage",
+        "Grabado",
+        "Fresco",
+        "Acuarela"
+      ],
+      "correct": 0,
+      "explanation": "El collage combina fragmentos adheridos a un soporte."
+    },
+    {
+      "id": "q14",
+      "prompt": "¿Qué material se talla para crear una xilografía?",
+      "options": [
+        "Madera",
+        "Vidrio",
+        "Mármol",
+        "Arcilla"
+      ],
+      "correct": 0,
+      "explanation": "La xilografía usa una matriz de madera tallada."
+    },
+    {
+      "id": "q15",
+      "prompt": "¿Qué artista pintó Guernica?",
+      "options": [
+        "Pablo Picasso",
+        "Salvador Dalí",
+        "Joan Miró",
+        "Diego Rivera"
+      ],
+      "correct": 0,
+      "explanation": "Picasso pintó Guernica en 1937."
+    },
+    {
+      "id": "q16",
+      "prompt": "¿Qué término describe el contraste entre luz y sombra?",
+      "options": [
+        "Claroscuro",
+        "Perspectiva aérea",
+        "Impasto",
+        "Puntillismo"
+      ],
+      "correct": 0,
+      "explanation": "El claroscuro modela formas mediante fuertes contrastes tonales."
+    },
+    {
+      "id": "q17",
+      "prompt": "¿Qué movimiento exaltó sueños y asociaciones del inconsciente?",
+      "options": [
+        "Surrealismo",
+        "Neoclasicismo",
+        "Realismo",
+        "Impresionismo"
+      ],
+      "correct": 0,
+      "explanation": "El surrealismo exploró sueños, automatismo e inconsciente."
+    },
+    {
+      "id": "q18",
+      "prompt": "¿Qué principio organiza elementos alrededor de un eje central equivalente?",
+      "options": [
+        "Simetría",
+        "Ritmo aleatorio",
+        "Saturación",
+        "Textura"
+      ],
+      "correct": 0,
+      "explanation": "La simetría equilibra elementos respecto de un eje o centro."
+    },
+    {
+      "id": "q19",
+      "type": "true-false",
+      "prompt": "La perspectiva lineal utiliza puntos de fuga para representar profundidad.",
+      "correct": true,
+      "explanation": "Las líneas convergentes hacia puntos de fuga crean ilusión espacial."
+    },
+    {
+      "id": "q20",
+      "prompt": "¿Qué colectivo mexicano incluyó a José Clemente Orozco, Diego Rivera y David Alfaro Siqueiros?",
+      "options": [
+        "Muralistas mexicanos",
+        "Fauvistas",
+        "Nabis",
+        "Prerrafaelitas"
+      ],
+      "correct": 0,
+      "explanation": "Los tres son figuras centrales del muralismo mexicano."
+    },
+    {
+      "id": "q21",
+      "prompt": "¿Qué concepto de la Gestalt completa mentalmente formas incompletas?",
+      "options": [
+        "Cierre",
+        "Proximidad",
+        "Contraste",
+        "Jerarquía"
+      ],
+      "correct": 0,
+      "explanation": "La ley de cierre lleva a percibir figuras completas aunque falten partes."
+    },
+    {
+      "id": "q22",
+      "prompt": "¿Qué técnica escultórica construye una forma añadiendo material?",
+      "options": [
+        "Modelado",
+        "Talla",
+        "Grabado",
+        "Esgrafiado"
+      ],
+      "correct": 0,
+      "explanation": "El modelado es un proceso aditivo, por ejemplo con arcilla."
+    },
+    {
+      "id": "q23",
+      "type": "true-false",
+      "prompt": "La Bauhaus defendía una separación estricta entre arte, diseño y artesanía.",
+      "correct": false,
+      "explanation": "La Bauhaus buscó integrar arte, artesanía, arquitectura y producción."
+    },
+    {
+      "id": "q24",
+      "type": "true-false",
+      "prompt": "El contrapposto distribuye el peso del cuerpo de manera asimétrica en una figura.",
+      "correct": true,
+      "explanation": "El contrapposto desplaza el peso a una pierna y crea una postura dinámica."
+    },
+    {
+      "id": "q25",
+      "prompt": "¿Qué artista realizó la instalación The Weather Project en la Tate Modern?",
+      "options": [
+        "Olafur Eliasson",
+        "Ai Weiwei",
+        "Marina Abramović",
+        "Jeff Koons"
+      ],
+      "correct": 0,
+      "explanation": "Olafur Eliasson presentó The Weather Project en 2003."
+    },
+    {
+      "id": "q26",
+      "prompt": "¿Qué soporte de tela se usa comúnmente para pintar al óleo?",
+      "options": [
+        "Lienzo",
+        "Arcilla",
+        "Bronce",
+        "Vitral"
+      ],
+      "correct": 0,
+      "explanation": "El lienzo tensado es un soporte habitual de la pintura al óleo."
+    },
+    {
+      "id": "q27",
+      "prompt": "¿Qué artista pintó El grito?",
+      "options": [
+        "Edvard Munch",
+        "Gustav Klimt",
+        "Paul Klee",
+        "René Magritte"
+      ],
+      "correct": 0,
+      "explanation": "Edvard Munch creó varias versiones de El grito."
+    },
+    {
+      "id": "q28",
+      "prompt": "¿Qué técnica usa pequeños puntos de color separados?",
+      "options": [
+        "Puntillismo",
+        "Frotado",
+        "Esgrafiado",
+        "Temple"
+      ],
+      "correct": 0,
+      "explanation": "El puntillismo construye imágenes con puntos de color."
+    },
+    {
+      "id": "q29",
+      "prompt": "¿Qué arquitecto diseñó la Casa Batlló?",
+      "options": [
+        "Antoni Gaudí",
+        "Le Corbusier",
+        "Frank Lloyd Wright",
+        "Oscar Niemeyer"
+      ],
+      "correct": 0,
+      "explanation": "La Casa Batlló es una obra modernista de Gaudí."
+    },
+    {
+      "id": "q30",
+      "prompt": "¿Qué movimiento italiano celebró velocidad y tecnología a inicios del siglo XX?",
+      "options": [
+        "Futurismo",
+        "Romanticismo",
+        "Rococó",
+        "Simbolismo"
+      ],
+      "correct": 0,
+      "explanation": "El futurismo exaltó máquinas, velocidad y modernidad."
+    },
+    {
+      "id": "q31",
+      "prompt": "¿Qué técnica aplica pintura espesa para dejar visible la textura de las pinceladas?",
+      "options": [
+        "Impasto",
+        "Aguafuerte",
+        "Veladura",
+        "Cianotipia"
+      ],
+      "correct": 0,
+      "explanation": "El impasto utiliza capas gruesas de pintura que conservan relieve y gesto."
+    },
+    {
+      "id": "q32",
+      "prompt": "¿Qué artista presentó Fountain en 1917 bajo el nombre R. Mutt?",
+      "options": [
+        "Marcel Duchamp",
+        "Man Ray",
+        "Kazimir Malévich",
+        "Wassily Kandinsky"
+      ],
+      "correct": 0,
+      "explanation": "Fountain es un readymade asociado a Marcel Duchamp."
+    },
+    {
+      "id": "q33",
+      "prompt": "¿Qué término japonés valora la imperfección y la transitoriedad?",
+      "options": [
+        "Wabi-sabi",
+        "Ukiyo-e",
+        "Kintsugi exclusivamente",
+        "Origami"
+      ],
+      "correct": 0,
+      "explanation": "Wabi-sabi encuentra belleza en lo imperfecto y efímero."
+    },
+    {
+      "id": "q34",
+      "prompt": "¿Qué teórico relacionó colores y formas en Punto y línea sobre el plano?",
+      "options": [
+        "Wassily Kandinsky",
+        "John Ruskin",
+        "Giorgio Vasari",
+        "Clement Greenberg"
+      ],
+      "correct": 0,
+      "explanation": "Kandinsky analizó relaciones visuales en esa obra teórica."
+    },
+    {
+      "id": "q35",
+      "prompt": "¿Qué técnica fotográfica temprana fijaba imágenes sobre una placa de cobre plateada?",
+      "options": [
+        "Daguerrotipo",
+        "Cianotipia",
+        "Gelatina de plata",
+        "Fotograma digital"
+      ],
+      "correct": 0,
+      "explanation": "El daguerrotipo empleaba una placa de cobre recubierta de plata."
+    }
+  ],
+  "quizzes": [
+    {
+      "id": "lienzo-1",
+      "title": "Colores y maestros",
+      "description": "Colores, materiales, herramientas y obras muy conocidas.",
+      "difficulty": "Inicial",
+      "questionIds": [
+        "q1",
+        "q2",
+        "q3",
+        "q10",
+        "q11"
+      ]
+    },
+    {
+      "id": "lienzo-2",
+      "title": "Taller de artista",
+      "description": "Impresionismo, collage, grabado y artistas modernos.",
+      "difficulty": "Fácil",
+      "questionIds": [
+        "q4",
+        "q12",
+        "q13",
+        "q14",
+        "q15",
+        "q26"
+      ]
+    },
+    {
+      "id": "lienzo-3",
+      "title": "Museo esencial",
+      "description": "Escultura, fresco, cubismo y recursos de iluminación.",
+      "difficulty": "Intermedio",
+      "questionIds": [
+        "q5",
+        "q6",
+        "q16",
+        "q17",
+        "q18",
+        "q27",
+        "q28"
+      ]
+    },
+    {
+      "id": "lienzo-4",
+      "title": "Forma y composición",
+      "description": "Vanguardias, composición, surrealismo y técnicas pictóricas.",
+      "difficulty": "Avanzado",
+      "questionIds": [
+        "q7",
+        "q8",
+        "q19",
+        "q20",
+        "q21",
+        "q29",
+        "q30",
+        "q31"
+      ]
+    },
+    {
+      "id": "lienzo-5",
+      "title": "Curaduría experta",
+      "description": "Bauhaus, Gestalt, escultura, postura e instalación contemporánea.",
+      "difficulty": "Experto",
+      "questionIds": [
+        "q9",
+        "q22",
+        "q23",
+        "q24",
+        "q25",
+        "q32",
+        "q33",
+        "q34",
+        "q35"
+      ]
+    }
+  ]
+}

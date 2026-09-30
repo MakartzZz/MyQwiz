@@ -3,6 +3,7 @@
 @import "./styles/home.css";
 @import "./styles/customization.css";
 @import "./styles/quiz-library.css";
+@import "./styles/quick-quizzes.css";
 /* Sala de prompts */
 @import "./styles/prompt-studio.css";
 @import "./styles/gameplay.css";

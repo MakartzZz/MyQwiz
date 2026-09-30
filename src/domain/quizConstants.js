@@ -19,6 +19,12 @@ export const QUIZ_ICONS = Object.freeze({
   MEDICINE: "medicine",
   ANATOMY: "anatomy",
   GEOGRAPHY: "geography",
+  VIDEOGAMES: "videogames",
+  MUSIC: "music",
+  ART: "art",
+  BIOLOGY: "biology",
+  PHYSICS: "physics",
+  CINEMA: "cinema",
 });
 
 export const GAME_MODES = Object.freeze({

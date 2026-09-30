@@ -1,0 +1,487 @@
+{
+  "category": "technology",
+  "questions": [
+    {
+      "id": "q1",
+      "prompt": "¿Qué componente ejecuta la mayoría de las instrucciones de una computadora?",
+      "options": [
+        "CPU",
+        "Monitor",
+        "Teclado",
+        "Disco"
+      ],
+      "correct": 0,
+      "explanation": "La CPU procesa las instrucciones del sistema."
+    },
+    {
+      "id": "q2",
+      "prompt": "¿Qué significa URL?",
+      "options": [
+        "Universal Read Link",
+        "Uniform Resource Locator",
+        "User Route List",
+        "Unified Resource Language"
+      ],
+      "correct": 1,
+      "explanation": "URL significa Uniform Resource Locator."
+    },
+    {
+      "id": "q3",
+      "prompt": "¿Cuál de estos es un sistema operativo?",
+      "options": [
+        "Linux",
+        "HTML",
+        "Wi-Fi",
+        "USB"
+      ],
+      "correct": 0,
+      "explanation": "Linux es una familia de sistemas operativos."
+    },
+    {
+      "id": "q4",
+      "prompt": "¿Qué lenguaje estructura el contenido de una página web?",
+      "options": [
+        "CSS",
+        "HTML",
+        "SQL",
+        "Bash"
+      ],
+      "correct": 1,
+      "explanation": "HTML define la estructura semántica de una página."
+    },
+    {
+      "id": "q5",
+      "prompt": "¿Qué protocolo se usa normalmente para navegar de forma cifrada por la web?",
+      "options": [
+        "FTP",
+        "HTTP",
+        "HTTPS",
+        "SMTP"
+      ],
+      "correct": 2,
+      "explanation": "HTTPS protege la comunicación mediante cifrado."
+    },
+    {
+      "id": "q6",
+      "prompt": "¿Qué estructura de datos sigue el principio LIFO?",
+      "options": [
+        "Cola",
+        "Pila",
+        "Grafo",
+        "Árbol"
+      ],
+      "correct": 1,
+      "explanation": "En una pila, el último elemento en entrar es el primero en salir."
+    },
+    {
+      "id": "q7",
+      "prompt": "¿Qué tipo de memoria pierde sus datos al apagar el equipo?",
+      "options": [
+        "SSD",
+        "ROM",
+        "RAM",
+        "Flash"
+      ],
+      "correct": 2,
+      "explanation": "La RAM es memoria volátil."
+    },
+    {
+      "id": "q8",
+      "prompt": "¿Qué algoritmo de búsqueda requiere datos ordenados y divide el espacio a la mitad?",
+      "options": [
+        "Lineal",
+        "Binaria",
+        "Profundidad",
+        "Burbuja"
+      ],
+      "correct": 1,
+      "explanation": "La búsqueda binaria descarta la mitad de los elementos en cada paso."
+    },
+    {
+      "id": "q9",
+      "prompt": "¿Qué propiedad garantiza que una transacción de base de datos se complete entera o no se aplique?",
+      "options": [
+        "Consistencia",
+        "Aislamiento",
+        "Atomicidad",
+        "Durabilidad"
+      ],
+      "correct": 2,
+      "explanation": "La atomicidad trata cada transacción como una unidad indivisible."
+    },
+    {
+      "id": "q10",
+      "prompt": "¿Qué dispositivo permite mover el puntero en una computadora?",
+      "options": [
+        "Router",
+        "Ratón",
+        "Módem",
+        "Escáner"
+      ],
+      "correct": 1,
+      "explanation": "El ratón o mouse controla el puntero."
+    },
+    {
+      "id": "q11",
+      "prompt": "¿Qué unidad suele medir la capacidad de almacenamiento?",
+      "options": [
+        "Voltio",
+        "Byte",
+        "Hercio",
+        "Píxel"
+      ],
+      "correct": 1,
+      "explanation": "El byte y sus múltiplos miden almacenamiento digital."
+    },
+    {
+      "id": "q12",
+      "prompt": "¿Qué etiqueta HTML crea un enlace?",
+      "options": [
+        "<p>",
+        "<a>",
+        "<img>",
+        "<div>"
+      ],
+      "correct": 1,
+      "explanation": "La etiqueta <a> define un hipervínculo."
+    },
+    {
+      "id": "q13",
+      "prompt": "¿Qué extensión se asocia normalmente a una hoja de estilos?",
+      "options": [
+        ".css",
+        ".jpg",
+        ".mp3",
+        ".exe"
+      ],
+      "correct": 0,
+      "explanation": "Los archivos CSS definen estilos visuales."
+    },
+    {
+      "id": "q14",
+      "prompt": "¿Qué sistema traduce nombres de dominio a direcciones IP?",
+      "options": [
+        "DNS",
+        "USB",
+        "GPU",
+        "SQL"
+      ],
+      "correct": 0,
+      "explanation": "DNS resuelve nombres de dominio en direcciones IP."
+    },
+    {
+      "id": "q15",
+      "prompt": "¿Qué estructura sigue el principio FIFO?",
+      "options": [
+        "Pila",
+        "Cola",
+        "Árbol",
+        "Grafo"
+      ],
+      "correct": 1,
+      "explanation": "Una cola atiende primero al elemento que entró primero."
+    },
+    {
+      "id": "q16",
+      "prompt": "¿Qué paradigma encapsula datos y comportamiento en objetos?",
+      "options": [
+        "Programación orientada a objetos",
+        "Programación lineal",
+        "Marcado semántico",
+        "Compresión sin pérdida"
+      ],
+      "correct": 0,
+      "explanation": "La orientación a objetos agrupa estado y métodos."
+    },
+    {
+      "id": "q17",
+      "prompt": "¿Qué protocolo asigna automáticamente direcciones IP en una red?",
+      "options": [
+        "FTP",
+        "DHCP",
+        "SMTP",
+        "SSH"
+      ],
+      "correct": 1,
+      "explanation": "DHCP asigna parámetros de red a los dispositivos."
+    },
+    {
+      "id": "q18",
+      "prompt": "¿Qué operación lógica devuelve verdadero solo si ambas entradas son verdaderas?",
+      "options": [
+        "OR",
+        "NOT",
+        "AND",
+        "XOR"
+      ],
+      "correct": 2,
+      "explanation": "La conjunción AND exige que ambas entradas sean verdaderas."
+    },
+    {
+      "id": "q19",
+      "type": "true-false",
+      "prompt": "Una dirección IPv4 contiene 128 bits.",
+      "correct": false,
+      "explanation": "IPv4 usa 32 bits; IPv6 usa 128 bits."
+    },
+    {
+      "id": "q20",
+      "prompt": "¿Qué complejidad promedio tiene la búsqueda binaria?",
+      "options": [
+        "O(1)",
+        "O(log n)",
+        "O(n)",
+        "O(n²)"
+      ],
+      "correct": 1,
+      "explanation": "La búsqueda binaria reduce el espacio a la mitad en cada paso."
+    },
+    {
+      "id": "q21",
+      "prompt": "¿Qué normalización de bases de datos elimina dependencias transitivas?",
+      "options": [
+        "Primera forma normal",
+        "Segunda forma normal",
+        "Tercera forma normal",
+        "Forma normal cero"
+      ],
+      "correct": 2,
+      "explanation": "La tercera forma normal elimina dependencias transitivas no clave."
+    },
+    {
+      "id": "q22",
+      "prompt": "¿Qué mecanismo permite ejecutar código aislado del sistema anfitrión mediante contenedores?",
+      "options": [
+        "Virtualización a nivel de sistema operativo",
+        "Desfragmentación",
+        "Rasterización",
+        "Indexación B-tree"
+      ],
+      "correct": 0,
+      "explanation": "Los contenedores aíslan procesos compartiendo el núcleo del anfitrión."
+    },
+    {
+      "id": "q23",
+      "type": "true-false",
+      "prompt": "Una función hash criptográfica segura debe ser fácilmente reversible.",
+      "correct": false,
+      "explanation": "Las funciones hash criptográficas están diseñadas para ser unidireccionales."
+    },
+    {
+      "id": "q24",
+      "type": "true-false",
+      "prompt": "En una transacción ACID, el aislamiento limita interferencias entre operaciones concurrentes.",
+      "correct": true,
+      "explanation": "El aislamiento evita que transacciones concurrentes observen estados inconsistentes."
+    },
+    {
+      "id": "q25",
+      "prompt": "¿Qué consenso usa Bitcoin para validar bloques?",
+      "options": [
+        "Prueba de trabajo",
+        "Prueba de autoridad central",
+        "Round robin",
+        "Two-phase commit"
+      ],
+      "correct": 0,
+      "explanation": "Bitcoin utiliza prueba de trabajo."
+    },
+    {
+      "id": "q26",
+      "prompt": "¿Qué aplicación se usa para visitar páginas web?",
+      "options": [
+        "Navegador",
+        "Compilador",
+        "Controlador de disco",
+        "Firmware"
+      ],
+      "correct": 0,
+      "explanation": "Un navegador interpreta y muestra contenido web."
+    },
+    {
+      "id": "q27",
+      "prompt": "¿Qué lenguaje da comportamiento interactivo a muchas páginas web?",
+      "options": [
+        "JavaScript",
+        "JPEG",
+        "HTTP",
+        "SQL únicamente"
+      ],
+      "correct": 0,
+      "explanation": "JavaScript ejecuta lógica interactiva en el navegador."
+    },
+    {
+      "id": "q28",
+      "prompt": "¿Qué comando de control de versiones incorpora cambios al historial local?",
+      "options": [
+        "commit",
+        "ping",
+        "format",
+        "mount"
+      ],
+      "correct": 0,
+      "explanation": "Un commit registra un conjunto de cambios en el repositorio."
+    },
+    {
+      "id": "q29",
+      "prompt": "¿Qué protocolo permite iniciar sesión remota cifrada en un servidor?",
+      "options": [
+        "SSH",
+        "HTTP",
+        "POP3",
+        "ARP"
+      ],
+      "correct": 0,
+      "explanation": "SSH proporciona acceso remoto seguro."
+    },
+    {
+      "id": "q30",
+      "prompt": "¿Qué árbol mantiene sus claves ordenadas y se usa frecuentemente en índices de bases de datos?",
+      "options": [
+        "B-tree",
+        "Árbol genealógico",
+        "Heap binario exclusivamente",
+        "Trie sin claves ordenadas"
+      ],
+      "correct": 0,
+      "explanation": "Los B-trees son comunes en índices de almacenamiento."
+    },
+    {
+      "id": "q31",
+      "prompt": "¿Qué patrón desacopla la creación de objetos de su uso directo?",
+      "options": [
+        "Factory",
+        "Singleton exclusivamente",
+        "Observer",
+        "Adapter"
+      ],
+      "correct": 0,
+      "explanation": "Factory encapsula la lógica de creación de objetos."
+    },
+    {
+      "id": "q32",
+      "prompt": "¿Qué problema demuestra que no existe un algoritmo general para decidir si cualquier programa termina?",
+      "options": [
+        "Problema de la parada",
+        "Problema del viajante resuelto",
+        "Ordenamiento estable",
+        "Consenso trivial"
+      ],
+      "correct": 0,
+      "explanation": "Turing demostró la indecidibilidad del problema de la parada."
+    },
+    {
+      "id": "q33",
+      "prompt": "¿Qué estructura probabilística comprueba pertenencia con posibles falsos positivos?",
+      "options": [
+        "Filtro de Bloom",
+        "Árbol AVL",
+        "Pila",
+        "Matriz dispersa"
+      ],
+      "correct": 0,
+      "explanation": "Un filtro de Bloom es compacto y puede producir falsos positivos."
+    },
+    {
+      "id": "q34",
+      "prompt": "¿Qué propiedad de CAP se refiere a que toda lectura recibe el dato más reciente?",
+      "options": [
+        "Consistencia",
+        "Disponibilidad",
+        "Tolerancia a particiones",
+        "Durabilidad"
+      ],
+      "correct": 0,
+      "explanation": "En CAP, consistencia implica una visión única y actualizada de los datos."
+    },
+    {
+      "id": "q35",
+      "prompt": "¿Qué ataque aprovecha consultas SQL construidas sin separar datos y código?",
+      "options": [
+        "Inyección SQL",
+        "Phishing visual",
+        "DDoS físico",
+        "Compresión zip"
+      ],
+      "correct": 0,
+      "explanation": "La inyección SQL inserta instrucciones maliciosas en consultas inseguras."
+    }
+  ],
+  "quizzes": [
+    {
+      "id": "digital-1",
+      "title": "Tecnología cotidiana",
+      "description": "Componentes, sistemas operativos y nociones digitales cotidianas.",
+      "difficulty": "Inicial",
+      "questionIds": [
+        "q1",
+        "q3",
+        "q10",
+        "q11",
+        "q12"
+      ]
+    },
+    {
+      "id": "digital-2",
+      "title": "Primeros pasos en la web",
+      "description": "Web, archivos, direcciones y resolución de dominios.",
+      "difficulty": "Fácil",
+      "questionIds": [
+        "q2",
+        "q4",
+        "q5",
+        "q13",
+        "q14",
+        "q26"
+      ]
+    },
+    {
+      "id": "digital-3",
+      "title": "Web y programación",
+      "description": "Estructuras de datos, programación, redes y lógica.",
+      "difficulty": "Intermedio",
+      "questionIds": [
+        "q6",
+        "q15",
+        "q16",
+        "q17",
+        "q18",
+        "q27",
+        "q28"
+      ]
+    },
+    {
+      "id": "digital-4",
+      "title": "Dentro de la máquina",
+      "description": "Memoria, algoritmos, redes y patrones de software.",
+      "difficulty": "Avanzado",
+      "questionIds": [
+        "q7",
+        "q8",
+        "q19",
+        "q20",
+        "q21",
+        "q29",
+        "q30",
+        "q31"
+      ]
+    },
+    {
+      "id": "digital-5",
+      "title": "Reto para tecnólogos",
+      "description": "Bases de datos, contenedores, criptografía y sistemas distribuidos.",
+      "difficulty": "Experto",
+      "questionIds": [
+        "q9",
+        "q22",
+        "q23",
+        "q24",
+        "q25",
+        "q32",
+        "q33",
+        "q34",
+        "q35"
+      ]
+    }
+  ]
+}

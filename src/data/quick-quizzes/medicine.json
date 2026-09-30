@@ -1,0 +1,487 @@
+{
+  "category": "medicine",
+  "questions": [
+    {
+      "id": "q1",
+      "prompt": "¿Qué profesional está capacitado para diagnosticar y tratar enfermedades?",
+      "options": [
+        "Médico",
+        "Arquitecto",
+        "Geólogo",
+        "Astrónomo"
+      ],
+      "correct": 0,
+      "explanation": "El médico se forma para prevenir, diagnosticar y tratar enfermedades."
+    },
+    {
+      "id": "q2",
+      "prompt": "¿Qué instrumento se utiliza para escuchar sonidos del corazón y los pulmones?",
+      "options": [
+        "Otoscopio",
+        "Estetoscopio",
+        "Termómetro",
+        "Tensiómetro"
+      ],
+      "correct": 1,
+      "explanation": "El estetoscopio permite auscultar sonidos internos."
+    },
+    {
+      "id": "q3",
+      "prompt": "¿Cuál es una temperatura corporal aproximada considerada normal?",
+      "options": [
+        "32 °C",
+        "37 °C",
+        "40 °C",
+        "45 °C"
+      ],
+      "correct": 1,
+      "explanation": "La temperatura normal suele rondar los 37 °C, con variaciones individuales."
+    },
+    {
+      "id": "q4",
+      "prompt": "¿Qué células sanguíneas participan principalmente en la defensa inmunitaria?",
+      "options": [
+        "Eritrocitos",
+        "Leucocitos",
+        "Plaquetas",
+        "Adipocitos"
+      ],
+      "correct": 1,
+      "explanation": "Los leucocitos forman parte del sistema inmunitario."
+    },
+    {
+      "id": "q5",
+      "prompt": "¿Qué vitamina puede sintetizar la piel con ayuda de la luz solar?",
+      "options": [
+        "Vitamina A",
+        "Vitamina C",
+        "Vitamina D",
+        "Vitamina K"
+      ],
+      "correct": 2,
+      "explanation": "La radiación UVB favorece la síntesis cutánea de vitamina D."
+    },
+    {
+      "id": "q6",
+      "prompt": "¿Qué órgano produce insulina?",
+      "options": [
+        "Páncreas",
+        "Bazo",
+        "Estómago",
+        "Tiroides"
+      ],
+      "correct": 0,
+      "explanation": "Las células beta del páncreas producen insulina."
+    },
+    {
+      "id": "q7",
+      "prompt": "¿Qué término describe una frecuencia cardíaca anormalmente rápida?",
+      "options": [
+        "Bradicardia",
+        "Taquicardia",
+        "Hipotermia",
+        "Apnea"
+      ],
+      "correct": 1,
+      "explanation": "Taquicardia significa frecuencia cardíaca elevada."
+    },
+    {
+      "id": "q8",
+      "prompt": "¿Qué tipo de inmunidad produce una vacuna?",
+      "options": [
+        "Activa adquirida",
+        "Pasiva natural",
+        "Innata",
+        "Pasiva artificial"
+      ],
+      "correct": 0,
+      "explanation": "La vacunación estimula al organismo para desarrollar inmunidad activa."
+    },
+    {
+      "id": "q9",
+      "prompt": "¿Qué escala evalúa rápidamente a un recién nacido tras el parto?",
+      "options": [
+        "Glasgow",
+        "Apgar",
+        "Borg",
+        "Norton"
+      ],
+      "correct": 1,
+      "explanation": "La escala de Apgar valora cinco signos del recién nacido."
+    },
+    {
+      "id": "q10",
+      "prompt": "¿Qué medida ayuda a prevenir la propagación de infecciones?",
+      "options": [
+        "Lavarse las manos",
+        "Compartir utensilios",
+        "Suspender vacunas",
+        "Dormir menos"
+      ],
+      "correct": 0,
+      "explanation": "La higiene de manos reduce la transmisión de microorganismos."
+    },
+    {
+      "id": "q11",
+      "prompt": "¿Qué valor mide un tensiómetro?",
+      "options": [
+        "Glucosa",
+        "Presión arterial",
+        "Temperatura",
+        "Saturación ósea"
+      ],
+      "correct": 1,
+      "explanation": "El tensiómetro mide la presión arterial."
+    },
+    {
+      "id": "q12",
+      "prompt": "¿Qué mineral es esencial para formar hemoglobina?",
+      "options": [
+        "Calcio",
+        "Hierro",
+        "Sodio",
+        "Yodo"
+      ],
+      "correct": 1,
+      "explanation": "El hierro forma parte del grupo hemo de la hemoglobina."
+    },
+    {
+      "id": "q13",
+      "prompt": "¿Qué tipo de microorganismo se trata con antibióticos?",
+      "options": [
+        "Bacteria susceptible",
+        "Virus",
+        "Prion",
+        "Todos por igual"
+      ],
+      "correct": 0,
+      "explanation": "Los antibióticos actúan contra bacterias susceptibles, no contra virus."
+    },
+    {
+      "id": "q14",
+      "prompt": "¿Qué órgano filtra la sangre y produce orina?",
+      "options": [
+        "Páncreas",
+        "Riñón",
+        "Bazo",
+        "Tiroides"
+      ],
+      "correct": 1,
+      "explanation": "Los riñones filtran la sangre y forman la orina."
+    },
+    {
+      "id": "q15",
+      "prompt": "¿Qué término describe una concentración baja de glucosa en sangre?",
+      "options": [
+        "Hiperglucemia",
+        "Hipoglucemia",
+        "Hipertensión",
+        "Hipoxia"
+      ],
+      "correct": 1,
+      "explanation": "La hipoglucemia es una glucemia anormalmente baja."
+    },
+    {
+      "id": "q16",
+      "prompt": "¿Qué prueba registra la actividad eléctrica del corazón?",
+      "options": [
+        "Electrocardiograma",
+        "Espirometría",
+        "Endoscopia",
+        "Audiometría"
+      ],
+      "correct": 0,
+      "explanation": "El electrocardiograma registra señales eléctricas cardíacas."
+    },
+    {
+      "id": "q17",
+      "prompt": "¿Qué componente sanguíneo participa principalmente en la coagulación?",
+      "options": [
+        "Plaquetas",
+        "Eritrocitos",
+        "Linfocitos",
+        "Plasma sin proteínas"
+      ],
+      "correct": 0,
+      "explanation": "Las plaquetas forman el tapón inicial de la coagulación."
+    },
+    {
+      "id": "q18",
+      "prompt": "¿Qué hormona reduce la glucosa sanguínea?",
+      "options": [
+        "Adrenalina",
+        "Insulina",
+        "Cortisol",
+        "Tiroxina"
+      ],
+      "correct": 1,
+      "explanation": "La insulina facilita la captación y almacenamiento de glucosa."
+    },
+    {
+      "id": "q19",
+      "type": "true-false",
+      "prompt": "Los antibióticos curan infecciones causadas por virus.",
+      "correct": false,
+      "explanation": "Los antibióticos no actúan contra los virus."
+    },
+    {
+      "id": "q20",
+      "prompt": "¿Qué alteración ácido-base presenta un pH sanguíneo por debajo de 7,35?",
+      "options": [
+        "Alcalosis",
+        "Acidosis",
+        "Homeostasis",
+        "Isotonía"
+      ],
+      "correct": 1,
+      "explanation": "Un pH sanguíneo inferior a 7,35 indica acidemia asociada a acidosis."
+    },
+    {
+      "id": "q21",
+      "prompt": "¿Qué biomarcador se usa con frecuencia para detectar lesión del músculo cardíaco?",
+      "options": [
+        "Troponina",
+        "Bilirrubina",
+        "Amilasa",
+        "TSH"
+      ],
+      "correct": 0,
+      "explanation": "La troponina cardíaca se eleva ante lesión miocárdica."
+    },
+    {
+      "id": "q22",
+      "prompt": "¿Qué escala evalúa el nivel de conciencia mediante ojos, voz y movimiento?",
+      "options": [
+        "Apgar",
+        "Glasgow",
+        "Bishop",
+        "Wells"
+      ],
+      "correct": 1,
+      "explanation": "La escala de Glasgow evalúa apertura ocular, respuesta verbal y motora."
+    },
+    {
+      "id": "q23",
+      "type": "true-false",
+      "prompt": "La vía intravenosa evita el proceso de absorción gastrointestinal.",
+      "correct": true,
+      "explanation": "El fármaco entra directamente en la circulación sistémica."
+    },
+    {
+      "id": "q24",
+      "type": "true-false",
+      "prompt": "La sensibilidad de una prueba es la capacidad de identificar correctamente a quienes tienen la enfermedad.",
+      "correct": true,
+      "explanation": "La sensibilidad corresponde a la proporción de verdaderos positivos."
+    },
+    {
+      "id": "q25",
+      "prompt": "¿Qué patrón electrocardiográfico caracteriza típicamente la fibrilación auricular?",
+      "options": [
+        "Ritmo regular con ondas P",
+        "Ritmo irregular sin ondas P organizadas",
+        "Segmento ST siempre elevado",
+        "Intervalo PR fijo y largo"
+      ],
+      "correct": 1,
+      "explanation": "La fibrilación auricular suele mostrar ritmo irregularmente irregular y ausencia de ondas P organizadas."
+    },
+    {
+      "id": "q26",
+      "prompt": "¿Qué especialista trata principalmente enfermedades de la piel?",
+      "options": [
+        "Dermatólogo",
+        "Cardiólogo",
+        "Neurólogo",
+        "Nefrólogo"
+      ],
+      "correct": 0,
+      "explanation": "La dermatología se ocupa de la piel y sus anexos."
+    },
+    {
+      "id": "q27",
+      "prompt": "¿Qué signo vital se expresa normalmente en respiraciones por minuto?",
+      "options": [
+        "Frecuencia respiratoria",
+        "Presión sistólica",
+        "Temperatura",
+        "Glucemia"
+      ],
+      "correct": 0,
+      "explanation": "La frecuencia respiratoria cuenta ciclos respiratorios por minuto."
+    },
+    {
+      "id": "q28",
+      "prompt": "¿Qué vacuna ayuda a prevenir el tétanos?",
+      "options": [
+        "Toxoide tetánico",
+        "BCG",
+        "Triple viral únicamente",
+        "Antirrábica"
+      ],
+      "correct": 0,
+      "explanation": "El toxoide tetánico induce protección contra la toxina."
+    },
+    {
+      "id": "q29",
+      "prompt": "¿Qué término describe dificultad para respirar?",
+      "options": [
+        "Disnea",
+        "Disfagia",
+        "Diplopía",
+        "Disuria"
+      ],
+      "correct": 0,
+      "explanation": "Disnea significa sensación o dificultad respiratoria."
+    },
+    {
+      "id": "q30",
+      "prompt": "¿Qué examen mide volúmenes y flujos respiratorios?",
+      "options": [
+        "Espirometría",
+        "Electroencefalograma",
+        "Colonoscopia",
+        "Ecocardiograma"
+      ],
+      "correct": 0,
+      "explanation": "La espirometría evalúa la función ventilatoria."
+    },
+    {
+      "id": "q31",
+      "prompt": "¿Qué electrolito es el principal catión extracelular?",
+      "options": [
+        "Sodio",
+        "Potasio",
+        "Magnesio",
+        "Hierro"
+      ],
+      "correct": 0,
+      "explanation": "El sodio predomina en el líquido extracelular."
+    },
+    {
+      "id": "q32",
+      "prompt": "¿Qué patrón indica un bloqueo auriculoventricular completo?",
+      "options": [
+        "Disociación entre ondas P y QRS",
+        "Todas las P seguidas de QRS",
+        "Ritmo sin actividad eléctrica",
+        "Solo elevación de ST"
+      ],
+      "correct": 0,
+      "explanation": "En el bloqueo completo aurículas y ventrículos laten de forma independiente."
+    },
+    {
+      "id": "q33",
+      "prompt": "¿Qué principio epidemiológico compara incidencia entre expuestos y no expuestos?",
+      "options": [
+        "Riesgo relativo",
+        "Valor predictivo aislado",
+        "Moda estadística",
+        "Desviación anatómica"
+      ],
+      "correct": 0,
+      "explanation": "El riesgo relativo es la razón de incidencias entre grupos."
+    },
+    {
+      "id": "q34",
+      "prompt": "¿Qué síndrome combina hipertensión, proteinuria y embarazo después de la semana 20?",
+      "options": [
+        "Preeclampsia",
+        "Endometriosis",
+        "Hipertiroidismo",
+        "Sepsis neonatal"
+      ],
+      "correct": 0,
+      "explanation": "La preeclampsia aparece después de la semana 20 con hipertensión y daño orgánico."
+    },
+    {
+      "id": "q35",
+      "prompt": "¿Qué antibiótico inhibe la síntesis de pared bacteriana al unirse a proteínas fijadoras de penicilina?",
+      "options": [
+        "Penicilina",
+        "Azitromicina",
+        "Doxiciclina",
+        "Ciprofloxacino"
+      ],
+      "correct": 0,
+      "explanation": "Las penicilinas bloquean la transpeptidación del peptidoglucano."
+    }
+  ],
+  "quizzes": [
+    {
+      "id": "salud-1",
+      "title": "Salud en un minuto",
+      "description": "Profesionales, instrumentos, temperatura e higiene básica.",
+      "difficulty": "Inicial",
+      "questionIds": [
+        "q1",
+        "q2",
+        "q3",
+        "q10",
+        "q11"
+      ]
+    },
+    {
+      "id": "salud-2",
+      "title": "Señales vitales",
+      "description": "Defensas, vitaminas, sangre y prevención cotidiana.",
+      "difficulty": "Fácil",
+      "questionIds": [
+        "q4",
+        "q5",
+        "q12",
+        "q13",
+        "q14",
+        "q26"
+      ]
+    },
+    {
+      "id": "salud-3",
+      "title": "Cuerpo y prevención",
+      "description": "Órganos reguladores, glucosa, corazón y coagulación.",
+      "difficulty": "Intermedio",
+      "questionIds": [
+        "q6",
+        "q15",
+        "q16",
+        "q17",
+        "q18",
+        "q27",
+        "q28"
+      ]
+    },
+    {
+      "id": "salud-4",
+      "title": "Lenguaje clínico",
+      "description": "Terminología clínica, inmunidad, hormonas y uso de antibióticos.",
+      "difficulty": "Avanzado",
+      "questionIds": [
+        "q7",
+        "q8",
+        "q19",
+        "q20",
+        "q21",
+        "q29",
+        "q30",
+        "q31"
+      ]
+    },
+    {
+      "id": "salud-5",
+      "title": "Guardia experta",
+      "description": "Evaluación clínica, biomarcadores, farmacología y diagnóstico.",
+      "difficulty": "Experto",
+      "questionIds": [
+        "q9",
+        "q22",
+        "q23",
+        "q24",
+        "q25",
+        "q32",
+        "q33",
+        "q34",
+        "q35"
+      ]
+    }
+  ]
+}

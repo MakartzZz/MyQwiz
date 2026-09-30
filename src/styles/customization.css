@@ -175,6 +175,12 @@
 .help-faq summary { padding: 15px 17px; cursor: pointer; font-size: .72rem; font-weight: 800; }
 .help-faq details[open] summary { color: var(--purple-dark); background: var(--purple-soft); }
 .help-faq details p { margin: 0; padding: 0 17px 17px; color: var(--muted); font-size: .69rem; line-height: 1.65; }
+.help-controls__content { display: grid; padding: 0 17px 17px; gap: 8px; }
+.help-controls__content > p { padding: 0; }
+.help-controls__content > div { display: grid; padding: 11px 12px; grid-template-columns: minmax(130px, .38fr) 1fr; align-items: start; gap: 12px; color: var(--ink); background: var(--page-bg); border-left: 3px solid var(--purple); }
+.help-controls__content strong { font-size: .68rem; }
+.help-controls__content span { color: var(--muted); font-size: .67rem; line-height: 1.55; }
+.help-controls__content kbd { display: inline-grid; min-width: 23px; min-height: 21px; padding: 2px 5px; place-items: center; border: 1px solid var(--line); color: var(--purple-dark); background: var(--surface); box-shadow: 0 2px 0 var(--card-shadow); font: 800 .58rem "Archivo", sans-serif; }
 
 :root[data-large-text="true"] { font-size: 112.5%; }
 :root[data-high-contrast="true"] *:focus-visible { outline: 4px solid var(--purple) !important; outline-offset: 3px !important; }
@@ -196,13 +202,13 @@
 .music-ribbon--one { right: 2%; background: color-mix(in srgb, var(--ribbon-one) 88%, transparent); }
 .music-ribbon--two { right: 11%; background: color-mix(in srgb, var(--ribbon-two) 88%, transparent); transform: rotate(10deg) translateY(3%); }
 .music-ribbon--three { right: 20%; background: color-mix(in srgb, var(--ribbon-three) 88%, transparent); transform: rotate(10deg) translateY(-2%); }
-.music-ribbon__track { display: flex; width: 100%; height: max-content; flex-direction: column; align-items: center; animation: ribbon-scroll 24s linear infinite; }
+.music-ribbon__track { display: flex; width: 100%; height: 200%; flex-direction: column; align-items: center; animation: ribbon-scroll 24s linear infinite; }
 .music-ribbon--two .music-ribbon__track { animation-duration: 30s; animation-direction: reverse; }
 .music-ribbon--three .music-ribbon__track { animation-duration: 21s; }
 .music-backdrop.is-changing .music-ribbon--one .music-ribbon__track { animation-duration: .8s; }
 .music-backdrop.is-changing .music-ribbon--two .music-ribbon__track { animation-duration: 1s; }
 .music-backdrop.is-changing .music-ribbon--three .music-ribbon__track { animation-duration: .7s; }
-.music-ribbon__group { display: flex; padding-bottom: 42px; flex-direction: column; align-items: center; gap: 42px; }
+.music-ribbon__group { display: flex; width: 100%; height: 50%; padding: 34px 0; flex: 0 0 50%; flex-direction: column; align-items: center; justify-content: space-around; }
 .music-ribbon svg { width: 31px; height: 31px; flex: 0 0 auto; }
 .music-library__heading h2 { margin: 5px 0 5px; font: 800 clamp(1.8rem, 4vw, 3rem)/1 "Archivo", sans-serif; letter-spacing: -.055em; }
 .music-library__heading p { margin: 0; color: var(--muted); font-size: .76rem; }
@@ -224,10 +230,7 @@
 .music-player-bar__volume button i:nth-child(2) { height: 9px; }
 .music-player-bar__volume button i:nth-child(3) { height: 13px; }
 .music-player-bar__volume button i.is-filled { opacity: 1; }
-.music-album-grid { display: grid; padding: 3px 9px 18px 2px; grid-auto-columns: minmax(190px, 215px); grid-auto-flow: column; grid-template-columns: none; justify-content: start; gap: 18px; overflow-x: auto; overflow-y: hidden; overscroll-behavior-inline: contain; scroll-snap-type: inline proximity; scrollbar-color: var(--purple) color-mix(in srgb, var(--surface) 72%, transparent); scrollbar-width: thin; }
-.music-album-grid::-webkit-scrollbar { height: 8px; }
-.music-album-grid::-webkit-scrollbar-track { background: color-mix(in srgb, var(--surface) 72%, transparent); }
-.music-album-grid::-webkit-scrollbar-thumb { background: var(--purple); }
+.music-album-grid { display: grid; width: 100%; padding: 3px 9px 18px 2px; grid-template-columns: repeat(auto-fit, minmax(190px, 215px)); justify-content: center; gap: 18px; overflow: visible; }
 .music-album-card { position: relative; display: grid; min-width: 0; padding: 0 0 14px; overflow: hidden; border: 2px solid var(--line); border-radius: 0; color: var(--ink); background: var(--surface); box-shadow: 5px 5px 0 var(--card-shadow); scroll-snap-align: start; text-align: left; transition: transform .2s ease, border-color .2s ease; }
 .music-album-card:hover { transform: translateY(-3px); border-color: var(--purple); }
 .music-album-card.is-selected { border-color: var(--purple); box-shadow: 7px 7px 0 var(--card-shadow); }
@@ -255,11 +258,13 @@
 .theme-ribbon--two { right: 11%; background: var(--ribbon-two); transform: rotate(10deg) translateY(3%); }
 .theme-ribbon--three { right: 20%; background: var(--ribbon-three); transform: rotate(10deg) translateY(-2%); }
 .theme-ribbons .theme-ribbon { animation: theme-ribbon-pop .46s cubic-bezier(.2, .9, .3, 1.25) both; animation-delay: calc(var(--ribbon-pop-index) * 70ms); }
-.theme-ribbon__track { display: flex; width: 100%; height: max-content; flex-direction: column; align-items: center; animation: ribbon-scroll 24s linear infinite; }
+.theme-ribbon__track { display: flex; width: 100%; height: 200%; flex-direction: column; align-items: center; animation: ribbon-scroll 24s linear infinite; }
 .theme-ribbon--two .theme-ribbon__track { animation-duration: 30s; }
 .theme-ribbon--three .theme-ribbon__track { animation-duration: 21s; }
-.theme-ribbon__group { display: flex; padding-bottom: 42px; flex-direction: column; align-items: center; gap: 42px; }
+.theme-ribbon__group { display: flex; width: 100%; height: 50%; padding: 34px 0; flex: 0 0 50%; flex-direction: column; align-items: center; justify-content: space-around; }
 .theme-ribbon__icon { display: grid; flex: 0 0 auto; place-items: center; animation: theme-icon-pop .3s cubic-bezier(.18, .9, .3, 1.4) both; animation-delay: calc(110ms + var(--icon-pop-index) * 24ms); }
+.theme-ribbon__icon--tablet-extra,
+.theme-ribbon__icon--mobile-extra { display: none; }
 .theme-ribbon svg { width: 32px; height: 32px; }
 .theme-gallery { position: relative; z-index: 2; display: grid; max-width: 1220px; margin-right: auto; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 18px; perspective: 1300px; }
 .theme-card { position: relative; min-width: 0; height: 440px; padding: 0; overflow: hidden; border: 0; border-radius: 0; color: #fff; box-shadow: 5px 5px 0 var(--card-shadow); text-align: left; transition: transform .24s cubic-bezier(.2,.8,.2,1), box-shadow .24s ease; }

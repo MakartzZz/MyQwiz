@@ -1,0 +1,487 @@
+{
+  "category": "music",
+  "questions": [
+    {
+      "id": "q1",
+      "prompt": "¿Cuántas notas tiene la escala diatónica básica?",
+      "options": [
+        "Cinco",
+        "Siete",
+        "Ocho",
+        "Doce"
+      ],
+      "correct": 1,
+      "explanation": "La escala diatónica está formada por siete notas distintas."
+    },
+    {
+      "id": "q2",
+      "prompt": "¿Qué instrumento tiene normalmente 88 teclas?",
+      "options": [
+        "Violín",
+        "Piano",
+        "Flauta",
+        "Trompeta"
+      ],
+      "correct": 1,
+      "explanation": "El piano moderno estándar posee 88 teclas."
+    },
+    {
+      "id": "q3",
+      "prompt": "¿A qué familia pertenece el violín?",
+      "options": [
+        "Viento",
+        "Percusión",
+        "Cuerda",
+        "Teclado"
+      ],
+      "correct": 2,
+      "explanation": "El violín es un instrumento de cuerda frotada."
+    },
+    {
+      "id": "q4",
+      "prompt": "¿Qué símbolo eleva una nota un semitono?",
+      "options": [
+        "Bemol",
+        "Sostenido",
+        "Becuadro",
+        "Calderón"
+      ],
+      "correct": 1,
+      "explanation": "El sostenido aumenta la altura un semitono."
+    },
+    {
+      "id": "q5",
+      "prompt": "¿Quién compuso Las cuatro estaciones?",
+      "options": [
+        "Mozart",
+        "Vivaldi",
+        "Bach",
+        "Chopin"
+      ],
+      "correct": 1,
+      "explanation": "Antonio Vivaldi compuso este célebre conjunto de conciertos."
+    },
+    {
+      "id": "q6",
+      "prompt": "¿Qué término indica tocar suavemente?",
+      "options": [
+        "Forte",
+        "Piano",
+        "Allegro",
+        "Presto"
+      ],
+      "correct": 1,
+      "explanation": "Piano es una indicación de dinámica suave."
+    },
+    {
+      "id": "q7",
+      "prompt": "¿Qué intervalo separa do de sol?",
+      "options": [
+        "Tercera",
+        "Cuarta",
+        "Quinta",
+        "Sexta"
+      ],
+      "correct": 2,
+      "explanation": "Do-re-mi-fa-sol abarca una quinta."
+    },
+    {
+      "id": "q8",
+      "prompt": "¿Qué músico es conocido como el Duque del jazz?",
+      "options": [
+        "Duke Ellington",
+        "Miles Davis",
+        "Louis Armstrong",
+        "Thelonious Monk"
+      ],
+      "correct": 0,
+      "explanation": "Duke Ellington fue compositor, pianista y director de big band."
+    },
+    {
+      "id": "q9",
+      "prompt": "¿Qué modo eclesiástico comienza como una escala mayor con séptimo grado descendido?",
+      "options": [
+        "Dórico",
+        "Frigio",
+        "Lidio",
+        "Mixolidio"
+      ],
+      "correct": 3,
+      "explanation": "El modo mixolidio tiene tercera mayor y séptima menor."
+    },
+    {
+      "id": "q10",
+      "prompt": "¿Qué instrumento se toca soplando y tiene lengüeta?",
+      "options": [
+        "Clarinete",
+        "Violín",
+        "Piano",
+        "Timbal"
+      ],
+      "correct": 0,
+      "explanation": "El clarinete produce sonido mediante una lengüeta simple."
+    },
+    {
+      "id": "q11",
+      "prompt": "¿Qué figura musical dura normalmente dos pulsos en compás simple?",
+      "options": [
+        "Negra",
+        "Blanca",
+        "Corchea",
+        "Semicorchea"
+      ],
+      "correct": 1,
+      "explanation": "La blanca equivale normalmente a dos negras."
+    },
+    {
+      "id": "q12",
+      "prompt": "¿Qué familia incluye la trompeta?",
+      "options": [
+        "Cuerda",
+        "Viento metal",
+        "Percusión",
+        "Teclado"
+      ],
+      "correct": 1,
+      "explanation": "La trompeta es un instrumento de viento metal."
+    },
+    {
+      "id": "q13",
+      "prompt": "¿Qué palabra indica la velocidad de una pieza?",
+      "options": [
+        "Tempo",
+        "Timbre",
+        "Altura",
+        "Textura"
+      ],
+      "correct": 0,
+      "explanation": "El tempo describe la velocidad de ejecución."
+    },
+    {
+      "id": "q14",
+      "prompt": "¿Quién compuso la Novena Sinfonía?",
+      "options": [
+        "Beethoven",
+        "Vivaldi",
+        "Debussy",
+        "Chopin"
+      ],
+      "correct": 0,
+      "explanation": "Ludwig van Beethoven compuso su Novena Sinfonía."
+    },
+    {
+      "id": "q15",
+      "prompt": "¿Qué término indica aumentar gradualmente el volumen?",
+      "options": [
+        "Crescendo",
+        "Diminuendo",
+        "Legato",
+        "Staccato"
+      ],
+      "correct": 0,
+      "explanation": "Crescendo indica un aumento progresivo de intensidad."
+    },
+    {
+      "id": "q16",
+      "prompt": "¿Qué acorde forman do, mi y sol?",
+      "options": [
+        "Do mayor",
+        "Do menor",
+        "Sol mayor",
+        "La menor"
+      ],
+      "correct": 0,
+      "explanation": "Do-mi-sol forma la tríada de do mayor."
+    },
+    {
+      "id": "q17",
+      "prompt": "¿Qué género nació en comunidades afroamericanas de Nueva Orleans?",
+      "options": [
+        "Jazz",
+        "Flamenco",
+        "Fado",
+        "Polca"
+      ],
+      "correct": 0,
+      "explanation": "El jazz se desarrolló en Nueva Orleans a inicios del siglo XX."
+    },
+    {
+      "id": "q18",
+      "prompt": "¿Qué textura presenta una melodía principal con acompañamiento?",
+      "options": [
+        "Monofonía",
+        "Homofonía",
+        "Polirritmia",
+        "Ruido blanco"
+      ],
+      "correct": 1,
+      "explanation": "La homofonía combina una voz principal con soporte armónico."
+    },
+    {
+      "id": "q19",
+      "type": "true-false",
+      "prompt": "Una octava justa contiene doce semitonos en el sistema temperado occidental.",
+      "correct": true,
+      "explanation": "La octava se divide en doce semitonos iguales."
+    },
+    {
+      "id": "q20",
+      "prompt": "¿Qué compositor desarrolló ampliamente la técnica dodecafónica?",
+      "options": [
+        "Arnold Schönberg",
+        "Johann Pachelbel",
+        "Franz Schubert",
+        "Giacomo Puccini"
+      ],
+      "correct": 0,
+      "explanation": "Schönberg sistematizó la composición con doce tonos."
+    },
+    {
+      "id": "q21",
+      "prompt": "¿Qué sustitución armónica del jazz reemplaza un dominante por otro a distancia de tritono?",
+      "options": [
+        "Sustitución tritonal",
+        "Pedal armónico",
+        "Ostinato",
+        "Canon"
+      ],
+      "correct": 0,
+      "explanation": "La sustitución tritonal cambia un acorde dominante por otro separado por un tritono."
+    },
+    {
+      "id": "q22",
+      "prompt": "¿Qué forma contrapuntística desarrolla un tema mediante entradas imitativas?",
+      "options": [
+        "Fuga",
+        "Rondó",
+        "Minueto",
+        "Nocturno"
+      ],
+      "correct": 0,
+      "explanation": "La fuga desarrolla uno o varios sujetos por imitación contrapuntística."
+    },
+    {
+      "id": "q23",
+      "type": "true-false",
+      "prompt": "El modo locrio posee una quinta disminuida respecto de su tónica.",
+      "correct": true,
+      "explanation": "La quinta disminuida es un rasgo característico del modo locrio."
+    },
+    {
+      "id": "q24",
+      "type": "true-false",
+      "prompt": "En afinación temperada igual, todos los semitonos tienen exactamente la misma razón de frecuencia.",
+      "correct": true,
+      "explanation": "Cada semitono multiplica la frecuencia por la raíz duodécima de dos."
+    },
+    {
+      "id": "q25",
+      "prompt": "¿Qué compositor escribió La consagración de la primavera?",
+      "options": [
+        "Igor Stravinski",
+        "Gustav Mahler",
+        "Erik Satie",
+        "Maurice Ravel"
+      ],
+      "correct": 0,
+      "explanation": "Stravinski estrenó La consagración de la primavera en 1913."
+    },
+    {
+      "id": "q26",
+      "prompt": "¿Qué instrumento de percusión tiene láminas de madera?",
+      "options": [
+        "Xilófono",
+        "Trompeta",
+        "Oboe",
+        "Viola"
+      ],
+      "correct": 0,
+      "explanation": "El xilófono produce notas mediante láminas de madera."
+    },
+    {
+      "id": "q27",
+      "prompt": "¿Cuántos semitonos separan do y mi en afinación temperada?",
+      "options": [
+        "2",
+        "3",
+        "4",
+        "5"
+      ],
+      "correct": 2,
+      "explanation": "Do a mi forma una tercera mayor de cuatro semitonos."
+    },
+    {
+      "id": "q28",
+      "prompt": "¿Qué agrupación vocal suele tener soprano, alto, tenor y bajo?",
+      "options": [
+        "Coro SATB",
+        "Trío de jazz",
+        "Cuarteto de cuerdas",
+        "Banda de metales"
+      ],
+      "correct": 0,
+      "explanation": "SATB designa soprano, alto, tenor y bajo."
+    },
+    {
+      "id": "q29",
+      "prompt": "¿Qué compositor escribió El lago de los cisnes?",
+      "options": [
+        "Chaikovski",
+        "Bach",
+        "Verdi",
+        "Berlioz"
+      ],
+      "correct": 0,
+      "explanation": "Piotr Ilich Chaikovski compuso ese ballet."
+    },
+    {
+      "id": "q30",
+      "prompt": "¿Qué escala tiene el patrón tono-semitono-tono-tono-semitono-tono-tono?",
+      "options": [
+        "Menor natural",
+        "Mayor",
+        "Cromática",
+        "Pentatónica mayor"
+      ],
+      "correct": 0,
+      "explanation": "Ese patrón corresponde a la escala menor natural."
+    },
+    {
+      "id": "q31",
+      "prompt": "¿Qué recurso desplaza acentos fuera de los pulsos fuertes?",
+      "options": [
+        "Síncopa",
+        "Unísono",
+        "Cadencia perfecta",
+        "Pedal"
+      ],
+      "correct": 0,
+      "explanation": "La síncopa enfatiza partes débiles o contratiempos."
+    },
+    {
+      "id": "q32",
+      "prompt": "¿Qué compositor completó la ópera Wozzeck?",
+      "options": [
+        "Alban Berg",
+        "Anton Webern",
+        "Gustav Holst",
+        "Aaron Copland"
+      ],
+      "correct": 0,
+      "explanation": "Alban Berg compuso Wozzeck."
+    },
+    {
+      "id": "q33",
+      "prompt": "¿Qué acorde contiene tónica, tercera mayor, quinta justa y séptima menor?",
+      "options": [
+        "Dominante séptima",
+        "Mayor séptima",
+        "Menor séptima",
+        "Disminuido"
+      ],
+      "correct": 0,
+      "explanation": "Esa estructura forma un acorde de séptima dominante."
+    },
+    {
+      "id": "q34",
+      "prompt": "¿Qué término describe dos tonalidades simultáneas?",
+      "options": [
+        "Bitonalidad",
+        "Monodia",
+        "Heterofonía",
+        "Rubato"
+      ],
+      "correct": 0,
+      "explanation": "La bitonalidad superpone dos centros tonales."
+    },
+    {
+      "id": "q35",
+      "prompt": "¿Qué tratado barroco escribió Johann Joseph Fux sobre contrapunto?",
+      "options": [
+        "Gradus ad Parnassum",
+        "El clave bien temperado",
+        "El arte de la fuga",
+        "Armonía del mundo"
+      ],
+      "correct": 0,
+      "explanation": "Gradus ad Parnassum sistematizó el contrapunto por especies."
+    }
+  ],
+  "quizzes": [
+    {
+      "id": "ritmo-1",
+      "title": "Primer compás",
+      "description": "Notas, instrumentos y figuras musicales para comenzar.",
+      "difficulty": "Inicial",
+      "questionIds": [
+        "q1",
+        "q2",
+        "q3",
+        "q10",
+        "q11"
+      ]
+    },
+    {
+      "id": "ritmo-2",
+      "title": "Familias sonoras",
+      "description": "Familias, signos, tempo y teoría elemental.",
+      "difficulty": "Fácil",
+      "questionIds": [
+        "q4",
+        "q12",
+        "q13",
+        "q14",
+        "q15",
+        "q26"
+      ]
+    },
+    {
+      "id": "ritmo-3",
+      "title": "Clásicos y dinámica",
+      "description": "Compositores, dinámica, acordes y orígenes del jazz.",
+      "difficulty": "Intermedio",
+      "questionIds": [
+        "q5",
+        "q6",
+        "q16",
+        "q17",
+        "q18",
+        "q27",
+        "q28"
+      ]
+    },
+    {
+      "id": "ritmo-4",
+      "title": "Armonía y jazz",
+      "description": "Intervalos, jazz, textura, ritmo, acordes y afinación.",
+      "difficulty": "Avanzado",
+      "questionIds": [
+        "q7",
+        "q8",
+        "q19",
+        "q20",
+        "q21",
+        "q29",
+        "q30",
+        "q31"
+      ]
+    },
+    {
+      "id": "ritmo-5",
+      "title": "Oído experto",
+      "description": "Modos, dodecafonismo, armonía, contrapunto y teoría musical.",
+      "difficulty": "Experto",
+      "questionIds": [
+        "q9",
+        "q22",
+        "q23",
+        "q24",
+        "q25",
+        "q32",
+        "q33",
+        "q34",
+        "q35"
+      ]
+    }
+  ]
+}

@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { QUESTION_TYPES } from "../domain/quizConstants.js";
-import { cloneQuestion, createId, createQuestion } from "../domain/quizFactory.js";
+import { cloneQuestion, createId, createQuestion, prepareQuizForReady } from "../domain/quizFactory.js";
 import { validateQuiz } from "../domain/quizValidation.js";
 import SubjectSelect from "./SubjectSelect.jsx";
 
@@ -159,7 +159,6 @@ const QuestionFields = ({ question, onChange }) => {
         <span>Palabras clave <small>separadas por comas</small></span>
         <input value={question.keywords.join(", ")} onChange={(event) => onChange({ keywords: event.target.value.split(",").map((keyword) => keyword.trim()).filter(Boolean) })} placeholder="Ejemplo: fotosíntesis, luz, energía" />
       </label>
-      <label className="editor-check"><input type="checkbox" checked={question.allowSelfAssessment} onChange={(event) => onChange({ allowSelfAssessment: event.target.checked })} /> Permitir valoración final de la persona</label>
     </div>
   );
 };
@@ -234,7 +233,7 @@ function QuizEditor({ quiz, onBack, onSave, onValidationError }) {
       return;
     }
 
-    const savedQuiz = onSave({ ...draft, status: "ready" });
+    const savedQuiz = onSave(prepareQuizForReady(draft));
     if (!savedQuiz) return;
     setDraft(savedQuiz);
     setIsSaved(true);

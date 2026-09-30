@@ -1,0 +1,487 @@
+{
+  "category": "chemistry",
+  "questions": [
+    {
+      "id": "q1",
+      "prompt": "¿Cuál es el símbolo químico del oxígeno?",
+      "options": [
+        "Ox",
+        "O",
+        "Og",
+        "Os"
+      ],
+      "correct": 1,
+      "explanation": "El símbolo del oxígeno es O."
+    },
+    {
+      "id": "q2",
+      "prompt": "¿Qué fórmula representa al agua?",
+      "options": [
+        "CO₂",
+        "H₂O",
+        "O₂",
+        "NaCl"
+      ],
+      "correct": 1,
+      "explanation": "Una molécula de agua contiene dos hidrógenos y un oxígeno."
+    },
+    {
+      "id": "q3",
+      "prompt": "¿Qué indica el número atómico?",
+      "options": [
+        "Neutrones",
+        "Protones",
+        "Moléculas",
+        "Enlaces"
+      ],
+      "correct": 1,
+      "explanation": "El número atómico corresponde a la cantidad de protones."
+    },
+    {
+      "id": "q4",
+      "prompt": "¿Qué pH tiene una disolución neutra a 25 °C?",
+      "options": [
+        "0",
+        "5",
+        "7",
+        "14"
+      ],
+      "correct": 2,
+      "explanation": "A 25 °C una disolución neutra tiene pH 7."
+    },
+    {
+      "id": "q5",
+      "prompt": "¿Qué enlace comparte pares de electrones?",
+      "options": [
+        "Iónico",
+        "Covalente",
+        "Metálico",
+        "Puente salino"
+      ],
+      "correct": 1,
+      "explanation": "En el enlace covalente los átomos comparten electrones."
+    },
+    {
+      "id": "q6",
+      "prompt": "¿Qué gas noble posee el símbolo Ne?",
+      "options": [
+        "Neón",
+        "Nitrógeno",
+        "Níquel",
+        "Neptunio"
+      ],
+      "correct": 0,
+      "explanation": "Ne es el símbolo del neón."
+    },
+    {
+      "id": "q7",
+      "prompt": "En una oxidación, una especie química...",
+      "options": [
+        "Gana protones",
+        "Pierde electrones",
+        "Gana neutrones",
+        "Pierde masa siempre"
+      ],
+      "correct": 1,
+      "explanation": "Oxidarse significa perder electrones."
+    },
+    {
+      "id": "q8",
+      "prompt": "¿Cuál es la geometría molecular del metano CH₄?",
+      "options": [
+        "Lineal",
+        "Angular",
+        "Trigonal plana",
+        "Tetraédrica"
+      ],
+      "correct": 3,
+      "explanation": "Los cuatro enlaces del carbono se orientan tetraédricamente."
+    },
+    {
+      "id": "q9",
+      "prompt": "¿Qué ley relaciona presión y volumen de un gas a temperatura constante?",
+      "options": [
+        "Ley de Boyle",
+        "Ley de Charles",
+        "Ley de Hess",
+        "Ley de Faraday"
+      ],
+      "correct": 0,
+      "explanation": "La ley de Boyle establece una relación inversa entre presión y volumen."
+    },
+    {
+      "id": "q10",
+      "prompt": "¿Cuál es el símbolo químico del sodio?",
+      "options": [
+        "So",
+        "S",
+        "Na",
+        "N"
+      ],
+      "correct": 2,
+      "explanation": "Na proviene del nombre latino natrium."
+    },
+    {
+      "id": "q11",
+      "prompt": "¿Qué partícula tiene carga positiva?",
+      "options": [
+        "Electrón",
+        "Protón",
+        "Neutrón",
+        "Fotón"
+      ],
+      "correct": 1,
+      "explanation": "El protón posee carga eléctrica positiva."
+    },
+    {
+      "id": "q12",
+      "prompt": "¿Qué elemento es líquido a temperatura ambiente?",
+      "options": [
+        "Hierro",
+        "Mercurio",
+        "Carbono",
+        "Calcio"
+      ],
+      "correct": 1,
+      "explanation": "El mercurio es un metal líquido a temperatura ambiente."
+    },
+    {
+      "id": "q13",
+      "prompt": "¿Qué tipo de mezcla es el aire?",
+      "options": [
+        "Heterogénea",
+        "Homogénea",
+        "Suspensión",
+        "Coloide sólido"
+      ],
+      "correct": 1,
+      "explanation": "Los gases del aire forman una mezcla homogénea."
+    },
+    {
+      "id": "q14",
+      "prompt": "¿Qué grupo de la tabla periódica contiene los halógenos?",
+      "options": [
+        "1",
+        "2",
+        "17",
+        "18"
+      ],
+      "correct": 2,
+      "explanation": "Los halógenos pertenecen al grupo 17."
+    },
+    {
+      "id": "q15",
+      "prompt": "¿Cuál es el número de oxidación habitual del oxígeno en compuestos?",
+      "options": [
+        "+2",
+        "+1",
+        "−1",
+        "−2"
+      ],
+      "correct": 3,
+      "explanation": "En la mayoría de compuestos el oxígeno tiene número de oxidación −2."
+    },
+    {
+      "id": "q16",
+      "prompt": "¿Qué sustancia acepta protones según Brønsted-Lowry?",
+      "options": [
+        "Ácido",
+        "Base",
+        "Sal",
+        "Oxidante"
+      ],
+      "correct": 1,
+      "explanation": "Una base de Brønsted-Lowry acepta protones."
+    },
+    {
+      "id": "q17",
+      "prompt": "¿Qué orbital puede contener como máximo dos electrones?",
+      "options": [
+        "Cualquier orbital individual",
+        "Solo el orbital s",
+        "Solo el orbital p",
+        "Ninguno"
+      ],
+      "correct": 0,
+      "explanation": "Por el principio de exclusión de Pauli, todo orbital admite hasta dos electrones."
+    },
+    {
+      "id": "q18",
+      "prompt": "¿Qué catalizador biológico acelera reacciones en seres vivos?",
+      "options": [
+        "Lípido",
+        "Enzima",
+        "Carbohidrato",
+        "Nucleótido"
+      ],
+      "correct": 1,
+      "explanation": "Las enzimas reducen la energía de activación de reacciones biológicas."
+    },
+    {
+      "id": "q19",
+      "type": "true-false",
+      "prompt": "Un catalizador cambia la constante de equilibrio de una reacción.",
+      "correct": false,
+      "explanation": "Acelera ambos sentidos de la reacción, pero no cambia el equilibrio."
+    },
+    {
+      "id": "q20",
+      "prompt": "¿Qué ecuación relaciona energía libre, entalpía y entropía?",
+      "options": [
+        "ΔG = ΔH − TΔS",
+        "E = mc²",
+        "PV = nRT",
+        "F = ma"
+      ],
+      "correct": 0,
+      "explanation": "La ecuación de Gibbs es ΔG = ΔH − TΔS."
+    },
+    {
+      "id": "q21",
+      "prompt": "¿Qué hibridación presenta el carbono en el eteno?",
+      "options": [
+        "sp",
+        "sp²",
+        "sp³",
+        "dsp²"
+      ],
+      "correct": 1,
+      "explanation": "Cada carbono del eteno presenta hibridación sp²."
+    },
+    {
+      "id": "q22",
+      "prompt": "¿Qué regla predice la orientación frecuente en adiciones a alquenos asimétricos?",
+      "options": [
+        "Regla de Hund",
+        "Regla de Markovnikov",
+        "Regla de Hess",
+        "Regla de Aufbau"
+      ],
+      "correct": 1,
+      "explanation": "La regla de Markovnikov predice la regioselectividad de muchas adiciones."
+    },
+    {
+      "id": "q23",
+      "type": "true-false",
+      "prompt": "En una celda galvánica espontánea, la oxidación ocurre en el ánodo.",
+      "correct": true,
+      "explanation": "La oxidación siempre ocurre en el ánodo."
+    },
+    {
+      "id": "q24",
+      "type": "true-false",
+      "prompt": "El punto triple representa una única combinación de presión y temperatura donde coexisten tres fases.",
+      "correct": true,
+      "explanation": "En el punto triple coexisten sólido, líquido y gas en equilibrio."
+    },
+    {
+      "id": "q25",
+      "prompt": "¿Qué aproximación supone que los gases no tienen volumen propio ni fuerzas intermoleculares?",
+      "options": [
+        "Gas ideal",
+        "Gas de van der Waals",
+        "Plasma",
+        "Fluido supercrítico"
+      ],
+      "correct": 0,
+      "explanation": "El modelo de gas ideal ignora volumen molecular e interacciones."
+    },
+    {
+      "id": "q26",
+      "prompt": "¿Qué separa una filtración?",
+      "options": [
+        "Un sólido insoluble de un líquido",
+        "Dos gases ideales",
+        "Iones por carga exclusivamente",
+        "Luz por color"
+      ],
+      "correct": 0,
+      "explanation": "La filtración retiene un sólido insoluble mientras pasa el fluido."
+    },
+    {
+      "id": "q27",
+      "prompt": "¿Qué cantidad de sustancia representa aproximadamente 6,022×10²³ entidades?",
+      "options": [
+        "Un mol",
+        "Un gramo",
+        "Un litro",
+        "Un julio"
+      ],
+      "correct": 0,
+      "explanation": "Un mol contiene el número de Avogadro de entidades."
+    },
+    {
+      "id": "q28",
+      "prompt": "¿Qué producto se forma al reaccionar un ácido con una base idealmente?",
+      "options": [
+        "Sal y agua",
+        "Solo oxígeno",
+        "Metal puro",
+        "Un neutrón"
+      ],
+      "correct": 0,
+      "explanation": "La neutralización ácido-base produce sal y agua."
+    },
+    {
+      "id": "q29",
+      "prompt": "¿Qué principio predice el desplazamiento de un equilibrio al cambiar condiciones?",
+      "options": [
+        "Le Châtelier",
+        "Pauli",
+        "Arquímedes",
+        "Hubble"
+      ],
+      "correct": 0,
+      "explanation": "Le Châtelier describe cómo responde un equilibrio a una perturbación."
+    },
+    {
+      "id": "q30",
+      "prompt": "¿Qué técnica separa componentes por su distinta afinidad entre fases?",
+      "options": [
+        "Cromatografía",
+        "Calcinación",
+        "Electrólisis exclusivamente",
+        "Sublimación nuclear"
+      ],
+      "correct": 0,
+      "explanation": "La cromatografía separa sustancias por interacciones diferenciales."
+    },
+    {
+      "id": "q31",
+      "prompt": "¿Qué ecuación calcula el pH de un tampón débil?",
+      "options": [
+        "Henderson-Hasselbalch",
+        "Bernoulli",
+        "Schrödinger",
+        "Clausius-Clapeyron"
+      ],
+      "correct": 0,
+      "explanation": "Henderson-Hasselbalch relaciona pH, pKa y proporción base/ácido."
+    },
+    {
+      "id": "q32",
+      "prompt": "¿Qué efecto estabiliza electrones deslocalizados en una molécula?",
+      "options": [
+        "Resonancia",
+        "Gravedad",
+        "Capilaridad",
+        "Difusión térmica"
+      ],
+      "correct": 0,
+      "explanation": "La resonancia describe deslocalización electrónica y estabilización."
+    },
+    {
+      "id": "q33",
+      "prompt": "¿Qué teoría explica la separación energética de orbitales d en complejos metálicos?",
+      "options": [
+        "Teoría del campo cristalino",
+        "Teoría cinética de gases",
+        "Modelo de gota líquida",
+        "Regla de las fases"
+      ],
+      "correct": 0,
+      "explanation": "El campo creado por los ligandos separa los niveles de energía de los orbitales d."
+    },
+    {
+      "id": "q34",
+      "prompt": "¿Qué mecanismo orgánico ocurre en una sola etapa con inversión de configuración?",
+      "options": [
+        "SN2",
+        "SN1",
+        "E1",
+        "Adición radicalaria"
+      ],
+      "correct": 0,
+      "explanation": "La sustitución SN2 es concertada y produce inversión de Walden."
+    },
+    {
+      "id": "q35",
+      "prompt": "¿Qué relación expresa la ecuación de Nernst?",
+      "options": [
+        "Potencial electroquímico y concentraciones",
+        "Masa y energía relativista",
+        "Presión y volumen ideal únicamente",
+        "Longitud y frecuencia de una cuerda"
+      ],
+      "correct": 0,
+      "explanation": "Nernst ajusta el potencial de electrodo según actividades o concentraciones."
+    }
+  ],
+  "quizzes": [
+    {
+      "id": "reacciones-1",
+      "title": "Símbolos y moléculas",
+      "description": "Símbolos, fórmulas y partículas fundamentales.",
+      "difficulty": "Inicial",
+      "questionIds": [
+        "q1",
+        "q2",
+        "q3",
+        "q10",
+        "q11"
+      ]
+    },
+    {
+      "id": "reacciones-2",
+      "title": "Átomos en breve",
+      "description": "pH, elementos, mezclas y métodos de separación.",
+      "difficulty": "Fácil",
+      "questionIds": [
+        "q4",
+        "q6",
+        "q12",
+        "q13",
+        "q14",
+        "q26"
+      ]
+    },
+    {
+      "id": "reacciones-3",
+      "title": "Enlaces y equilibrio",
+      "description": "Enlaces, reacciones redox, ácido-base, orbitales y cantidad de sustancia.",
+      "difficulty": "Intermedio",
+      "questionIds": [
+        "q5",
+        "q7",
+        "q15",
+        "q16",
+        "q17",
+        "q27",
+        "q28"
+      ]
+    },
+    {
+      "id": "reacciones-4",
+      "title": "Química molecular",
+      "description": "Geometría molecular, catálisis, equilibrio y química analítica.",
+      "difficulty": "Avanzado",
+      "questionIds": [
+        "q8",
+        "q18",
+        "q19",
+        "q20",
+        "q21",
+        "q29",
+        "q30",
+        "q31"
+      ]
+    },
+    {
+      "id": "reacciones-5",
+      "title": "Laboratorio experto",
+      "description": "Gases, química orgánica, complejos metálicos y electroquímica.",
+      "difficulty": "Experto",
+      "questionIds": [
+        "q9",
+        "q22",
+        "q23",
+        "q24",
+        "q25",
+        "q32",
+        "q33",
+        "q34",
+        "q35"
+      ]
+    }
+  ]
+}

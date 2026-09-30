@@ -20,7 +20,3 @@ pnpm-debug.log*
 !.vscode/extensions.json
 .DS_Store
 Thumbs.db
-
-# Local reference projects (not part of MyQwiz)
-/Play-Kids/
-/prototipo simple/

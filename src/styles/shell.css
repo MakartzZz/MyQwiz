@@ -95,5 +95,6 @@
 
 @keyframes vinyl-spin { to { transform: rotate(360deg); } }
 .topbar { display: flex; align-items: center; justify-content: space-between; gap: 24px; margin-bottom: 30px; }
+.topbar--menu-only { margin-bottom: 0; }
 .topbar h1 { margin: 4px 0 0; font: 700 clamp(1.35rem, 2.2vw, 1.85rem) "Archivo", sans-serif; letter-spacing: -.04em; }
 .menu-button { display: none; width: 42px; height: 42px; place-items: center; border-radius: 12px; color: var(--purple); background: var(--purple-soft); }

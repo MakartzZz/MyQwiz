@@ -1,0 +1,487 @@
+{
+  "category": "anatomy",
+  "questions": [
+    {
+      "id": "q1",
+      "prompt": "¿Cuál es el hueso más largo del cuerpo humano?",
+      "options": [
+        "Húmero",
+        "Fémur",
+        "Tibia",
+        "Radio"
+      ],
+      "correct": 1,
+      "explanation": "El fémur se extiende entre la cadera y la rodilla."
+    },
+    {
+      "id": "q2",
+      "prompt": "¿Cuántas cámaras tiene el corazón humano?",
+      "options": [
+        "Dos",
+        "Tres",
+        "Cuatro",
+        "Cinco"
+      ],
+      "correct": 2,
+      "explanation": "Tiene dos aurículas y dos ventrículos."
+    },
+    {
+      "id": "q3",
+      "prompt": "¿Qué órgano protege el cráneo?",
+      "options": [
+        "Corazón",
+        "Cerebro",
+        "Hígado",
+        "Pulmones"
+      ],
+      "correct": 1,
+      "explanation": "El cráneo rodea y protege el cerebro."
+    },
+    {
+      "id": "q4",
+      "prompt": "¿Qué músculo separa el tórax del abdomen?",
+      "options": [
+        "Trapecio",
+        "Diafragma",
+        "Deltoides",
+        "Sartorio"
+      ],
+      "correct": 1,
+      "explanation": "El diafragma también es esencial para respirar."
+    },
+    {
+      "id": "q5",
+      "prompt": "¿Cuál es la unidad funcional del riñón?",
+      "options": [
+        "Neurona",
+        "Nefrona",
+        "Alvéolo",
+        "Osteona"
+      ],
+      "correct": 1,
+      "explanation": "La nefrona filtra la sangre y forma la orina."
+    },
+    {
+      "id": "q6",
+      "prompt": "¿Qué estructura conecta músculo con hueso?",
+      "options": [
+        "Ligamento",
+        "Tendón",
+        "Cartílago",
+        "Fascia"
+      ],
+      "correct": 1,
+      "explanation": "Los tendones transmiten la fuerza muscular al hueso."
+    },
+    {
+      "id": "q7",
+      "prompt": "¿Qué válvula separa la aurícula izquierda del ventrículo izquierdo?",
+      "options": [
+        "Tricúspide",
+        "Mitral",
+        "Pulmonar",
+        "Aórtica"
+      ],
+      "correct": 1,
+      "explanation": "La válvula mitral también se llama bicúspide."
+    },
+    {
+      "id": "q8",
+      "prompt": "¿En qué lóbulo cerebral se procesa principalmente la visión?",
+      "options": [
+        "Frontal",
+        "Temporal",
+        "Parietal",
+        "Occipital"
+      ],
+      "correct": 3,
+      "explanation": "La corteza visual se localiza en el lóbulo occipital."
+    },
+    {
+      "id": "q9",
+      "prompt": "¿Qué par craneal controla gran parte de la expresión facial?",
+      "options": [
+        "Trigémino",
+        "Facial",
+        "Vago",
+        "Óptico"
+      ],
+      "correct": 1,
+      "explanation": "El nervio facial corresponde al séptimo par craneal."
+    },
+    {
+      "id": "q10",
+      "prompt": "¿Cuántos pulmones tiene normalmente una persona?",
+      "options": [
+        "Uno",
+        "Dos",
+        "Tres",
+        "Cuatro"
+      ],
+      "correct": 1,
+      "explanation": "El cuerpo humano posee un pulmón derecho y uno izquierdo."
+    },
+    {
+      "id": "q11",
+      "prompt": "¿Qué hueso protege principalmente el corazón y los pulmones por delante?",
+      "options": [
+        "Esternón",
+        "Rótula",
+        "Escápula",
+        "Sacro"
+      ],
+      "correct": 0,
+      "explanation": "El esternón forma la parte anterior de la caja torácica."
+    },
+    {
+      "id": "q12",
+      "prompt": "¿Dónde se encuentra la rótula?",
+      "options": [
+        "Hombro",
+        "Rodilla",
+        "Cadera",
+        "Muñeca"
+      ],
+      "correct": 1,
+      "explanation": "La rótula está situada en la parte anterior de la rodilla."
+    },
+    {
+      "id": "q13",
+      "prompt": "¿Qué órgano almacena la bilis?",
+      "options": [
+        "Páncreas",
+        "Vesícula biliar",
+        "Bazo",
+        "Apéndice"
+      ],
+      "correct": 1,
+      "explanation": "La vesícula biliar concentra y almacena la bilis."
+    },
+    {
+      "id": "q14",
+      "prompt": "¿Qué parte del ojo regula la cantidad de luz que entra?",
+      "options": [
+        "Iris",
+        "Retina",
+        "Esclerótica",
+        "Cristalino"
+      ],
+      "correct": 0,
+      "explanation": "El iris modifica el diámetro de la pupila."
+    },
+    {
+      "id": "q15",
+      "prompt": "¿Qué hueso del antebrazo está del lado del pulgar?",
+      "options": [
+        "Cúbito",
+        "Radio",
+        "Húmero",
+        "Carpo"
+      ],
+      "correct": 1,
+      "explanation": "El radio se ubica en el lado lateral del antebrazo, hacia el pulgar."
+    },
+    {
+      "id": "q16",
+      "prompt": "¿Qué estructura comunica la faringe con el estómago?",
+      "options": [
+        "Tráquea",
+        "Esófago",
+        "Laringe",
+        "Duodeno"
+      ],
+      "correct": 1,
+      "explanation": "El esófago conduce el alimento hasta el estómago."
+    },
+    {
+      "id": "q17",
+      "prompt": "¿En qué cavidad se encuentra el corazón?",
+      "options": [
+        "Craneal",
+        "Torácica",
+        "Pélvica",
+        "Vertebral"
+      ],
+      "correct": 1,
+      "explanation": "El corazón se encuentra en el mediastino de la cavidad torácica."
+    },
+    {
+      "id": "q18",
+      "prompt": "¿Qué meninges está adherida directamente al encéfalo?",
+      "options": [
+        "Duramadre",
+        "Aracnoides",
+        "Piamadre",
+        "Pericardio"
+      ],
+      "correct": 2,
+      "explanation": "La piamadre sigue de cerca la superficie del encéfalo."
+    },
+    {
+      "id": "q19",
+      "type": "true-false",
+      "prompt": "Los ligamentos conectan principalmente músculo con hueso.",
+      "correct": false,
+      "explanation": "Los ligamentos conectan hueso con hueso; los tendones conectan músculo con hueso."
+    },
+    {
+      "id": "q20",
+      "prompt": "¿Qué rama de la arteria carótida común irriga directamente el encéfalo sin dar ramas cervicales?",
+      "options": [
+        "Carótida externa",
+        "Carótida interna",
+        "Arteria facial",
+        "Arteria tiroidea superior"
+      ],
+      "correct": 1,
+      "explanation": "La carótida interna entra al cráneo y no da ramas en el cuello."
+    },
+    {
+      "id": "q21",
+      "prompt": "¿Qué estructura atraviesa el foramen magno?",
+      "options": [
+        "Médula oblongada",
+        "Nervio óptico",
+        "Arteria femoral",
+        "Esófago"
+      ],
+      "correct": 0,
+      "explanation": "La médula oblongada continúa como médula espinal a través del foramen magno."
+    },
+    {
+      "id": "q22",
+      "prompt": "¿Qué segmento del nefrón recibe primero el filtrado glomerular?",
+      "options": [
+        "Túbulo contorneado proximal",
+        "Asa de Henle",
+        "Conducto colector",
+        "Túbulo distal"
+      ],
+      "correct": 0,
+      "explanation": "El filtrado pasa de la cápsula de Bowman al túbulo proximal."
+    },
+    {
+      "id": "q23",
+      "type": "true-false",
+      "prompt": "El nervio vago pertenece al sistema nervioso parasimpático.",
+      "correct": true,
+      "explanation": "El nervio vago aporta la principal inervación parasimpática visceral."
+    },
+    {
+      "id": "q24",
+      "type": "true-false",
+      "prompt": "La válvula tricúspide se encuentra entre la aurícula izquierda y el ventrículo izquierdo.",
+      "correct": false,
+      "explanation": "La tricúspide está en el lado derecho; la mitral ocupa el lado izquierdo."
+    },
+    {
+      "id": "q25",
+      "prompt": "¿Qué músculo inicia principalmente la abducción del brazo en sus primeros grados?",
+      "options": [
+        "Supraespinoso",
+        "Dorsal ancho",
+        "Pectoral mayor",
+        "Redondo mayor"
+      ],
+      "correct": 0,
+      "explanation": "El supraespinoso inicia los primeros grados de abducción del hombro."
+    },
+    {
+      "id": "q26",
+      "prompt": "¿Qué articulación une el brazo con el antebrazo?",
+      "options": [
+        "Codo",
+        "Tobillo",
+        "Cadera",
+        "Sacroilíaca"
+      ],
+      "correct": 0,
+      "explanation": "El codo conecta húmero, radio y cúbito."
+    },
+    {
+      "id": "q27",
+      "prompt": "¿Qué músculo principal extiende la rodilla?",
+      "options": [
+        "Cuádriceps femoral",
+        "Bíceps braquial",
+        "Trapecio",
+        "Sóleo"
+      ],
+      "correct": 0,
+      "explanation": "El cuádriceps extiende la pierna en la rodilla."
+    },
+    {
+      "id": "q28",
+      "prompt": "¿Qué vaso lleva sangre oxigenada desde los pulmones al corazón?",
+      "options": [
+        "Venas pulmonares",
+        "Arterias pulmonares",
+        "Vena cava",
+        "Aorta descendente"
+      ],
+      "correct": 0,
+      "explanation": "Las venas pulmonares desembocan en la aurícula izquierda."
+    },
+    {
+      "id": "q29",
+      "prompt": "¿Qué hueso forma la frente?",
+      "options": [
+        "Frontal",
+        "Temporal",
+        "Esfenoides",
+        "Etmoides"
+      ],
+      "correct": 0,
+      "explanation": "El hueso frontal forma la frente y parte de las órbitas."
+    },
+    {
+      "id": "q30",
+      "prompt": "¿Qué estructura del oído interno participa principalmente en el equilibrio?",
+      "options": [
+        "Canales semicirculares",
+        "Cóclea únicamente",
+        "Tímpano",
+        "Martillo"
+      ],
+      "correct": 0,
+      "explanation": "Los canales semicirculares detectan aceleraciones angulares."
+    },
+    {
+      "id": "q31",
+      "prompt": "¿Qué nervio craneal transmite la visión?",
+      "options": [
+        "Óptico",
+        "Oculomotor",
+        "Troclear",
+        "Abducens"
+      ],
+      "correct": 0,
+      "explanation": "El nervio óptico es el segundo par craneal."
+    },
+    {
+      "id": "q32",
+      "prompt": "¿Qué espacio contiene líquido cefalorraquídeo alrededor del encéfalo?",
+      "options": [
+        "Espacio subaracnoideo",
+        "Espacio pleural",
+        "Peritoneo",
+        "Mediastino"
+      ],
+      "correct": 0,
+      "explanation": "El líquido cefalorraquídeo circula por el espacio subaracnoideo."
+    },
+    {
+      "id": "q33",
+      "prompt": "¿Qué porción del sistema de conducción retrasa el impulso antes de los ventrículos?",
+      "options": [
+        "Nodo auriculoventricular",
+        "Nodo sinoauricular",
+        "Fibras musculares lisas",
+        "Pericardio"
+      ],
+      "correct": 0,
+      "explanation": "El nodo AV retrasa la señal para permitir el llenado ventricular."
+    },
+    {
+      "id": "q34",
+      "prompt": "¿Qué dermatoma incluye habitualmente el ombligo?",
+      "options": [
+        "T10",
+        "C4",
+        "L5",
+        "S2"
+      ],
+      "correct": 0,
+      "explanation": "El ombligo corresponde aproximadamente al dermatoma T10."
+    },
+    {
+      "id": "q35",
+      "prompt": "¿Qué estructura delimita la entrada superior de la pelvis verdadera?",
+      "options": [
+        "Línea terminal",
+        "Cresta ilíaca sola",
+        "Acetábulo",
+        "Foramen obturador"
+      ],
+      "correct": 0,
+      "explanation": "La línea terminal forma el estrecho superior pélvico."
+    }
+  ],
+  "quizzes": [
+    {
+      "id": "cuerpo-1",
+      "title": "Mapa del cuerpo",
+      "description": "Huesos, corazón, cerebro y órganos fáciles de ubicar.",
+      "difficulty": "Inicial",
+      "questionIds": [
+        "q1",
+        "q2",
+        "q3",
+        "q10",
+        "q11"
+      ]
+    },
+    {
+      "id": "cuerpo-2",
+      "title": "Órganos esenciales",
+      "description": "Músculos, articulaciones, aparato digestivo y sentidos.",
+      "difficulty": "Fácil",
+      "questionIds": [
+        "q4",
+        "q6",
+        "q12",
+        "q13",
+        "q14",
+        "q26"
+      ]
+    },
+    {
+      "id": "cuerpo-3",
+      "title": "Sistemas en conexión",
+      "description": "Órganos, huesos, cavidades, circulación y meninges.",
+      "difficulty": "Intermedio",
+      "questionIds": [
+        "q5",
+        "q15",
+        "q16",
+        "q17",
+        "q18",
+        "q27",
+        "q28"
+      ]
+    },
+    {
+      "id": "cuerpo-4",
+      "title": "Anatomía funcional",
+      "description": "Válvulas, neuroanatomía, vasos y sistema sensorial.",
+      "difficulty": "Avanzado",
+      "questionIds": [
+        "q7",
+        "q8",
+        "q19",
+        "q20",
+        "q21",
+        "q29",
+        "q30",
+        "q31"
+      ]
+    },
+    {
+      "id": "cuerpo-5",
+      "title": "Reto anatómico",
+      "description": "Nervios, nefrón, conducción cardíaca y anatomía regional.",
+      "difficulty": "Experto",
+      "questionIds": [
+        "q9",
+        "q22",
+        "q23",
+        "q24",
+        "q25",
+        "q32",
+        "q33",
+        "q34",
+        "q35"
+      ]
+    }
+  ]
+}

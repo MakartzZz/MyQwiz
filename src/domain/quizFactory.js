@@ -58,7 +58,6 @@ export const createQuestion = (type = QUESTION_TYPES.MULTIPLE_CHOICE) => {
         referenceAnswer: "",
         keywords: [],
         similarityThreshold: 0.7,
-        allowSelfAssessment: true,
       };
 
     default:
@@ -120,6 +119,18 @@ export const createQuiz = ({
     questions: [],
   };
 };
+
+export const prepareQuizForReady = (quiz) => ({
+  ...quiz,
+  status: "ready",
+  stats: Number.isFinite(quiz.stats?.bestScore)
+    ? {
+        attempts: 0,
+        bestScore: null,
+        lastPlayedAt: null,
+      }
+    : { ...quiz.stats },
+});
 
 export const duplicateQuiz = (sourceQuiz) => {
   const duplicate = createQuiz({

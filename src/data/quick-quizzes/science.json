@@ -1,0 +1,487 @@
+{
+  "category": "science",
+  "questions": [
+    {
+      "id": "q1",
+      "prompt": "¿Qué gas necesitan las plantas para realizar la fotosíntesis?",
+      "options": [
+        "Oxígeno",
+        "Dióxido de carbono",
+        "Nitrógeno",
+        "Hidrógeno"
+      ],
+      "correct": 1,
+      "explanation": "Las plantas incorporan dióxido de carbono durante la fotosíntesis."
+    },
+    {
+      "id": "q2",
+      "prompt": "¿Cuál es el estado del agua por debajo de 0 °C a presión normal?",
+      "options": [
+        "Sólido",
+        "Líquido",
+        "Gas",
+        "Plasma"
+      ],
+      "correct": 0,
+      "explanation": "A presión normal el agua se congela a 0 °C."
+    },
+    {
+      "id": "q3",
+      "prompt": "¿Qué órgano bombea la sangre por el cuerpo?",
+      "options": [
+        "Pulmón",
+        "Hígado",
+        "Corazón",
+        "Riñón"
+      ],
+      "correct": 2,
+      "explanation": "El corazón impulsa la sangre a través del sistema circulatorio."
+    },
+    {
+      "id": "q4",
+      "prompt": "¿Qué fuerza mantiene a los planetas en órbita?",
+      "options": [
+        "Fricción",
+        "Gravedad",
+        "Magnetismo",
+        "Electricidad"
+      ],
+      "correct": 1,
+      "explanation": "La atracción gravitatoria mantiene las órbitas planetarias."
+    },
+    {
+      "id": "q5",
+      "prompt": "¿Dónde se encuentra la mayor parte del ADN de una célula eucariota?",
+      "options": [
+        "Núcleo",
+        "Membrana",
+        "Citoplasma",
+        "Ribosoma"
+      ],
+      "correct": 0,
+      "explanation": "La mayor parte del ADN eucariota se guarda en el núcleo."
+    },
+    {
+      "id": "q6",
+      "prompt": "¿Qué tipo de energía posee un objeto debido a su movimiento?",
+      "options": [
+        "Química",
+        "Potencial",
+        "Cinética",
+        "Nuclear"
+      ],
+      "correct": 2,
+      "explanation": "La energía cinética depende de la masa y la velocidad."
+    },
+    {
+      "id": "q7",
+      "prompt": "¿Qué partícula subatómica tiene carga negativa?",
+      "options": [
+        "Protón",
+        "Neutrón",
+        "Electrón",
+        "Fotón"
+      ],
+      "correct": 2,
+      "explanation": "El electrón tiene carga eléctrica negativa."
+    },
+    {
+      "id": "q8",
+      "prompt": "¿Qué escala organiza la dureza de los minerales?",
+      "options": [
+        "Richter",
+        "Mohs",
+        "Kelvin",
+        "Beaufort"
+      ],
+      "correct": 1,
+      "explanation": "La escala de Mohs compara la resistencia al rayado."
+    },
+    {
+      "id": "q9",
+      "prompt": "¿Qué proceso celular produce dos células hijas genéticamente iguales?",
+      "options": [
+        "Meiosis",
+        "Mitosis",
+        "Ósmosis",
+        "Transcripción"
+      ],
+      "correct": 1,
+      "explanation": "La mitosis conserva la información genética en las células hijas."
+    },
+    {
+      "id": "q10",
+      "prompt": "¿Qué instrumento permite observar objetos muy pequeños?",
+      "options": [
+        "Telescopio",
+        "Microscopio",
+        "Barómetro",
+        "Sismógrafo"
+      ],
+      "correct": 1,
+      "explanation": "El microscopio amplía objetos demasiado pequeños para verse a simple vista."
+    },
+    {
+      "id": "q11",
+      "prompt": "¿Qué planeta posee los anillos más visibles?",
+      "options": [
+        "Marte",
+        "Saturno",
+        "Venus",
+        "Mercurio"
+      ],
+      "correct": 1,
+      "explanation": "Saturno posee un extenso sistema de anillos."
+    },
+    {
+      "id": "q12",
+      "prompt": "¿Qué cambio de estado transforma un gas en líquido?",
+      "options": [
+        "Fusión",
+        "Condensación",
+        "Sublimación",
+        "Evaporación"
+      ],
+      "correct": 1,
+      "explanation": "La condensación convierte un gas en líquido."
+    },
+    {
+      "id": "q13",
+      "prompt": "¿Cuál es la función principal de las raíces de una planta?",
+      "options": [
+        "Producir semillas",
+        "Absorber agua y minerales",
+        "Captar sonido",
+        "Crear flores"
+      ],
+      "correct": 1,
+      "explanation": "Las raíces absorben agua y sales minerales del suelo."
+    },
+    {
+      "id": "q14",
+      "prompt": "¿Qué capa sólida forma la superficie exterior de la Tierra?",
+      "options": [
+        "Núcleo",
+        "Manto",
+        "Corteza",
+        "Astenosfera"
+      ],
+      "correct": 2,
+      "explanation": "La corteza es la capa sólida más externa."
+    },
+    {
+      "id": "q15",
+      "prompt": "¿Qué orgánulo realiza la fotosíntesis?",
+      "options": [
+        "Ribosoma",
+        "Cloroplasto",
+        "Lisosoma",
+        "Centriolo"
+      ],
+      "correct": 1,
+      "explanation": "Los cloroplastos contienen clorofila y realizan la fotosíntesis."
+    },
+    {
+      "id": "q16",
+      "prompt": "¿Qué número de protones tiene el carbono?",
+      "options": [
+        "4",
+        "6",
+        "8",
+        "12"
+      ],
+      "correct": 1,
+      "explanation": "El número atómico del carbono es 6."
+    },
+    {
+      "id": "q17",
+      "prompt": "¿Qué tipo de roca se forma al enfriarse el magma?",
+      "options": [
+        "Sedimentaria",
+        "Metamórfica",
+        "Ígnea",
+        "Calcárea"
+      ],
+      "correct": 2,
+      "explanation": "Las rocas ígneas se forman por solidificación del magma o lava."
+    },
+    {
+      "id": "q18",
+      "prompt": "¿Qué estructura celular regula el paso de sustancias?",
+      "options": [
+        "Membrana plasmática",
+        "Nucleolo",
+        "Cromosoma",
+        "Pared secundaria"
+      ],
+      "correct": 0,
+      "explanation": "La membrana plasmática controla el intercambio con el entorno."
+    },
+    {
+      "id": "q19",
+      "type": "true-false",
+      "prompt": "La masa de un objeto cambia al trasladarlo de la Tierra a la Luna.",
+      "correct": false,
+      "explanation": "La masa permanece; lo que cambia es el peso por la distinta gravedad."
+    },
+    {
+      "id": "q20",
+      "prompt": "¿Qué interacción mantiene unidos protones y neutrones en el núcleo?",
+      "options": [
+        "Fuerza nuclear fuerte",
+        "Gravedad",
+        "Fuerza magnética",
+        "Fricción"
+      ],
+      "correct": 0,
+      "explanation": "La fuerza nuclear fuerte mantiene unido el núcleo atómico."
+    },
+    {
+      "id": "q21",
+      "prompt": "¿Qué ciclo biogeoquímico incluye fijación y desnitrificación?",
+      "options": [
+        "Ciclo del carbono",
+        "Ciclo del nitrógeno",
+        "Ciclo del agua",
+        "Ciclo del fósforo"
+      ],
+      "correct": 1,
+      "explanation": "La fijación y la desnitrificación pertenecen al ciclo del nitrógeno."
+    },
+    {
+      "id": "q22",
+      "prompt": "¿Qué ley describe la relación entre volumen y temperatura de un gas a presión constante?",
+      "options": [
+        "Ley de Charles",
+        "Ley de Ohm",
+        "Ley de Hooke",
+        "Ley de Coulomb"
+      ],
+      "correct": 0,
+      "explanation": "La ley de Charles relaciona volumen y temperatura absoluta."
+    },
+    {
+      "id": "q23",
+      "type": "true-false",
+      "prompt": "Los virus pueden reproducirse por sí solos fuera de una célula huésped.",
+      "correct": false,
+      "explanation": "Los virus necesitan la maquinaria de una célula huésped para replicarse."
+    },
+    {
+      "id": "q24",
+      "type": "true-false",
+      "prompt": "La entropía de un sistema aislado tiende a aumentar.",
+      "correct": true,
+      "explanation": "Es una formulación de la segunda ley de la termodinámica."
+    },
+    {
+      "id": "q25",
+      "prompt": "¿Qué partícula media la interacción electromagnética?",
+      "options": [
+        "Fotón",
+        "Gluón",
+        "Neutrino",
+        "Bosón de Higgs"
+      ],
+      "correct": 0,
+      "explanation": "El fotón es el bosón mediador de la interacción electromagnética."
+    },
+    {
+      "id": "q26",
+      "prompt": "¿Cómo se llama el paso del agua desde la superficie hacia la atmósfera?",
+      "options": [
+        "Evaporación",
+        "Precipitación",
+        "Infiltración",
+        "Solidificación"
+      ],
+      "correct": 0,
+      "explanation": "La evaporación incorpora vapor de agua a la atmósfera."
+    },
+    {
+      "id": "q27",
+      "prompt": "¿Qué teoría explica el movimiento de los continentes?",
+      "options": [
+        "Tectónica de placas",
+        "Generación espontánea",
+        "Geocentrismo",
+        "Flogisto"
+      ],
+      "correct": 0,
+      "explanation": "La tectónica de placas describe el movimiento de la litosfera."
+    },
+    {
+      "id": "q28",
+      "prompt": "¿Qué valor de pH indica una disolución ácida?",
+      "options": [
+        "Mayor que 7",
+        "Menor que 7",
+        "Exactamente 7 siempre",
+        "Mayor que 14"
+      ],
+      "correct": 1,
+      "explanation": "A 25 °C, un pH menor que 7 es ácido."
+    },
+    {
+      "id": "q29",
+      "prompt": "¿Qué fenómeno desvía la luz al cambiar de medio?",
+      "options": [
+        "Refracción",
+        "Conducción",
+        "Fermentación",
+        "Erosión"
+      ],
+      "correct": 0,
+      "explanation": "La refracción cambia la dirección de la luz entre medios."
+    },
+    {
+      "id": "q30",
+      "prompt": "¿Qué estructuras homólogas sugieren un ancestro común?",
+      "options": [
+        "Órganos con origen anatómico compartido",
+        "Órganos sin relación",
+        "Minerales iguales",
+        "Nubes semejantes"
+      ],
+      "correct": 0,
+      "explanation": "Las homologías anatómicas son evidencia de ascendencia común."
+    },
+    {
+      "id": "q31",
+      "prompt": "¿Qué tipo de enlace une las bases complementarias del ADN?",
+      "options": [
+        "Puentes de hidrógeno",
+        "Enlaces metálicos",
+        "Enlaces peptídicos",
+        "Fuerzas nucleares"
+      ],
+      "correct": 0,
+      "explanation": "Las bases complementarias se asocian mediante puentes de hidrógeno."
+    },
+    {
+      "id": "q32",
+      "prompt": "¿Qué evidencia llevó a proponer la materia oscura en galaxias?",
+      "options": [
+        "Curvas de rotación",
+        "Color de las estrellas",
+        "Fases lunares",
+        "Mareas terrestres"
+      ],
+      "correct": 0,
+      "explanation": "Las velocidades orbitales observadas requieren más masa que la visible."
+    },
+    {
+      "id": "q33",
+      "prompt": "¿Qué herramienta de edición genética usa una nucleasa guiada por ARN?",
+      "options": [
+        "CRISPR-Cas9",
+        "PCR sola",
+        "Cromatografía",
+        "Centrifugación"
+      ],
+      "correct": 0,
+      "explanation": "CRISPR-Cas9 dirige una nucleasa a una secuencia específica."
+    },
+    {
+      "id": "q34",
+      "prompt": "¿Qué objeto astronómico alimentado por un agujero negro puede ser extremadamente luminoso?",
+      "options": [
+        "Cuásar",
+        "Asteroide",
+        "Enana marrón",
+        "Cometa"
+      ],
+      "correct": 0,
+      "explanation": "Los cuásares son núcleos galácticos activos muy luminosos."
+    },
+    {
+      "id": "q35",
+      "prompt": "¿Qué límite físico establece la velocidad máxima de propagación de información?",
+      "options": [
+        "Velocidad de la luz en el vacío",
+        "Velocidad del sonido",
+        "Velocidad de escape terrestre",
+        "Velocidad orbital"
+      ],
+      "correct": 0,
+      "explanation": "La relatividad limita la información a la velocidad de la luz en el vacío."
+    }
+  ],
+  "quizzes": [
+    {
+      "id": "laboratorio-1",
+      "title": "Ciencia de todos los días",
+      "description": "Plantas, estados de la materia, cuerpo y observación científica.",
+      "difficulty": "Inicial",
+      "questionIds": [
+        "q1",
+        "q2",
+        "q3",
+        "q4",
+        "q10"
+      ]
+    },
+    {
+      "id": "laboratorio-2",
+      "title": "Naturaleza en acción",
+      "description": "Células, energía, astronomía y cambios de estado.",
+      "difficulty": "Fácil",
+      "questionIds": [
+        "q5",
+        "q6",
+        "q11",
+        "q12",
+        "q13",
+        "q26"
+      ]
+    },
+    {
+      "id": "laboratorio-3",
+      "title": "Del núcleo al movimiento",
+      "description": "Partículas, minerales, células, geología y acidez.",
+      "difficulty": "Intermedio",
+      "questionIds": [
+        "q7",
+        "q8",
+        "q9",
+        "q14",
+        "q15",
+        "q27",
+        "q28"
+      ]
+    },
+    {
+      "id": "laboratorio-4",
+      "title": "Materia y minerales",
+      "description": "Células, átomos, rocas, evolución y comportamiento de la luz.",
+      "difficulty": "Avanzado",
+      "questionIds": [
+        "q16",
+        "q17",
+        "q18",
+        "q19",
+        "q20",
+        "q29",
+        "q30",
+        "q31"
+      ]
+    },
+    {
+      "id": "laboratorio-5",
+      "title": "Mentes científicas",
+      "description": "Gases, biología molecular, termodinámica y astrofísica.",
+      "difficulty": "Experto",
+      "questionIds": [
+        "q21",
+        "q22",
+        "q23",
+        "q24",
+        "q25",
+        "q32",
+        "q33",
+        "q34",
+        "q35"
+      ]
+    }
+  ]
+}

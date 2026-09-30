@@ -13,6 +13,9 @@
 .quiz-manage-modal { width: min(510px, 100%); }
 .quiz-manage-modal__warning { margin: 0; padding: 17px; border-left: 4px solid #c6554d; color: var(--muted); background: var(--page-bg); font-size: .8rem; line-height: 1.6; }
 .quiz-manage-modal__warning strong { color: var(--ink); }
+.quiz-edit-warning-modal__content { display: grid; gap: 10px; margin-bottom: 19px; padding: 17px; border-left: 4px solid var(--coral); color: var(--muted); background: var(--page-bg); font-size: .8rem; line-height: 1.6; }
+.quiz-edit-warning-modal__content p { margin: 0; }
+.quiz-edit-warning-modal__content strong { color: var(--ink); }
 .quiz-import-conflict__message { margin: 0; padding: 15px 17px; border-left: 4px solid var(--coral); color: var(--muted); background: var(--page-bg); font-size: .78rem; line-height: 1.6; }
 .quiz-import-modal { width: min(720px, 100%); }
 .quiz-import-modal__file { display: grid; padding: 15px; grid-template-columns: auto 1fr auto; align-items: center; gap: 14px; border: 1px solid var(--line); background: var(--page-bg); }

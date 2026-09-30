@@ -61,8 +61,7 @@ const questionStructures = {
   "explanation": "Explicación breve",
   "referenceAnswer": "Respuesta modelo completa",
   "keywords": ["palabra clave"],
-  "similarityThreshold": 0.7,
-  "allowSelfAssessment": true
+  "similarityThreshold": 0.7
 }`,
 };
 

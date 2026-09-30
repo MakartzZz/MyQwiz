@@ -9,6 +9,10 @@ const ribbonIcons = [
   Pencil, Lightbulb, CircleHelp, BookOpen, FileText, CircleCheckBig,
 ];
 
+const responsiveRibbonIcons = Array.from({ length: 3 }, (_, cycle) =>
+  ribbonIcons.map((RibbonIcon, index) => ({ RibbonIcon, cycle, index })),
+).flat();
+
 const ThemeRibbons = () => (
   <div className="theme-ribbons" aria-hidden="true">
     <div className="theme-backdrop-copy">
@@ -22,8 +26,12 @@ const ThemeRibbons = () => (
         <div className="theme-ribbon__track">
           {[0, 1].map((group) => (
             <span className="theme-ribbon__group" key={group}>
-              {ribbonIcons.map((RibbonIcon, index) => (
-                <span className="theme-ribbon__icon" style={{ "--icon-pop-index": ribbonIndex * 2 + group * ribbonIcons.length + index }} key={index}>
+              {responsiveRibbonIcons.map(({ RibbonIcon, cycle, index }, itemIndex) => (
+                <span
+                  className={`theme-ribbon__icon ${cycle === 1 ? "theme-ribbon__icon--tablet-extra" : ""} ${cycle === 2 ? "theme-ribbon__icon--mobile-extra" : ""}`}
+                  style={{ "--icon-pop-index": ribbonIndex * 2 + group * responsiveRibbonIcons.length + itemIndex }}
+                  key={`${cycle}-${index}`}
+                >
                   <RibbonIcon strokeWidth={1.8} />
                 </span>
               ))}

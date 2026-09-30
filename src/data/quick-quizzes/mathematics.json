@@ -1,0 +1,487 @@
+{
+  "category": "mathematics",
+  "questions": [
+    {
+      "id": "q1",
+      "prompt": "¿Cuánto es 7 × 8?",
+      "options": [
+        "54",
+        "56",
+        "58",
+        "64"
+      ],
+      "correct": 1,
+      "explanation": "Siete por ocho es 56."
+    },
+    {
+      "id": "q2",
+      "prompt": "¿Cuál es la mitad de 3/4?",
+      "options": [
+        "3/8",
+        "2/4",
+        "1/8",
+        "3/2"
+      ],
+      "correct": 0,
+      "explanation": "Dividir entre dos equivale a multiplicar por 1/2."
+    },
+    {
+      "id": "q3",
+      "prompt": "¿Cuál es el perímetro de un cuadrado de lado 5?",
+      "options": [
+        "10",
+        "15",
+        "20",
+        "25"
+      ],
+      "correct": 2,
+      "explanation": "El perímetro es cuatro veces la longitud del lado."
+    },
+    {
+      "id": "q4",
+      "prompt": "Si 2x + 4 = 12, ¿cuánto vale x?",
+      "options": [
+        "2",
+        "3",
+        "4",
+        "6"
+      ],
+      "correct": 2,
+      "explanation": "Al restar 4 quedan 2x = 8; por tanto x = 4."
+    },
+    {
+      "id": "q5",
+      "prompt": "¿Cuál es el área de un círculo de radio 3?",
+      "options": [
+        "3π",
+        "6π",
+        "9π",
+        "12π"
+      ],
+      "correct": 2,
+      "explanation": "El área es πr², así que vale 9π."
+    },
+    {
+      "id": "q6",
+      "prompt": "¿Cuál es la raíz cuadrada principal de 144?",
+      "options": [
+        "10",
+        "11",
+        "12",
+        "14"
+      ],
+      "correct": 2,
+      "explanation": "12 × 12 = 144."
+    },
+    {
+      "id": "q7",
+      "prompt": "¿Qué pendiente tiene la recta y = 3x - 2?",
+      "options": [
+        "-2",
+        "2",
+        "3",
+        "-3"
+      ],
+      "correct": 2,
+      "explanation": "En y = mx + b, la pendiente es el coeficiente m."
+    },
+    {
+      "id": "q8",
+      "prompt": "¿Cuál es la derivada de x²?",
+      "options": [
+        "x",
+        "2x",
+        "x³",
+        "2"
+      ],
+      "correct": 1,
+      "explanation": "La regla de la potencia produce 2x."
+    },
+    {
+      "id": "q9",
+      "prompt": "¿Cuánto suma una progresión geométrica infinita que inicia en 1 y tiene razón 1/2?",
+      "options": [
+        "1",
+        "3/2",
+        "2",
+        "4"
+      ],
+      "correct": 2,
+      "explanation": "La suma es a/(1-r): 1/(1-1/2) = 2."
+    },
+    {
+      "id": "q10",
+      "prompt": "¿Cuánto es 45 + 27?",
+      "options": [
+        "62",
+        "72",
+        "82",
+        "92"
+      ],
+      "correct": 1,
+      "explanation": "45 más 27 es 72."
+    },
+    {
+      "id": "q11",
+      "prompt": "¿Qué número continúa la secuencia 2, 4, 6, 8?",
+      "options": [
+        "9",
+        "10",
+        "11",
+        "12"
+      ],
+      "correct": 1,
+      "explanation": "La secuencia aumenta de dos en dos."
+    },
+    {
+      "id": "q12",
+      "prompt": "¿Cuántos grados tiene un ángulo recto?",
+      "options": [
+        "45",
+        "90",
+        "180",
+        "360"
+      ],
+      "correct": 1,
+      "explanation": "Un ángulo recto mide 90 grados."
+    },
+    {
+      "id": "q13",
+      "prompt": "¿Cuál es el 25% de 80?",
+      "options": [
+        "15",
+        "20",
+        "25",
+        "40"
+      ],
+      "correct": 1,
+      "explanation": "La cuarta parte de 80 es 20."
+    },
+    {
+      "id": "q14",
+      "prompt": "¿Cuál es el mínimo común múltiplo de 4 y 6?",
+      "options": [
+        "8",
+        "10",
+        "12",
+        "24"
+      ],
+      "correct": 2,
+      "explanation": "12 es el menor múltiplo compartido por 4 y 6."
+    },
+    {
+      "id": "q15",
+      "prompt": "¿Cuál es el área de un triángulo de base 10 y altura 6?",
+      "options": [
+        "16",
+        "30",
+        "60",
+        "80"
+      ],
+      "correct": 1,
+      "explanation": "El área es base por altura entre dos: 30."
+    },
+    {
+      "id": "q16",
+      "prompt": "Si x/3 = 7, ¿cuánto vale x?",
+      "options": [
+        "10",
+        "18",
+        "21",
+        "24"
+      ],
+      "correct": 2,
+      "explanation": "Multiplicar ambos lados por tres da x = 21."
+    },
+    {
+      "id": "q17",
+      "prompt": "¿Cuál es la mediana de 3, 5, 8, 11 y 14?",
+      "options": [
+        "5",
+        "8",
+        "9",
+        "11"
+      ],
+      "correct": 1,
+      "explanation": "El valor central de la lista ordenada es 8."
+    },
+    {
+      "id": "q18",
+      "prompt": "¿Cuál es el determinante de la matriz [[2,1],[3,4]]?",
+      "options": [
+        "5",
+        "6",
+        "8",
+        "11"
+      ],
+      "correct": 0,
+      "explanation": "El determinante es 2×4 − 1×3 = 5."
+    },
+    {
+      "id": "q19",
+      "prompt": "¿Cuál es el límite de (sen x)/x cuando x tiende a 0?",
+      "options": [
+        "0",
+        "1",
+        "Infinito",
+        "No existe"
+      ],
+      "correct": 1,
+      "explanation": "Es un límite fundamental cuyo valor es 1."
+    },
+    {
+      "id": "q20",
+      "type": "true-false",
+      "prompt": "Todo número primo mayor que 2 es impar.",
+      "correct": true,
+      "explanation": "El único número primo par es 2."
+    },
+    {
+      "id": "q21",
+      "prompt": "¿Cuántas diagonales tiene un hexágono?",
+      "options": [
+        "6",
+        "9",
+        "12",
+        "15"
+      ],
+      "correct": 1,
+      "explanation": "n(n−3)/2 da 6×3/2 = 9."
+    },
+    {
+      "id": "q22",
+      "prompt": "¿Cuál es la integral indefinida de 3x²?",
+      "options": [
+        "x³ + C",
+        "3x³ + C",
+        "6x + C",
+        "x² + C"
+      ],
+      "correct": 0,
+      "explanation": "La antiderivada de 3x² es x³ + C."
+    },
+    {
+      "id": "q23",
+      "prompt": "¿Cuál es el valor de e elevado a ln(5)?",
+      "options": [
+        "1",
+        "e",
+        "5",
+        "ln(5)"
+      ],
+      "correct": 2,
+      "explanation": "La exponencial y el logaritmo natural son funciones inversas."
+    },
+    {
+      "id": "q24",
+      "type": "true-false",
+      "prompt": "Una matriz cuadrada con determinante cero tiene inversa.",
+      "correct": false,
+      "explanation": "Una matriz con determinante cero es singular y no tiene inversa."
+    },
+    {
+      "id": "q25",
+      "type": "true-false",
+      "prompt": "La suma de los ángulos interiores de un polígono de n lados es (n−2)×180°.",
+      "correct": true,
+      "explanation": "Esa es la fórmula general para polígonos simples."
+    },
+    {
+      "id": "q26",
+      "prompt": "Si tres cuadernos cuestan 12, ¿cuánto cuesta uno?",
+      "options": [
+        "3",
+        "4",
+        "6",
+        "9"
+      ],
+      "correct": 1,
+      "explanation": "Dividir 12 entre 3 da 4."
+    },
+    {
+      "id": "q27",
+      "prompt": "¿Cuál es la probabilidad de obtener cara al lanzar una moneda equilibrada?",
+      "options": [
+        "1/4",
+        "1/3",
+        "1/2",
+        "1"
+      ],
+      "correct": 2,
+      "explanation": "Hay dos resultados equiprobables y uno es cara."
+    },
+    {
+      "id": "q28",
+      "prompt": "¿Cuál es la hipotenusa de un triángulo rectángulo con catetos 3 y 4?",
+      "options": [
+        "5",
+        "6",
+        "7",
+        "8"
+      ],
+      "correct": 0,
+      "explanation": "Por Pitágoras, 3² + 4² = 5²."
+    },
+    {
+      "id": "q29",
+      "prompt": "¿Cuántas combinaciones de dos elementos pueden elegirse de un conjunto de cinco?",
+      "options": [
+        "5",
+        "10",
+        "15",
+        "20"
+      ],
+      "correct": 1,
+      "explanation": "El número combinatorio 5 sobre 2 es 10."
+    },
+    {
+      "id": "q30",
+      "prompt": "¿Cuál es el módulo del número complejo 3 + 4i?",
+      "options": [
+        "4",
+        "5",
+        "7",
+        "25"
+      ],
+      "correct": 1,
+      "explanation": "El módulo es la raíz de 3² + 4², igual a 5."
+    },
+    {
+      "id": "q31",
+      "prompt": "¿Qué valor propio tiene la matriz identidad para cualquier vector no nulo?",
+      "options": [
+        "0",
+        "1",
+        "−1",
+        "Depende del vector"
+      ],
+      "correct": 1,
+      "explanation": "La matriz identidad deja todo vector sin cambios, por lo que su valor propio es 1."
+    },
+    {
+      "id": "q32",
+      "prompt": "¿Qué serie converge a π²/6?",
+      "options": [
+        "La suma de 1/n",
+        "La suma de 1/n²",
+        "La suma de n",
+        "La suma de 2ⁿ"
+      ],
+      "correct": 1,
+      "explanation": "El problema de Basilea establece que la suma de 1/n² es π²/6."
+    },
+    {
+      "id": "q33",
+      "prompt": "¿Qué propiedad topológica permanece bajo deformaciones continuas?",
+      "options": [
+        "Longitud exacta",
+        "Color",
+        "Conectividad",
+        "Área"
+      ],
+      "correct": 2,
+      "explanation": "La conectividad es invariante bajo homeomorfismos."
+    },
+    {
+      "id": "q34",
+      "prompt": "¿Qué transformada descompone una señal en frecuencias?",
+      "options": [
+        "Transformada de Fourier",
+        "Regla de Cramer",
+        "Método de Euclides",
+        "Teorema de Bayes"
+      ],
+      "correct": 0,
+      "explanation": "La transformada de Fourier representa una señal mediante componentes de frecuencia."
+    },
+    {
+      "id": "q35",
+      "prompt": "¿Cuál es el cardinal del conjunto de números naturales?",
+      "options": [
+        "Finito",
+        "Aleph cero",
+        "Continuo",
+        "Uno"
+      ],
+      "correct": 1,
+      "explanation": "El cardinal numerable de los naturales se denota aleph cero."
+    }
+  ],
+  "quizzes": [
+    {
+      "id": "numeros-1",
+      "title": "Cálculo relámpago",
+      "description": "Operaciones, secuencias y geometría elemental.",
+      "difficulty": "Inicial",
+      "questionIds": [
+        "q1",
+        "q3",
+        "q10",
+        "q11",
+        "q12"
+      ]
+    },
+    {
+      "id": "numeros-2",
+      "title": "Fracciones y ecuaciones",
+      "description": "Fracciones, ecuaciones, porcentajes, raíces y proporciones.",
+      "difficulty": "Fácil",
+      "questionIds": [
+        "q2",
+        "q4",
+        "q6",
+        "q13",
+        "q14",
+        "q26"
+      ]
+    },
+    {
+      "id": "numeros-3",
+      "title": "Geometría esencial",
+      "description": "Geometría, álgebra, estadística y probabilidad.",
+      "difficulty": "Intermedio",
+      "questionIds": [
+        "q5",
+        "q7",
+        "q15",
+        "q16",
+        "q17",
+        "q27",
+        "q28"
+      ]
+    },
+    {
+      "id": "numeros-4",
+      "title": "Álgebra en movimiento",
+      "description": "Cálculo, matrices, números complejos y razonamiento discreto.",
+      "difficulty": "Avanzado",
+      "questionIds": [
+        "q8",
+        "q18",
+        "q19",
+        "q20",
+        "q21",
+        "q29",
+        "q30",
+        "q31"
+      ]
+    },
+    {
+      "id": "numeros-5",
+      "title": "Desafío matemático",
+      "description": "Series, integrales, topología, transformadas y conjuntos.",
+      "difficulty": "Experto",
+      "questionIds": [
+        "q9",
+        "q22",
+        "q23",
+        "q24",
+        "q25",
+        "q32",
+        "q33",
+        "q34",
+        "q35"
+      ]
+    }
+  ]
+}

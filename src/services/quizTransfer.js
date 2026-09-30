@@ -80,7 +80,6 @@ const comparableQuestion = (question) => {
     comparable.referenceAnswer = question.referenceAnswer;
     comparable.keywords = [...question.keywords];
     comparable.similarityThreshold = question.similarityThreshold;
-    comparable.allowSelfAssessment = question.allowSelfAssessment;
   }
 
   return comparable;

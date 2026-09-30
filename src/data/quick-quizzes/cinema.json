@@ -1,0 +1,487 @@
+{
+  "category": "cinema",
+  "questions": [
+    {
+      "id": "q1",
+      "prompt": "¿Cómo se llama el premio principal de la Academia de Hollywood?",
+      "options": [
+        "Oscar",
+        "Emmy",
+        "Tony",
+        "Grammy"
+      ],
+      "correct": 0,
+      "explanation": "Los Premios de la Academia son conocidos como los Oscar."
+    },
+    {
+      "id": "q2",
+      "prompt": "¿Qué persona dirige la realización creativa de una película?",
+      "options": [
+        "Director",
+        "Proyeccionista",
+        "Crítico",
+        "Distribuidor"
+      ],
+      "correct": 0,
+      "explanation": "El director coordina la visión creativa de la película."
+    },
+    {
+      "id": "q3",
+      "prompt": "¿Qué género busca provocar miedo?",
+      "options": [
+        "Comedia",
+        "Terror",
+        "Musical",
+        "Documental"
+      ],
+      "correct": 1,
+      "explanation": "El cine de terror construye tensión y miedo."
+    },
+    {
+      "id": "q4",
+      "prompt": "¿Quién dirigió Jurassic Park?",
+      "options": [
+        "James Cameron",
+        "Steven Spielberg",
+        "Ridley Scott",
+        "George Lucas"
+      ],
+      "correct": 1,
+      "explanation": "Steven Spielberg dirigió Jurassic Park, estrenada en 1993."
+    },
+    {
+      "id": "q5",
+      "prompt": "¿Qué término describe la música compuesta específicamente para una película?",
+      "options": [
+        "Foley",
+        "Banda sonora",
+        "Montaje",
+        "Atrezzo"
+      ],
+      "correct": 1,
+      "explanation": "La banda sonora incluye la música asociada a la película."
+    },
+    {
+      "id": "q6",
+      "prompt": "¿Qué movimiento de cámara gira horizontalmente desde un punto fijo?",
+      "options": [
+        "Travelling",
+        "Paneo",
+        "Zoom",
+        "Dolly in"
+      ],
+      "correct": 1,
+      "explanation": "El paneo rota la cámara horizontalmente sobre su eje."
+    },
+    {
+      "id": "q7",
+      "prompt": "¿Qué cineasta japonés dirigió Los siete samuráis?",
+      "options": [
+        "Hayao Miyazaki",
+        "Akira Kurosawa",
+        "Yasujirō Ozu",
+        "Takashi Miike"
+      ],
+      "correct": 1,
+      "explanation": "Akira Kurosawa dirigió Los siete samuráis en 1954."
+    },
+    {
+      "id": "q8",
+      "prompt": "¿Qué es un plano secuencia?",
+      "options": [
+        "Una escena animada",
+        "Una toma continua extensa",
+        "Un montaje de fotos",
+        "Un guion técnico"
+      ],
+      "correct": 1,
+      "explanation": "El plano secuencia desarrolla una acción sin cortes visibles."
+    },
+    {
+      "id": "q9",
+      "prompt": "¿Qué película ganó la primera Palma de Oro otorgada con ese nombre en 1955?",
+      "options": [
+        "Marty",
+        "La strada",
+        "Ordet",
+        "Rififi"
+      ],
+      "correct": 0,
+      "explanation": "Marty, de Delbert Mann, recibió la Palma de Oro de 1955."
+    },
+    {
+      "id": "q10",
+      "prompt": "¿Cómo se llama el texto que organiza diálogos y acciones de una película?",
+      "options": [
+        "Guion",
+        "Cartel",
+        "Crédito",
+        "Tráiler"
+      ],
+      "correct": 0,
+      "explanation": "El guion describe escenas, acciones y diálogos."
+    },
+    {
+      "id": "q11",
+      "prompt": "¿Qué se vende para ingresar a una función de cine?",
+      "options": [
+        "Entrada",
+        "Storyboard",
+        "Claqueta",
+        "Bobina"
+      ],
+      "correct": 0,
+      "explanation": "La entrada permite acceder a la proyección."
+    },
+    {
+      "id": "q12",
+      "prompt": "¿Qué actriz interpreta a Hermione Granger en las películas de Harry Potter?",
+      "options": [
+        "Emma Watson",
+        "Emma Stone",
+        "Keira Knightley",
+        "Natalie Portman"
+      ],
+      "correct": 0,
+      "explanation": "Emma Watson interpreta a Hermione Granger."
+    },
+    {
+      "id": "q13",
+      "prompt": "¿Qué estudio de animación produjo Toy Story?",
+      "options": [
+        "Pixar",
+        "Studio Ghibli",
+        "Laika",
+        "Aardman"
+      ],
+      "correct": 0,
+      "explanation": "Pixar produjo Toy Story, estrenada en 1995."
+    },
+    {
+      "id": "q14",
+      "prompt": "¿Qué término describe una continuación de una película?",
+      "options": [
+        "Secuela",
+        "Prólogo",
+        "Remake",
+        "Cameo"
+      ],
+      "correct": 0,
+      "explanation": "Una secuela continúa la historia de una obra anterior."
+    },
+    {
+      "id": "q15",
+      "prompt": "¿Qué profesional diseña la apariencia visual de los escenarios?",
+      "options": [
+        "Diseñador de producción",
+        "Microfonista",
+        "Distribuidor",
+        "Exhibidor"
+      ],
+      "correct": 0,
+      "explanation": "El diseño de producción define espacios y estilo visual."
+    },
+    {
+      "id": "q16",
+      "prompt": "¿Qué plano encuadra generalmente a una persona desde el pecho o cintura?",
+      "options": [
+        "Plano medio",
+        "Gran plano general",
+        "Primerísimo primer plano",
+        "Plano cenital"
+      ],
+      "correct": 0,
+      "explanation": "El plano medio muestra parte del cuerpo y facilita ver gestos."
+    },
+    {
+      "id": "q17",
+      "prompt": "¿Qué montaje alterna acciones que ocurren en lugares distintos?",
+      "options": [
+        "Montaje paralelo",
+        "Plano fijo",
+        "Fundido a negro",
+        "Raccord de mirada"
+      ],
+      "correct": 0,
+      "explanation": "El montaje paralelo relaciona acciones separadas espacialmente."
+    },
+    {
+      "id": "q18",
+      "prompt": "¿Qué regla orienta la posición de la cámara para conservar continuidad espacial?",
+      "options": [
+        "Regla de los 180 grados",
+        "Regla de tercios exclusivamente",
+        "Efecto Kuleshov",
+        "Dogma 95"
+      ],
+      "correct": 0,
+      "explanation": "La regla de 180 grados mantiene coherentes las direcciones en pantalla."
+    },
+    {
+      "id": "q19",
+      "type": "true-false",
+      "prompt": "El sonido diegético pertenece al mundo narrativo de la película.",
+      "correct": true,
+      "explanation": "Los personajes podrían oír una fuente sonora diegética."
+    },
+    {
+      "id": "q20",
+      "prompt": "¿Qué movimiento cinematográfico francés se asocia con Godard y Truffaut?",
+      "options": [
+        "Nouvelle Vague",
+        "Neorrealismo",
+        "Expresionismo",
+        "Free Cinema japonés"
+      ],
+      "correct": 0,
+      "explanation": "Godard y Truffaut fueron figuras de la Nouvelle Vague."
+    },
+    {
+      "id": "q21",
+      "prompt": "¿Qué película de Fritz Lang presenta la ciudad futurista de 1927?",
+      "options": [
+        "Metrópolis",
+        "Nosferatu",
+        "M",
+        "El gabinete del doctor Caligari"
+      ],
+      "correct": 0,
+      "explanation": "Metrópolis es la obra futurista de Fritz Lang estrenada en 1927."
+    },
+    {
+      "id": "q22",
+      "prompt": "¿Qué término nombra una elipsis que salta hacia el futuro de la historia?",
+      "options": [
+        "Flashforward",
+        "Flashback",
+        "Raccord",
+        "Plano máster"
+      ],
+      "correct": 0,
+      "explanation": "El flashforward adelanta temporalmente la narración."
+    },
+    {
+      "id": "q23",
+      "type": "true-false",
+      "prompt": "El efecto Kuleshov demuestra que el montaje puede cambiar la interpretación de un rostro neutral.",
+      "correct": true,
+      "explanation": "El significado percibido depende de los planos que rodean al rostro."
+    },
+    {
+      "id": "q24",
+      "type": "true-false",
+      "prompt": "El formato anamórfico comprime horizontalmente la imagen durante la captura.",
+      "correct": true,
+      "explanation": "La imagen se descomprime al proyectarse para lograr una relación panorámica."
+    },
+    {
+      "id": "q25",
+      "prompt": "¿Qué directora fue la primera mujer en ganar el Óscar a mejor dirección?",
+      "options": [
+        "Kathryn Bigelow",
+        "Jane Campion",
+        "Sofia Coppola",
+        "Agnès Varda"
+      ],
+      "correct": 0,
+      "explanation": "Kathryn Bigelow ganó por The Hurt Locker en 2010."
+    },
+    {
+      "id": "q26",
+      "prompt": "¿Qué objeto se cierra al inicio de una toma para sincronizar imagen y sonido?",
+      "options": [
+        "Claqueta",
+        "Proyector",
+        "Teleprompter",
+        "Fotómetro"
+      ],
+      "correct": 0,
+      "explanation": "La claqueta identifica la toma y ayuda a sincronizar pistas."
+    },
+    {
+      "id": "q27",
+      "prompt": "¿Qué película animada presenta al robot WALL-E?",
+      "options": [
+        "WALL-E",
+        "Robots",
+        "Big Hero 6",
+        "Ratatouille"
+      ],
+      "correct": 0,
+      "explanation": "WALL-E protagoniza la película homónima de Pixar."
+    },
+    {
+      "id": "q28",
+      "prompt": "¿Qué transición oscurece gradualmente la imagen?",
+      "options": [
+        "Fundido a negro",
+        "Corte directo",
+        "Barrido de cámara",
+        "Zoom óptico"
+      ],
+      "correct": 0,
+      "explanation": "El fundido a negro reduce progresivamente la imagen."
+    },
+    {
+      "id": "q29",
+      "prompt": "¿Qué persona controla la iluminación y la cámara junto al director?",
+      "options": [
+        "Director de fotografía",
+        "Guionista",
+        "Montador de sonido",
+        "Distribuidor"
+      ],
+      "correct": 0,
+      "explanation": "La dirección de fotografía diseña luz, encuadre y captura."
+    },
+    {
+      "id": "q30",
+      "prompt": "¿Qué película de Akira Kurosawa inspiró numerosos relatos de equipos heroicos?",
+      "options": [
+        "Los siete samuráis",
+        "Rashomon",
+        "Ikiru",
+        "Trono de sangre"
+      ],
+      "correct": 0,
+      "explanation": "Los siete samuráis influyó en muchas historias de grupos reunidos para una misión."
+    },
+    {
+      "id": "q31",
+      "prompt": "¿Qué objetivo produce un campo visual muy amplio?",
+      "options": [
+        "Gran angular",
+        "Teleobjetivo",
+        "Macro exclusivamente",
+        "Objetivo normal largo"
+      ],
+      "correct": 0,
+      "explanation": "El gran angular cubre un ángulo de visión amplio."
+    },
+    {
+      "id": "q32",
+      "prompt": "¿Qué movimiento italiano usó locaciones reales y actores no profesionales tras la Segunda Guerra Mundial?",
+      "options": [
+        "Neorrealismo italiano",
+        "Futurismo ruso",
+        "Nouvelle Vague alemana",
+        "Cinema Novo japonés"
+      ],
+      "correct": 0,
+      "explanation": "El neorrealismo italiano buscó realismo social en escenarios cotidianos."
+    },
+    {
+      "id": "q33",
+      "prompt": "¿Qué película de Orson Welles comienza con la muerte de Charles Foster Kane?",
+      "options": [
+        "Ciudadano Kane",
+        "Sed de mal",
+        "El cuarto mandamiento",
+        "El proceso"
+      ],
+      "correct": 0,
+      "explanation": "Ciudadano Kane inicia con la muerte del magnate y reconstruye su vida."
+    },
+    {
+      "id": "q34",
+      "prompt": "¿Qué técnica combina imágenes filmadas a distintas velocidades para mantener continuidad?",
+      "options": [
+        "Raccord de movimiento",
+        "Voz en off",
+        "Iris cerrado",
+        "Matte painting"
+      ],
+      "correct": 0,
+      "explanation": "El raccord de movimiento enlaza una acción entre planos."
+    },
+    {
+      "id": "q35",
+      "prompt": "¿Qué montaje soviético asociaba atracciones para provocar una respuesta intelectual o emocional?",
+      "options": [
+        "Montaje de atracciones",
+        "Plano-secuencia contemplativo",
+        "Continuidad invisible clásica",
+        "Cámara vérité"
+      ],
+      "correct": 0,
+      "explanation": "Eisenstein teorizó el montaje de atracciones."
+    }
+  ],
+  "quizzes": [
+    {
+      "id": "pantalla-1",
+      "title": "Luces, cámara, acción",
+      "description": "Premios, géneros, dirección y elementos básicos de una función.",
+      "difficulty": "Inicial",
+      "questionIds": [
+        "q1",
+        "q2",
+        "q3",
+        "q10",
+        "q11"
+      ]
+    },
+    {
+      "id": "pantalla-2",
+      "title": "Géneros y directores",
+      "description": "Películas populares, animación, intérpretes y continuaciones.",
+      "difficulty": "Fácil",
+      "questionIds": [
+        "q4",
+        "q12",
+        "q13",
+        "q14",
+        "q15",
+        "q26"
+      ]
+    },
+    {
+      "id": "pantalla-3",
+      "title": "Cómo se hace una película",
+      "description": "Sonido, cámara, planos, diseño y montaje.",
+      "difficulty": "Intermedio",
+      "questionIds": [
+        "q5",
+        "q6",
+        "q16",
+        "q17",
+        "q18",
+        "q27",
+        "q28"
+      ]
+    },
+    {
+      "id": "pantalla-4",
+      "title": "Lenguaje cinematográfico",
+      "description": "Autores, continuidad, lenguaje visual y sonido narrativo.",
+      "difficulty": "Avanzado",
+      "questionIds": [
+        "q7",
+        "q8",
+        "q19",
+        "q20",
+        "q21",
+        "q29",
+        "q30",
+        "q31"
+      ]
+    },
+    {
+      "id": "pantalla-5",
+      "title": "Cinéfilo experto",
+      "description": "Historia del cine, montaje, formatos y dirección galardonada.",
+      "difficulty": "Experto",
+      "questionIds": [
+        "q9",
+        "q22",
+        "q23",
+        "q24",
+        "q25",
+        "q32",
+        "q33",
+        "q34",
+        "q35"
+      ]
+    }
+  ]
+}

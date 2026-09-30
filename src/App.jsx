@@ -12,7 +12,10 @@ import GameModeSelector from "./components/GameModeSelector.jsx";
 import QuizImportConflictModal from "./components/QuizImportConflictModal.jsx";
 import QuizImportModal from "./components/QuizImportModal.jsx";
 import QuizLibrary from "./components/QuizLibrary.jsx";
+import QuickQuizLibrary from "./components/QuickQuizLibrary.jsx";
+import QuickQuizDrawModal from "./components/QuickQuizDrawModal.jsx";
 import QuizManageModal from "./components/QuizManageModal.jsx";
+import QuizEditWarningModal from "./components/QuizEditWarningModal.jsx";
 import QuizPlayer from "./components/QuizPlayer.jsx";
 import MusicSelector from "./components/MusicSelector.jsx";
 import PromptRoom from "./components/PromptRoom.jsx";
@@ -24,11 +27,14 @@ import ThemeSwitcher from "./components/ThemeSwitcher.jsx";
 import { themes } from "./config/themes.js";
 import { DEFAULT_MUSIC_ALBUM, MUSIC_ALBUM_STORAGE_KEY, musicAlbums } from "./config/musicAlbums.js";
 import { QUESTION_TYPES } from "./domain/quizConstants.js";
+import { quickQuizzes } from "./data/quick-quizzes/index.js";
 import { useQuizLibrary } from "./hooks/useQuizLibrary.js";
 import { useTheme } from "./hooks/useTheme.js";
 import { systemNotifications } from "./services/systemNotifications.js";
+import { playBufferedSound, prepareSoundBuffers, stopBufferedSound, unlockSoundBuffers } from "./services/soundBuffer.js";
 import { applyUserPreferences, canPlayGameplaySounds, canPlayInterfaceSounds, getSoundScale, readUserPreferences, saveUserPreferences } from "./services/userPreferences.js";
 import { quizSessionStorage } from "./services/quizSessionStorage.js";
+import { quickQuizProgress } from "./services/quickQuizProgress.js";
 import { playButtonPressSound, playConfirmSound, playTypingSound } from "./services/uiSounds.js";
 import { areQuizzesEquivalent, downloadQuizFile, MAX_QUIZ_FILE_SIZE, normalizeQuizTitle, parseQuizImport } from "./services/quizTransfer.js";
 import "./App.css";
@@ -44,6 +50,7 @@ const Icon = ({ name, size = 20 }) => {
   const paths = {
     home: <><path d="m3 11 9-8 9 8" /><path d="M5 10v10h14V10" /><path d="M9 20v-6h6v6" /></>,
     library: <><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" /><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2Z" /></>,
+    quick: <><path d="M4 4h6v6H4zM14 4h6v6h-6zM4 14h6v6H4zM14 14h6v6h-6z" /><path d="m7 7 .01 0M17 7l.01 0M7 17l.01 0M17 17l.01 0" /></>,
     chart: <><path d="M4 19V9" /><path d="M10 19V5" /><path d="M16 19v-7" /><path d="M22 19H2" /></>,
     settings: <><circle cx="12" cy="12" r="3" /><path d="M19.4 15a1.7 1.7 0 0 0 .34 1.88l.06.06-2.83 2.83-.06-.06a1.7 1.7 0 0 0-1.88-.34 1.7 1.7 0 0 0-1.03 1.56V21h-4v-.08A1.7 1.7 0 0 0 9 19.37a1.7 1.7 0 0 0-1.88.34l-.06.06-2.83-2.83.06-.06A1.7 1.7 0 0 0 4.63 15 1.7 1.7 0 0 0 3.08 14H3v-4h.08A1.7 1.7 0 0 0 4.63 9a1.7 1.7 0 0 0-.34-1.88l-.06-.06 2.83-2.83.06.06A1.7 1.7 0 0 0 9 4.63h.01A1.7 1.7 0 0 0 10 3.08V3h4v.08A1.7 1.7 0 0 0 15 4.63a1.7 1.7 0 0 0 1.88-.34l.06-.06 2.83 2.83-.06.06A1.7 1.7 0 0 0 19.37 9v.01A1.7 1.7 0 0 0 20.92 10H21v4h-.08A1.7 1.7 0 0 0 19.4 15Z" /></>,
     plus: <><path d="M12 5v14" /><path d="M5 12h14" /></>,
@@ -108,12 +115,14 @@ const AutoScrollTitle = ({ children }) => {
 const navigation = [
   { label: "Inicio", icon: "home" },
   { label: "Mis quizzes", icon: "library" },
+  { label: "Quizzes rápidos", icon: "quick" },
   { label: "Sala de prompts", icon: "sparkle" },
 ];
 
 const sectionTitles = {
   Inicio: "Tu espacio de estudio.",
   "Mis quizzes": "Crea y organiza tus quizzes.",
+  "Quizzes rápidos": "Elige un reto y empieza a jugar.",
   "Sala de prompts": "Diseña quizzes con ayuda de IA.",
   Ajustes: "Configura tu experiencia.",
 };
@@ -139,12 +148,17 @@ function App() {
   const [isCreatorOpen, setIsCreatorOpen] = useState(false);
   const [editingQuizId, setEditingQuizId] = useState(null);
   const [playingQuizId, setPlayingQuizId] = useState(null);
+  const [quickQuizId, setQuickQuizId] = useState(null);
+  const [drawnQuickQuiz, setDrawnQuickQuiz] = useState(null);
+  const [quickQuizStats, setQuickQuizStats] = useState(() => quickQuizProgress.getAll());
+  const [quickQuizLibraryState, setQuickQuizLibraryState] = useState({ selectedCategory: "all", searchQuery: "" });
   const [activeGameMode, setActiveGameMode] = useState(null);
   const [activeGameRules, setActiveGameRules] = useState({});
   const [gameAttemptKey, setGameAttemptKey] = useState(0);
   const [savedGameSession, setSavedGameSession] = useState(() => quizSessionStorage.get());
   const [managedQuiz, setManagedQuiz] = useState(null);
   const [manageMode, setManageMode] = useState("rename");
+  const [quizPendingEdit, setQuizPendingEdit] = useState(null);
   const [importConflict, setImportConflict] = useState(null);
   const [isImportModalOpen, setIsImportModalOpen] = useState(false);
   const [exportingQuiz, setExportingQuiz] = useState(null);
@@ -152,6 +166,9 @@ function App() {
   const [scoreCardCapacity, setScoreCardCapacity] = useState(4);
   const importInputRef = useRef(null);
   const scoreboardRef = useRef(null);
+  const quickQuizLibraryScrollRef = useRef(0);
+  const shouldRestoreQuickQuizScrollRef = useRef(false);
+  const previousSectionRef = useRef(activeSection);
   const [settingsView, setSettingsView] = useState("index");
   const [selectedAlbumId, setSelectedAlbumId] = useState(() => (
     window.localStorage.getItem(MUSIC_ALBUM_STORAGE_KEY) ?? DEFAULT_MUSIC_ALBUM
@@ -161,13 +178,18 @@ function App() {
   const [isMusicChanging, setIsMusicChanging] = useState(false);
   const [musicVolume, setMusicVolume] = useState(readStoredMusicVolume);
   const musicAudioRef = useRef(null);
-  const musicChangeAudioRef = useRef(null);
+  const musicChangeSoundRef = useRef(null);
   const musicChangeSequenceRef = useRef(0);
   const { theme, changeTheme } = useTheme();
   const { quizzes, createDraft, saveDraft, duplicateDraft, deleteDraft, importDraft, recordAttempt } = useQuizLibrary();
 
   const editingQuiz = quizzes.find((quiz) => quiz.id === editingQuizId) ?? null;
   const playingQuiz = quizzes.find((quiz) => quiz.id === playingQuizId) ?? null;
+  const quickQuizzesWithStats = quickQuizzes.map((quiz) => ({
+    ...quiz,
+    stats: quickQuizStats[quiz.id] ?? quiz.stats,
+  }));
+  const playingQuickQuiz = quickQuizzesWithStats.find((quiz) => quiz.id === quickQuizId) ?? null;
   const activeTheme = themes.find((item) => item.id === theme) ?? themes[0];
   const selectedAlbum = musicAlbums.find((album) => album.id === selectedAlbumId) ?? musicAlbums[0];
   const currentMusicTrack = selectedAlbum.tracks[currentTrackIndex] ?? selectedAlbum.tracks[0] ?? null;
@@ -177,7 +199,9 @@ function App() {
   const isMusicScreen = activeSection === "Ajustes" && settingsView === "music";
   const isHomeScreen = activeSection === "Inicio";
   const isQuizScreen = activeSection === "Mis quizzes";
+  const isQuickQuizScreen = activeSection === "Quizzes rápidos";
   const isQuizActivityScreen = isQuizScreen && Boolean(editingQuiz || playingQuiz);
+  const isQuickQuizActivityScreen = isQuickQuizScreen && Boolean(playingQuickQuiz);
   const scoredQuizzes = quizzes
     .filter((quiz) => Number.isFinite(quiz.stats?.bestScore))
     .sort((first, second) => (
@@ -185,6 +209,13 @@ function App() {
       || new Date(second.stats.lastPlayedAt ?? 0) - new Date(first.stats.lastPlayedAt ?? 0)
     ));
   const visibleScoredQuizzes = scoredQuizzes.slice(0, scoreCardCapacity);
+  const visibleScoredQuickQuizzes = quickQuizzesWithStats
+    .filter((quiz) => Number.isFinite(quiz.stats?.bestScore))
+    .sort((first, second) => (
+      second.stats.bestScore - first.stats.bestScore
+      || new Date(second.stats.lastPlayedAt ?? 0) - new Date(first.stats.lastPlayedAt ?? 0)
+    ))
+    .slice(0, 5);
   const resumableQuiz = savedGameSession
     ? quizzes.find((quiz) => quiz.id === savedGameSession.quizId) ?? null
     : null;
@@ -196,6 +227,38 @@ function App() {
   useEffect(() => {
     applyUserPreferences(userPreferences);
   }, [userPreferences]);
+
+  useEffect(() => {
+    if (previousSectionRef.current === activeSection) return;
+    previousSectionRef.current = activeSection;
+    window.scrollTo(0, 0);
+  }, [activeSection]);
+
+  useEffect(() => {
+    if (!isQuickQuizScreen || quickQuizId || !shouldRestoreQuickQuizScrollRef.current) return undefined;
+
+    const frameId = window.requestAnimationFrame(() => {
+      window.scrollTo(0, quickQuizLibraryScrollRef.current);
+      shouldRestoreQuickQuizScrollRef.current = false;
+    });
+
+    return () => window.cancelAnimationFrame(frameId);
+  }, [isQuickQuizScreen, quickQuizId]);
+
+  useEffect(() => {
+    prepareSoundBuffers();
+
+    const unlockAudio = () => unlockSoundBuffers();
+    window.addEventListener("pointerdown", unlockAudio, { capture: true });
+    window.addEventListener("keydown", unlockAudio, { capture: true });
+
+    return () => {
+      window.removeEventListener("pointerdown", unlockAudio, { capture: true });
+      window.removeEventListener("keydown", unlockAudio, { capture: true });
+      musicChangeSequenceRef.current += 1;
+      stopBufferedSound(musicChangeSoundRef.current);
+    };
+  }, []);
 
   useEffect(() => {
     const scoreboard = scoreboardRef.current;
@@ -220,19 +283,6 @@ function App() {
     return () => observer.disconnect();
   }, [activeSection, scoredQuizzes.length]);
 
-  useEffect(() => {
-    const sound = new Audio("/sounds/music-change.mp3");
-    sound.preload = "auto";
-    sound.volume = 0.45;
-    musicChangeAudioRef.current = sound;
-
-    return () => {
-      musicChangeSequenceRef.current += 1;
-      sound.pause();
-      musicChangeAudioRef.current = null;
-    };
-  }, []);
-
   const playMusicChangeTransition = useCallback((onComplete) => {
     const sequence = musicChangeSequenceRef.current + 1;
     musicChangeSequenceRef.current = sequence;
@@ -246,17 +296,17 @@ function App() {
       onComplete();
     };
 
-    const sound = musicChangeAudioRef.current;
-    if (!sound) {
+    stopBufferedSound(musicChangeSoundRef.current);
+    if (!canPlayInterfaceSounds()) {
       finish();
       return;
     }
 
-    sound.pause();
-    sound.currentTime = 0;
-    sound.onended = finish;
-    sound.onerror = finish;
-    sound.play().catch(finish);
+    musicChangeSoundRef.current = playBufferedSound("/sounds/music-change.mp3", {
+      volume: 0.18 * getSoundScale(),
+      onEnded: finish,
+      onError: finish,
+    });
   }, []);
 
   const selectMusicAlbum = (albumId) => {
@@ -272,7 +322,7 @@ function App() {
       });
     } else {
       musicChangeSequenceRef.current += 1;
-      musicChangeAudioRef.current?.pause();
+      stopBufferedSound(musicChangeSoundRef.current);
       setIsMusicChanging(false);
       setSelectedAlbumId(albumId);
       setCurrentTrackIndex(0);
@@ -307,34 +357,59 @@ function App() {
 
   useEffect(() => {
     const audio = musicAudioRef.current;
-    if (!audio) return;
-    audio.volume = musicVolume;
-    if (!isMusicPlaying || !currentMusicTrack) {
+    if (!audio) return undefined;
+
+    let active = true;
+
+    const pauseMusic = () => {
       audio.pause();
-      return;
-    }
-    audio.play().catch(() => setIsMusicPlaying(false));
+    };
+
+    const syncMusicPlayback = () => {
+      audio.volume = musicVolume;
+
+      if (!isMusicPlaying || !currentMusicTrack || document.hidden) {
+        pauseMusic();
+        return;
+      }
+
+      audio.play().catch(() => {
+        if (active && !document.hidden) setIsMusicPlaying(false);
+      });
+    };
+
+    const handleVisibilityChange = () => {
+      if (document.hidden) pauseMusic();
+      else syncMusicPlayback();
+    };
+
+    const handlePageShow = () => {
+      if (!document.hidden) syncMusicPlayback();
+    };
+
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+    window.addEventListener("pagehide", pauseMusic);
+    window.addEventListener("pageshow", handlePageShow);
+    syncMusicPlayback();
+
+    return () => {
+      active = false;
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+      window.removeEventListener("pagehide", pauseMusic);
+      window.removeEventListener("pageshow", handlePageShow);
+    };
   }, [currentMusicTrack, isMusicPlaying, musicVolume]);
 
   useEffect(() => {
-    const hoverSound = new Audio("/sounds/button-hover.mp3");
-    hoverSound.preload = "auto";
-    hoverSound.volume = 0.18;
-
     const playHoverSound = (event) => {
       if (event.pointerType === "touch" || !(event.target instanceof Element)) return;
       const button = event.target.closest("button");
       if (!button || button.disabled || !canPlayInterfaceSounds() || (event.relatedTarget instanceof Node && button.contains(event.relatedTarget))) return;
-      hoverSound.currentTime = 0;
-      hoverSound.volume = 0.18 * getSoundScale();
-      hoverSound.play().catch(() => {});
+      playBufferedSound("/sounds/button-hover.mp3", { volume: 0.18 * getSoundScale() });
     };
 
     document.addEventListener("pointerover", playHoverSound);
-    return () => {
-      document.removeEventListener("pointerover", playHoverSound);
-      hoverSound.pause();
-    };
+    return () => document.removeEventListener("pointerover", playHoverSound);
   }, []);
 
   useEffect(() => {
@@ -372,6 +447,8 @@ function App() {
   }, []);
 
   const selectSection = (label) => {
+    shouldRestoreQuickQuizScrollRef.current = false;
+    if (label === activeSection) window.scrollTo(0, 0);
     setActiveSection(label);
     setIsMenuOpen(false);
 
@@ -380,6 +457,10 @@ function App() {
       setPlayingQuizId(null);
       setActiveGameMode(null);
       setActiveGameRules({});
+    }
+
+    if (label !== "Quizzes rápidos") {
+      setQuickQuizId(null);
     }
 
     if (label === "Ajustes") {
@@ -409,12 +490,27 @@ function App() {
     }
   };
 
-  const openQuizDraft = (quiz) => {
+  const enterQuizEditor = (quiz) => {
     setActiveSection("Mis quizzes");
     setPlayingQuizId(null);
     setActiveGameMode(null);
     setActiveGameRules({});
     setEditingQuizId(quiz.id);
+  };
+
+  const openQuizDraft = (quiz) => {
+    const hasPreviousScore = Number.isFinite(quiz.stats?.bestScore);
+    if (quiz.status === "ready" && hasPreviousScore) {
+      setQuizPendingEdit(quiz);
+      return;
+    }
+
+    enterQuizEditor(quiz);
+  };
+
+  const confirmQuizEdit = (quiz) => {
+    setQuizPendingEdit(null);
+    enterQuizEditor(quiz);
   };
 
   const openQuizGame = (quiz) => {
@@ -424,6 +520,42 @@ function App() {
     setActiveGameMode(null);
     setActiveGameRules({});
   };
+
+  const openQuickQuizGame = (quiz) => {
+    if (activeSection === "Quizzes rápidos" && !quickQuizId) {
+      quickQuizLibraryScrollRef.current = window.scrollY;
+      shouldRestoreQuickQuizScrollRef.current = true;
+    }
+
+    setActiveSection("Quizzes rápidos");
+    setQuickQuizId(quiz.id);
+    setActiveGameMode(null);
+    setActiveGameRules({});
+  };
+
+  const drawQuickQuiz = () => {
+    const quiz = quickQuizzesWithStats[Math.floor(Math.random() * quickQuizzesWithStats.length)];
+    if (quiz) setDrawnQuickQuiz(quiz);
+  };
+
+  const finishQuickQuizDraw = (quiz) => {
+    setDrawnQuickQuiz(null);
+    openQuickQuizGame(quiz);
+  };
+
+  const exitQuickQuizGame = () => {
+    quizSessionStorage.clear();
+    setActiveGameMode(null);
+    setActiveGameRules({});
+    setQuickQuizId(null);
+  };
+
+  const completeQuickQuizGame = useCallback(({ score }) => {
+    quizSessionStorage.clear();
+    if (quickQuizId) setQuickQuizStats(quickQuizProgress.recordAttempt(quickQuizId, score));
+  }, [quickQuizId]);
+
+  const ignoreQuickQuizProgress = useCallback(() => {}, []);
 
   const startQuizGame = (_quiz, gameMode, rules) => {
     quizSessionStorage.clear();
@@ -596,7 +728,7 @@ function App() {
     <div className="app-shell">
       <Toaster
         position="bottom-right"
-        theme={theme === "midnight" ? "dark" : "light"}
+        theme={theme === "sky" || theme === "pink" ? "dark" : "light"}
         options={{ duration: 4000, roundness: 16, fill: "var(--toast-bg)" }}
       />
       <aside className={`sidebar ${isMenuOpen ? "is-open" : ""}`}>
@@ -665,16 +797,18 @@ function App() {
 
       {isMenuOpen && <button className="menu-backdrop" aria-label="Cerrar menú" onClick={() => setIsMenuOpen(false)} />}
 
-      <main className={`main-content ${isThemeScreen ? "main-content--themes" : ""} ${isSettingsHome ? "main-content--settings" : ""} ${isMusicScreen ? "main-content--music" : ""} ${isHomeScreen || isQuizScreen ? "main-content--workspace" : ""} ${isHomeScreen ? "main-content--home" : ""} ${isQuizScreen ? "main-content--library" : ""}`}>
-        {!hidesSettingsHeading && !isQuizActivityScreen && (
-          <header className="topbar">
+      <main className={`main-content ${isThemeScreen ? "main-content--themes" : ""} ${isSettingsHome ? "main-content--settings" : ""} ${isMusicScreen ? "main-content--music" : ""} ${isHomeScreen || isQuizScreen || isQuickQuizScreen ? "main-content--workspace" : ""} ${isHomeScreen ? "main-content--home" : ""} ${isQuizScreen || isQuickQuizScreen ? "main-content--library" : ""}`}>
+        {!hidesSettingsHeading && !isQuizActivityScreen && !isQuickQuizActivityScreen && (
+          <header className={`topbar ${isQuizScreen || isQuickQuizScreen ? "topbar--menu-only" : ""}`}>
             <button className="menu-button" type="button" aria-label={isMenuOpen ? "Cerrar menú" : "Abrir menú"} onClick={() => setIsMenuOpen(!isMenuOpen)}>
               <Icon name={isMenuOpen ? "close" : "menu"} />
             </button>
-            <div>
-              <span className="eyebrow">{activeSection}</span>
-              <h1>{sectionTitles[activeSection]}</h1>
-            </div>
+            {!isQuizScreen && !isQuickQuizScreen && (
+              <div>
+                <span className="eyebrow">{activeSection}</span>
+                <h1>{sectionTitles[activeSection]}</h1>
+              </div>
+            )}
           </header>
         )}
 
@@ -701,7 +835,7 @@ function App() {
 
             <section className="home-overview" aria-labelledby="overview-title">
               <div className="section-heading">
-                <div><span className="eyebrow">Resultados</span><h2 id="overview-title">Tus mejores quizzes</h2></div>
+                <div><span className="eyebrow">Resultados</span><h2 id="overview-title">Tus mejores quizzes personales</h2></div>
               </div>
 
               <div className="scoreboard">
@@ -745,6 +879,57 @@ function App() {
                     <div className="scoreboard__empty">
                       <Icon name="trophy" size={22} />
                       <div><strong>Aún no hay resultados</strong><span>Completa un quiz y tu mejor nota aparecerá aquí.</span></div>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </section>
+
+            <section className="home-overview" aria-labelledby="quick-overview-title">
+              <div className="section-heading">
+                <div><span className="eyebrow">Partidas rápidas</span><h2 id="quick-overview-title">Tus mejores quizzes rápidos</h2></div>
+              </div>
+
+              <div className="scoreboard">
+                <div
+                  className={`scoreboard__list scoreboard__list--fixed-five ${visibleScoredQuickQuizzes.length ? "" : "is-empty"}`}
+                  style={{ "--score-card-count": Math.max(visibleScoredQuickQuizzes.length, 1) }}
+                >
+                  {visibleScoredQuickQuizzes.length ? visibleScoredQuickQuizzes.map((quiz, index) => {
+                    const isPerfect = quiz.stats.bestScore === 100;
+                    const questionTypeCounts = SCORE_QUESTION_TYPES
+                      .map((type) => ({
+                        ...type,
+                        count: quiz.questions.filter((question) => question.type === type.id).length,
+                      }))
+                      .filter((type) => type.count > 0);
+
+                    return (
+                      <article className={`score-card ${isPerfect ? "is-perfect" : ""}`} key={quiz.id}>
+                        <span className="score-card__position">#{index + 1}</span>
+                        <span className="score-card__subject"><QuizIcon iconId={quiz.iconId} size={22} /></span>
+                        <div className="score-card__copy">
+                          <AutoScrollTitle>{quiz.title}</AutoScrollTitle>
+                          <span>{quiz.questions.length} preguntas</span>
+                        </div>
+                        <div className="score-card__types" aria-label="Preguntas por tipo">
+                          {questionTypeCounts.map((type) => (
+                            <span key={type.id}><i>{type.label}</i><b>{type.count}</b></span>
+                          ))}
+                        </div>
+                        <div className="score-card__score">
+                          <strong>{quiz.stats.bestScore}%</strong>
+                          <span>Mejor nota</span>
+                        </div>
+                        <button type="button" onClick={() => openQuickQuizGame(quiz)} aria-label={`Jugar ${quiz.title}`} title="Jugar quiz rápido">
+                          <Play size={18} fill="currentColor" />
+                        </button>
+                      </article>
+                    );
+                  }) : (
+                    <div className="scoreboard__empty">
+                      <Icon name="quick" size={22} />
+                      <div><strong>Aún no hay resultados rápidos</strong><span>Completa un quiz rápido y tus cinco mejores notas aparecerán aquí.</span></div>
                     </div>
                   )}
                 </div>
@@ -801,6 +986,43 @@ function App() {
               />
             </section>
             </>
+          )
+        )}
+
+        {activeSection === "Quizzes rápidos" && (
+          playingQuickQuiz ? (
+            activeGameMode ? (
+              <QuizPlayer
+                key={`${playingQuickQuiz.id}-${activeGameMode}-${gameAttemptKey}`}
+                quiz={playingQuickQuiz}
+                theme={theme}
+                gameMode={activeGameMode}
+                gameRules={activeGameRules}
+                onExit={exitQuickQuizGame}
+                onComplete={completeQuickQuizGame}
+                onProgress={ignoreQuickQuizProgress}
+                onRetry={retryQuizGame}
+                exitLabel="Volver a quizzes rápidos"
+              />
+            ) : (
+              <GameModeSelector
+                key={playingQuickQuiz.id}
+                quiz={playingQuickQuiz}
+                onBack={exitQuickQuizGame}
+                onStart={startQuizGame}
+                backLabel="Volver a quizzes rápidos"
+              />
+            )
+          ) : (
+            <QuickQuizLibrary
+              quizzes={quickQuizzesWithStats}
+              selectedCategory={quickQuizLibraryState.selectedCategory}
+              searchQuery={quickQuizLibraryState.searchQuery}
+              onCategoryChange={(selectedCategory) => setQuickQuizLibraryState((current) => ({ ...current, selectedCategory }))}
+              onSearchQueryChange={(searchQuery) => setQuickQuizLibraryState((current) => ({ ...current, searchQuery }))}
+              onPlay={openQuickQuizGame}
+              onDraw={drawQuickQuiz}
+            />
           )
         )}
 
@@ -909,6 +1131,8 @@ function App() {
       </main>
 
       <QuizCreatorModal isOpen={isCreatorOpen} onClose={() => setIsCreatorOpen(false)} onCreate={createQuizDraft} />
+      <QuickQuizDrawModal quiz={drawnQuickQuiz} onCancel={() => setDrawnQuickQuiz(null)} onComplete={finishQuickQuizDraw} />
+      <QuizEditWarningModal quiz={quizPendingEdit} onClose={() => setQuizPendingEdit(null)} onConfirm={confirmQuizEdit} />
       <QuizManageModal quiz={managedQuiz} mode={manageMode} onClose={closeManageQuiz} onConfirm={confirmManageQuiz} />
       <QuizImportModal isOpen={isImportModalOpen} onClose={() => setIsImportModalOpen(false)} onChooseFile={chooseQuizImportFile} onImportText={importQuizContent} />
       <QuizImportConflictModal conflict={importConflict} onClose={() => setImportConflict(null)} onConfirm={confirmConflictingImport} />

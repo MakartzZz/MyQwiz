@@ -1,0 +1,487 @@
+{
+  "category": "geography",
+  "questions": [
+    {
+      "id": "q1",
+      "prompt": "¿Cuál es el continente más grande?",
+      "options": [
+        "África",
+        "Asia",
+        "Europa",
+        "América del Sur"
+      ],
+      "correct": 1,
+      "explanation": "Asia es el continente de mayor superficie."
+    },
+    {
+      "id": "q2",
+      "prompt": "¿Qué río atraviesa Egipto?",
+      "options": [
+        "Amazonas",
+        "Danubio",
+        "Nilo",
+        "Misisipi"
+      ],
+      "correct": 2,
+      "explanation": "El Nilo cruza Egipto de sur a norte."
+    },
+    {
+      "id": "q3",
+      "prompt": "¿Cuál es la capital de Japón?",
+      "options": [
+        "Kioto",
+        "Osaka",
+        "Tokio",
+        "Sapporo"
+      ],
+      "correct": 2,
+      "explanation": "Tokio es la capital japonesa."
+    },
+    {
+      "id": "q4",
+      "prompt": "¿Qué cordillera recorre el oeste de América del Sur?",
+      "options": [
+        "Alpes",
+        "Andes",
+        "Himalaya",
+        "Urales"
+      ],
+      "correct": 1,
+      "explanation": "Los Andes recorren el borde occidental sudamericano."
+    },
+    {
+      "id": "q5",
+      "prompt": "¿Cuál es el país más grande por superficie?",
+      "options": [
+        "Canadá",
+        "China",
+        "Estados Unidos",
+        "Rusia"
+      ],
+      "correct": 3,
+      "explanation": "Rusia posee la mayor superficie nacional."
+    },
+    {
+      "id": "q6",
+      "prompt": "¿Qué estrecho separa Europa de África?",
+      "options": [
+        "Bering",
+        "Gibraltar",
+        "Magallanes",
+        "Ormuz"
+      ],
+      "correct": 1,
+      "explanation": "El estrecho de Gibraltar conecta Atlántico y Mediterráneo."
+    },
+    {
+      "id": "q7",
+      "prompt": "¿Qué país no tiene salida al mar?",
+      "options": [
+        "Portugal",
+        "Bolivia",
+        "Vietnam",
+        "Noruega"
+      ],
+      "correct": 1,
+      "explanation": "Bolivia es un país mediterráneo de América del Sur."
+    },
+    {
+      "id": "q8",
+      "prompt": "¿En qué océano se encuentran las islas Maldivas?",
+      "options": [
+        "Pacífico",
+        "Atlántico",
+        "Índico",
+        "Ártico"
+      ],
+      "correct": 2,
+      "explanation": "Las Maldivas están en el océano Índico."
+    },
+    {
+      "id": "q9",
+      "prompt": "¿Qué línea imaginaria se sitúa aproximadamente a 23,5° norte?",
+      "options": [
+        "Ecuador",
+        "Trópico de Cáncer",
+        "Trópico de Capricornio",
+        "Meridiano de Greenwich"
+      ],
+      "correct": 1,
+      "explanation": "El Trópico de Cáncer marca la latitud aproximada de 23,5° N."
+    },
+    {
+      "id": "q10",
+      "prompt": "¿Cuál es la capital de Francia?",
+      "options": [
+        "Lyon",
+        "París",
+        "Marsella",
+        "Niza"
+      ],
+      "correct": 1,
+      "explanation": "París es la capital de Francia."
+    },
+    {
+      "id": "q11",
+      "prompt": "¿Qué océano separa América de Europa y África?",
+      "options": [
+        "Índico",
+        "Atlántico",
+        "Ártico",
+        "Pacífico"
+      ],
+      "correct": 1,
+      "explanation": "El océano Atlántico se encuentra entre esos continentes."
+    },
+    {
+      "id": "q12",
+      "prompt": "¿En qué continente está Argentina?",
+      "options": [
+        "Europa",
+        "América del Sur",
+        "Asia",
+        "África"
+      ],
+      "correct": 1,
+      "explanation": "Argentina se ubica en América del Sur."
+    },
+    {
+      "id": "q13",
+      "prompt": "¿Qué país alberga las pirámides de Guiza?",
+      "options": [
+        "Egipto",
+        "Marruecos",
+        "Sudán",
+        "Grecia"
+      ],
+      "correct": 0,
+      "explanation": "Las pirámides de Guiza se encuentran en Egipto."
+    },
+    {
+      "id": "q14",
+      "prompt": "¿Cuál es la capital de Australia?",
+      "options": [
+        "Sídney",
+        "Melbourne",
+        "Canberra",
+        "Perth"
+      ],
+      "correct": 2,
+      "explanation": "Canberra es la capital australiana."
+    },
+    {
+      "id": "q15",
+      "prompt": "¿Qué meseta ocupa gran parte del centro de España?",
+      "options": [
+        "Meseta Central",
+        "Altiplano andino",
+        "Meseta del Decán",
+        "Tíbet"
+      ],
+      "correct": 0,
+      "explanation": "La Meseta Central domina el interior de la península ibérica."
+    },
+    {
+      "id": "q16",
+      "prompt": "¿Qué río forma parte de la frontera entre México y Estados Unidos?",
+      "options": [
+        "Río Bravo",
+        "Colorado únicamente",
+        "Orinoco",
+        "Usumacinta"
+      ],
+      "correct": 0,
+      "explanation": "El río Bravo o Grande marca buena parte de la frontera."
+    },
+    {
+      "id": "q17",
+      "prompt": "¿Qué país atraviesa el ecuador y da nombre a esa línea?",
+      "options": [
+        "Ecuador",
+        "Chile",
+        "Uruguay",
+        "Paraguay"
+      ],
+      "correct": 0,
+      "explanation": "La línea ecuatorial atraviesa Ecuador."
+    },
+    {
+      "id": "q18",
+      "prompt": "¿Qué corriente oceánica suaviza el clima de Europa occidental?",
+      "options": [
+        "Corriente del Golfo",
+        "Corriente de Humboldt",
+        "Corriente de Benguela",
+        "Corriente de Oyashio"
+      ],
+      "correct": 0,
+      "explanation": "La Corriente del Golfo y su prolongación transportan calor hacia Europa."
+    },
+    {
+      "id": "q19",
+      "type": "true-false",
+      "prompt": "El mar Caspio tiene conexión natural directa con los océanos.",
+      "correct": false,
+      "explanation": "Es una cuenca endorreica sin salida natural al océano."
+    },
+    {
+      "id": "q20",
+      "prompt": "¿Qué país posee el enclave de Kaliningrado?",
+      "options": [
+        "Polonia",
+        "Rusia",
+        "Lituania",
+        "Alemania"
+      ],
+      "correct": 1,
+      "explanation": "Kaliningrado es un exclave de Rusia junto al mar Báltico."
+    },
+    {
+      "id": "q21",
+      "prompt": "¿Qué estrecho comunica el mar Negro con el mar de Mármara?",
+      "options": [
+        "Bósforo",
+        "Dardanelos",
+        "Ormuz",
+        "Malaca"
+      ],
+      "correct": 0,
+      "explanation": "El Bósforo conecta el mar Negro con el mar de Mármara."
+    },
+    {
+      "id": "q22",
+      "prompt": "¿Qué proyección cartográfica conserva los ángulos locales y facilita la navegación?",
+      "options": [
+        "Mercator",
+        "Peters",
+        "Azimutal equidistante",
+        "Goode"
+      ],
+      "correct": 0,
+      "explanation": "La proyección de Mercator es conforme y conserva ángulos locales."
+    },
+    {
+      "id": "q23",
+      "type": "true-false",
+      "prompt": "Lesoto está completamente rodeado por Sudáfrica.",
+      "correct": true,
+      "explanation": "Lesoto es un enclave soberano dentro de Sudáfrica."
+    },
+    {
+      "id": "q24",
+      "type": "true-false",
+      "prompt": "El antimeridiano de Greenwich coincide exactamente en todo su recorrido con la línea internacional de cambio de fecha.",
+      "correct": false,
+      "explanation": "La línea de cambio de fecha se desvía para evitar dividir territorios."
+    },
+    {
+      "id": "q25",
+      "prompt": "¿Qué punto es la mayor depresión continental emergida?",
+      "options": [
+        "Orilla del mar Muerto",
+        "Valle de la Muerte",
+        "Depresión de Qattara",
+        "Lago Assal"
+      ],
+      "correct": 0,
+      "explanation": "La costa del mar Muerto es el punto terrestre emergido más bajo."
+    },
+    {
+      "id": "q26",
+      "prompt": "¿Cuál es la capital de Perú?",
+      "options": [
+        "Lima",
+        "Cusco",
+        "Arequipa",
+        "Trujillo"
+      ],
+      "correct": 0,
+      "explanation": "Lima es la capital de Perú."
+    },
+    {
+      "id": "q27",
+      "prompt": "¿Qué bioma presenta permafrost y vegetación baja?",
+      "options": [
+        "Tundra",
+        "Sabana",
+        "Selva tropical",
+        "Bosque mediterráneo"
+      ],
+      "correct": 0,
+      "explanation": "La tundra se caracteriza por permafrost y plantas de poca altura."
+    },
+    {
+      "id": "q28",
+      "prompt": "¿Qué lago comparten Perú y Bolivia?",
+      "options": [
+        "Titicaca",
+        "Maracaibo",
+        "Victoria",
+        "Baikal"
+      ],
+      "correct": 0,
+      "explanation": "El lago Titicaca se extiende entre Perú y Bolivia."
+    },
+    {
+      "id": "q29",
+      "prompt": "¿Qué clima tiene veranos secos e inviernos lluviosos?",
+      "options": [
+        "Mediterráneo",
+        "Ecuatorial",
+        "Polar",
+        "Monzónico todo el año"
+      ],
+      "correct": 0,
+      "explanation": "El clima mediterráneo concentra lluvias en la estación fría."
+    },
+    {
+      "id": "q30",
+      "prompt": "¿Qué archipiélago español se encuentra frente a la costa africana?",
+      "options": [
+        "Canarias",
+        "Baleares",
+        "Cíes",
+        "Chafarinas exclusivamente"
+      ],
+      "correct": 0,
+      "explanation": "Las islas Canarias están en el Atlántico, frente al noroeste africano."
+    },
+    {
+      "id": "q31",
+      "prompt": "¿Qué río desemboca en un gran delta compartido por Vietnam y Camboya?",
+      "options": [
+        "Mekong",
+        "Yangtsé",
+        "Ganges",
+        "Tigris"
+      ],
+      "correct": 0,
+      "explanation": "El Mekong forma un extenso delta en el sudeste asiático."
+    },
+    {
+      "id": "q32",
+      "prompt": "¿Qué país posee soberanía sobre Svalbard?",
+      "options": [
+        "Noruega",
+        "Suecia",
+        "Finlandia",
+        "Islandia"
+      ],
+      "correct": 0,
+      "explanation": "Svalbard forma parte de Noruega bajo un tratado especial."
+    },
+    {
+      "id": "q33",
+      "prompt": "¿Qué desierto costero está influido por la corriente de Benguela?",
+      "options": [
+        "Namib",
+        "Gobi",
+        "Sonora",
+        "Taklamakán"
+      ],
+      "correct": 0,
+      "explanation": "La corriente fría de Benguela contribuye a la aridez del Namib."
+    },
+    {
+      "id": "q34",
+      "prompt": "¿Qué concepto describe un territorio drenado por un río y sus afluentes?",
+      "options": [
+        "Cuenca hidrográfica",
+        "Istmo",
+        "Península",
+        "Albufera"
+      ],
+      "correct": 0,
+      "explanation": "Una cuenca hidrográfica reúne las aguas que fluyen hacia un mismo cauce."
+    },
+    {
+      "id": "q35",
+      "prompt": "¿Qué cordillera separa en parte Europa de Asia en Rusia?",
+      "options": [
+        "Urales",
+        "Alpes",
+        "Cárpatos",
+        "Apeninos"
+      ],
+      "correct": 0,
+      "explanation": "Los montes Urales forman un límite convencional entre Europa y Asia."
+    }
+  ],
+  "quizzes": [
+    {
+      "id": "mundo-1",
+      "title": "Vuelta al mundo",
+      "description": "Continentes, ríos, capitales y océanos conocidos.",
+      "difficulty": "Inicial",
+      "questionIds": [
+        "q1",
+        "q2",
+        "q3",
+        "q10",
+        "q11"
+      ]
+    },
+    {
+      "id": "mundo-2",
+      "title": "Capitales y relieves",
+      "description": "Cordilleras, países, capitales y grandes regiones.",
+      "difficulty": "Fácil",
+      "questionIds": [
+        "q4",
+        "q12",
+        "q13",
+        "q14",
+        "q15",
+        "q26"
+      ]
+    },
+    {
+      "id": "mundo-3",
+      "title": "Gigantes del mapa",
+      "description": "Superficie, estrechos, mesetas, fronteras y coordenadas.",
+      "difficulty": "Intermedio",
+      "questionIds": [
+        "q5",
+        "q6",
+        "q16",
+        "q17",
+        "q18",
+        "q27",
+        "q28"
+      ]
+    },
+    {
+      "id": "mundo-4",
+      "title": "Fronteras naturales",
+      "description": "Climas, océanos, corrientes, archipiélagos y territorios interiores.",
+      "difficulty": "Avanzado",
+      "questionIds": [
+        "q7",
+        "q8",
+        "q19",
+        "q20",
+        "q21",
+        "q29",
+        "q30",
+        "q31"
+      ]
+    },
+    {
+      "id": "mundo-5",
+      "title": "Atlas experto",
+      "description": "Líneas geográficas, enclaves, estrechos y cartografía avanzada.",
+      "difficulty": "Experto",
+      "questionIds": [
+        "q9",
+        "q22",
+        "q23",
+        "q24",
+        "q25",
+        "q32",
+        "q33",
+        "q34",
+        "q35"
+      ]
+    }
+  ]
+}
