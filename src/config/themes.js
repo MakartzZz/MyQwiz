@@ -1,11 +1,11 @@
-import makinCharacter from "../assets/characters/makin-theme-card-v3.png";
-import makinCharacterBlink from "../assets/characters/makin-theme-card-blink.png";
-import blueCharacter from "../assets/characters/mrg-theme-card-v2.png";
-import blueCharacterBlink from "../assets/characters/mrg-theme-card-blink.png";
-import darkCharacter from "../assets/characters/zn-theme-card-v1.png";
-import darkCharacterBlink from "../assets/characters/zn-theme-card-blink.png";
-import pinkCharacter from "../assets/characters/pink-theme-card-v1.png";
-import pinkCharacterBlink from "../assets/characters/pink-theme-card-blink.png";
+import makinCharacter from "../assets/characters/maz-theme-card-v3.webp";
+import makinCharacterBlink from "../assets/characters/maz-theme-card-blink.webp";
+import blueCharacter from "../assets/characters/mrg-theme-card-v2.webp";
+import blueCharacterBlink from "../assets/characters/mrg-theme-card-blink.webp";
+import darkCharacter from "../assets/characters/zn-theme-card-v1.webp";
+import darkCharacterBlink from "../assets/characters/zn-theme-card-blink.webp";
+import pinkCharacter from "../assets/characters/pink-theme-card-v1.webp";
+import pinkCharacterBlink from "../assets/characters/pink-theme-card-blink.webp";
 
 export const THEME_STORAGE_KEY = "myqwiz-theme";
 

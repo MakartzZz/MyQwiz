@@ -1,9 +1,9 @@
-import brokenClock from "../assets/game-feedback/broken-clock.png";
-import brokenHeart from "../assets/game-feedback/broken-heart.png";
-import thumbMidnight from "../assets/game-feedback/thumb-midnight.png";
-import thumbPink from "../assets/game-feedback/thumb-pink.png";
-import thumbSky from "../assets/game-feedback/thumb-sky.png";
-import thumbViolet from "../assets/game-feedback/thumb-violet.png";
+import brokenClock from "../assets/game-feedback/broken-clock.webp";
+import brokenHeart from "../assets/game-feedback/broken-heart.webp";
+import thumbMidnight from "../assets/game-feedback/thumb-midnight.webp";
+import thumbPink from "../assets/game-feedback/thumb-pink.webp";
+import thumbSky from "../assets/game-feedback/thumb-sky.webp";
+import thumbViolet from "../assets/game-feedback/thumb-violet.webp";
 
 const reactionLabels = {
   correct: "Respuesta correcta",
