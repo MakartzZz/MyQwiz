@@ -1,15 +1,29 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 const MAX_EYE_OFFSET_X = 4;
 const MAX_EYE_OFFSET_Y = 3.5;
 const FULL_GAZE_DISTANCE = 42;
 
-export default function SidebarMascot() {
+export default function SidebarMascot({ onActivate, rewardSignal = 0 }) {
   const eyeGroupRef = useRef(null);
   const eyeAnchorRef = useRef(null);
   const movingEyesRef = useRef(null);
   const pointerRef = useRef({ x: 0, y: 0 });
   const animationFrameRef = useRef(null);
+  const lastTouchRef = useRef(0);
+  const rewardTimerRef = useRef(null);
+  const [isRewarding, setIsRewarding] = useState(false);
+
+  useEffect(() => {
+    if (!rewardSignal) return undefined;
+    setIsRewarding(false);
+    const frame = window.requestAnimationFrame(() => setIsRewarding(true));
+    window.clearTimeout(rewardTimerRef.current);
+    rewardTimerRef.current = window.setTimeout(() => setIsRewarding(false), 900);
+    return () => window.cancelAnimationFrame(frame);
+  }, [rewardSignal]);
+
+  useEffect(() => () => window.clearTimeout(rewardTimerRef.current), []);
 
   useEffect(() => {
     const updatePupil = () => {
@@ -79,8 +93,25 @@ export default function SidebarMascot() {
     };
   }, []);
 
+  const handleTouch = (event) => {
+    if (event.pointerType !== "touch") return;
+    const now = Date.now();
+    if (now - lastTouchRef.current < 360) {
+      lastTouchRef.current = 0;
+      onActivate?.();
+    } else {
+      lastTouchRef.current = now;
+    }
+  };
+
   return (
-    <span className="sidebar-mascot" aria-hidden="true">
+    <button
+      className={`sidebar-mascot ${isRewarding ? "is-rewarding" : ""}`}
+      type="button"
+      aria-label="Mascota de MyQwiz"
+      onDoubleClick={onActivate}
+      onPointerUp={handleTouch}
+    >
       <svg viewBox="0 0 96 84" role="presentation">
         <path
           className="sidebar-mascot__body"
@@ -95,6 +126,6 @@ export default function SidebarMascot() {
           </g>
         </g>
       </svg>
-    </span>
+    </button>
   );
 }

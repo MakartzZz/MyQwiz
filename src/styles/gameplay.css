@@ -106,7 +106,7 @@
   45% { transform: scale(1.045) rotate(-.35deg); }
   72% { transform: scale(.99); }
 }
-.game-feedback-reaction { --feedback-accent: var(--purple); --feedback-dots: var(--purple-dark); position: fixed; z-index: 40; right: clamp(16px, 2.5vw, 34px); bottom: clamp(16px, 2.5vw, 30px); width: clamp(128px, 18vw, 176px); color: var(--feedback-accent); pointer-events: none; filter: drop-shadow(5px 6px 0 color-mix(in srgb, var(--card-shadow) 72%, transparent)); animation: feedback-cloud-enter .48s cubic-bezier(.18, .9, .25, 1.35) both; transform-origin: 70% 75%; }
+.game-feedback-reaction { --feedback-accent: var(--purple); --feedback-dots: var(--purple-dark); position: fixed; z-index: 40; left: calc(250px + clamp(16px, 2.5vw, 34px)); bottom: clamp(16px, 2.5vw, 30px); width: clamp(128px, 18vw, 176px); color: var(--feedback-accent); pointer-events: none; filter: drop-shadow(5px 6px 0 color-mix(in srgb, var(--card-shadow) 72%, transparent)); animation: feedback-cloud-enter .48s cubic-bezier(.18, .9, .25, 1.35) both; transform-origin: 30% 75%; }
 .game-feedback-reaction.is-wrong, .game-feedback-reaction.is-life { --feedback-accent: var(--coral); --feedback-dots: var(--coral); }
 .game-feedback-reaction.is-timeout { --feedback-accent: var(--muted); --feedback-dots: var(--purple-dark); }
 .game-feedback-reaction svg { display: block; width: 100%; overflow: visible; }

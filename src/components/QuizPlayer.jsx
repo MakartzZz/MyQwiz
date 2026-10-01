@@ -110,7 +110,7 @@ const focusSpatialOption = (refs, currentIndex, direction) => {
   candidates[0]?.element.focus();
 };
 
-function QuizPlayer({ quiz, theme, gameMode, gameRules = {}, initialSession, onExit, onComplete, onProgress, onRetry, exitLabel = "Volver a la biblioteca", recordsScore = true }) {
+function QuizPlayer({ quiz, theme, gameMode, gameRules = {}, initialSession, onExit, onComplete, onProgress, onRetry, onCorrectAnswer, exitLabel = "Volver a la biblioteca", recordsScore = true }) {
   const restoredSession = initialSession?.quizId === quiz.id && initialSession?.gameMode === gameMode
     ? initialSession
     : null;
@@ -245,6 +245,7 @@ function QuizPlayer({ quiz, theme, gameMode, gameRules = {}, initialSession, onE
     setFeedbackReaction(result ? "correct" : reason === "timeout" ? "timeout" : gameMode === GAME_MODES.LIVES ? "life" : "wrong");
     if (withSound) playGameSound(result ? gameSoundPaths.correct : gameSoundPaths.wrong, 0.58);
     if (result) {
+      onCorrectAnswer?.();
       setCorrectAnswers((value) => value + 1);
       setCorrectAnswersByType((value) => ({
         ...value,
@@ -266,7 +267,7 @@ function QuizPlayer({ quiz, theme, gameMode, gameRules = {}, initialSession, onE
         setTimeLeft((value) => Math.max(0, value - (gameRules.incorrectPenaltySeconds ?? DEFAULT_GAME_RULES.checkpoint.incorrectPenaltySeconds)));
       }
     }
-  }, [currentQuestion.type, gameMode, gameRules.correctBonusSeconds, gameRules.incorrectPenaltySeconds, lives]);
+  }, [currentQuestion.type, gameMode, gameRules.correctBonusSeconds, gameRules.incorrectPenaltySeconds, lives, onCorrectAnswer]);
 
   const checkAnswer = useCallback((forcedAnswer = answer, { reason = "answer" } = {}) => {
     if (isChecked || isFinished || isReviewingMatching) return;

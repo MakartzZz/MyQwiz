@@ -7,6 +7,10 @@ export const SOUND_EFFECT_PATHS = Object.freeze([
   "/sounds/notification.mp3",
   "/sounds/theme-change.mp3",
   "/sounds/typing.wav",
+  "/sounds/cat-eat.mp3",
+  "/sounds/cat-happy.mp3",
+  "/sounds/cat-reward.mp3",
+  "/sounds/cat-purr.mp3",
   "/sounds/game-modes/checkpoint.mp3",
   "/sounds/game-modes/classic.mp3",
   "/sounds/game-modes/lives.mp3",
@@ -80,6 +84,7 @@ const startBufferedSound = (handle, context, buffer, options) => {
   const source = context.createBufferSource();
   const gain = context.createGain();
   source.buffer = buffer;
+  source.loop = Boolean(options.loop);
   source.playbackRate.value = options.playbackRate ?? 1;
   gain.gain.value = Math.min(1, Math.max(0, options.volume ?? 1));
   source.connect(gain).connect(context.destination);

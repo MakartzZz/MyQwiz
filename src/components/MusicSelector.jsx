@@ -1,3 +1,6 @@
+import { Music2, Pencil, Plus } from "lucide-react";
+import AlbumCover from "./PersonalAlbumCover.jsx";
+
 const PlayerIcon = ({ playing }) => (
   <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
     {playing ? <><rect x="6" y="5" width="4" height="14" /><rect x="14" y="5" width="4" height="14" /></> : <path d="m8 5 11 7-11 7V5Z" />}
@@ -49,8 +52,25 @@ const volumeLevels = [
   { value: 0.2, label: "Máximo", percentage: 20 },
 ];
 
-function MusicSelector({ albums, activeAlbumId, currentTrack, isPlaying, isChanging, volume, onChange, onToggle, onPrevious, onNext, onVolumeChange }) {
-  const activeAlbum = albums.find((album) => album.id === activeAlbumId) ?? albums[0];
+function MusicSelector({
+  albums,
+  personalAlbums = [],
+  personalAlbumsLoading = false,
+  activeAlbumId,
+  currentTrack,
+  isPlaying,
+  isChanging,
+  volume,
+  onChange,
+  onToggle,
+  onPrevious,
+  onNext,
+  onVolumeChange,
+  onCreatePersonalAlbum,
+  onEditPersonalAlbum,
+}) {
+  const allAlbums = [...albums, ...personalAlbums];
+  const activeAlbum = allAlbums.find((album) => album.id === activeAlbumId) ?? albums[0];
 
   return (
     <>
@@ -65,7 +85,7 @@ function MusicSelector({ albums, activeAlbumId, currentTrack, isPlaying, isChang
       </div>
 
       <div className="music-player-bar">
-        <img src={activeAlbum.cover} alt="" />
+        <AlbumCover album={activeAlbum} />
         <div>
           <span>Reproduciendo ahora</span>
           <strong>{currentTrack?.title ?? activeAlbum.title}</strong>
@@ -115,7 +135,7 @@ function MusicSelector({ albums, activeAlbumId, currentTrack, isPlaying, isChang
               onClick={() => onChange(album.id)}
             >
               <span className="music-album-card__number">0{index + 1}</span>
-              <img src={album.cover} alt={`Portada de ${album.title}`} />
+              <AlbumCover album={album} alt={`Portada de ${album.title}`} />
               <span className="music-album-card__copy">
                 <strong>{album.title}</strong>
                 <small>{album.description}</small>
@@ -126,6 +146,60 @@ function MusicSelector({ albums, activeAlbumId, currentTrack, isPlaying, isChang
           );
         })}
       </div>
+
+      <section className="personal-music-library" aria-labelledby="personal-music-title">
+        <div className="personal-music-library__heading">
+          <div>
+            <span className="eyebrow">Tu música</span>
+            <h3 id="personal-music-title">Álbumes personales</h3>
+            <p>Guarda tus propias pistas en este navegador y escúchalas con el mismo reproductor.</p>
+          </div>
+          <button className="secondary-button personal-music-library__create" type="button" onClick={onCreatePersonalAlbum}>
+            <Plus size={18} /> Crear álbum
+          </button>
+        </div>
+
+        {personalAlbumsLoading ? (
+          <div className="personal-music-library__empty" aria-live="polite">
+            <Music2 size={24} />
+            <span>Buscando tus álbumes guardados…</span>
+          </div>
+        ) : personalAlbums.length ? (
+          <div className="music-album-grid music-album-grid--personal">
+            {personalAlbums.map((album, index) => {
+              const isActive = album.id === activeAlbumId;
+              return (
+                <div className="personal-music-card" key={album.id}>
+                  <button
+                    className={`music-album-card personal-music-card__select ${isActive ? "is-selected" : ""}`}
+                    type="button"
+                    data-button-sound="interface"
+                    aria-pressed={isActive}
+                    onClick={() => onChange(album.id)}
+                  >
+                    <span className="music-album-card__number">P{String(index + 1).padStart(2, "0")}</span>
+                    <AlbumCover album={album} alt={`Portada de ${album.title}`} />
+                    <span className="music-album-card__copy">
+                      <strong>{album.title}</strong>
+                      <span>{album.tracks.length} {album.tracks.length === 1 ? "pista" : "pistas"}</span>
+                    </span>
+                    {isActive && <span className="music-album-card__active">Seleccionado</span>}
+                  </button>
+                  <button className="personal-music-card__edit" type="button" onClick={() => onEditPersonalAlbum(album.id)} aria-label={`Editar ${album.title}`} title="Editar álbum">
+                    <Pencil size={16} />
+                  </button>
+                </div>
+              );
+            })}
+          </div>
+        ) : (
+          <button className="personal-music-library__empty" type="button" onClick={onCreatePersonalAlbum}>
+            <Music2 size={24} />
+            <strong>Aún no tienes álbumes personales</strong>
+            <span>Crea uno, elige el color de la portada y agrega tus canciones.</span>
+          </button>
+        )}
+      </section>
     </section>
     </>
   );

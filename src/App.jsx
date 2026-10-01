@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Play, SwatchBook } from "lucide-react";
 import { Toaster } from "sileo";
 import myQwizWordmarkMidnight from "./assets/branding/myqwiz-wordmark-midnight.webp";
@@ -18,6 +18,9 @@ import QuizManageModal from "./components/QuizManageModal.jsx";
 import QuizEditWarningModal from "./components/QuizEditWarningModal.jsx";
 import QuizPlayer from "./components/QuizPlayer.jsx";
 import MusicSelector from "./components/MusicSelector.jsx";
+import PersonalAlbumModal from "./components/PersonalAlbumModal.jsx";
+import AlbumCover from "./components/PersonalAlbumCover.jsx";
+import CatFeedingGame from "./components/CatFeedingGame.jsx";
 import PromptRoom from "./components/PromptRoom.jsx";
 import { QuizIcon } from "./components/QuizIcon.jsx";
 import {
@@ -37,8 +40,10 @@ import {
 import { QUESTION_TYPES } from "./domain/quizConstants.js";
 import { quickQuizzes } from "./data/quick-quizzes/index.js";
 import { useQuizLibrary } from "./hooks/useQuizLibrary.js";
+import { usePersonalMusicAlbums } from "./hooks/usePersonalMusicAlbums.js";
 import { useTheme } from "./hooks/useTheme.js";
 import { systemNotifications } from "./services/systemNotifications.js";
+import { catRewards } from "./services/catRewards.js";
 import {
   playBufferedSound,
   prepareSoundBuffers,
@@ -321,6 +326,9 @@ function App() {
   const [exportingQuiz, setExportingQuiz] = useState(null);
   const [userPreferences, setUserPreferences] = useState(readUserPreferences);
   const [scoreCardCapacity, setScoreCardCapacity] = useState(4);
+  const [catRewardState, setCatRewardState] = useState(catRewards.get);
+  const [catRewardSignal, setCatRewardSignal] = useState(0);
+  const [isCatGameOpen, setIsCatGameOpen] = useState(false);
   const importInputRef = useRef(null);
   const scoreboardRef = useRef(null);
   const quickQuizLibraryScrollRef = useRef(0);
@@ -336,10 +344,19 @@ function App() {
   const [isMusicPlaying, setIsMusicPlaying] = useState(false);
   const [isMusicChanging, setIsMusicChanging] = useState(false);
   const [musicVolume, setMusicVolume] = useState(readStoredMusicVolume);
+  const [isPersonalAlbumModalOpen, setIsPersonalAlbumModalOpen] = useState(false);
+  const [editingPersonalAlbumId, setEditingPersonalAlbumId] = useState(null);
   const musicAudioRef = useRef(null);
   const musicChangeSoundRef = useRef(null);
   const musicChangeSequenceRef = useRef(0);
   const { theme, changeTheme } = useTheme();
+  const {
+    albums: personalMusicAlbums,
+    isLoading: personalMusicAlbumsLoading,
+    storageEstimate: personalMusicStorageEstimate,
+    saveAlbum: savePersonalMusicAlbum,
+    deleteAlbum: deletePersonalMusicAlbum,
+  } = usePersonalMusicAlbums();
   const {
     quizzes,
     createDraft,
@@ -359,8 +376,14 @@ function App() {
   const playingQuickQuiz =
     quickQuizzesWithStats.find((quiz) => quiz.id === quickQuizId) ?? null;
   const activeTheme = themes.find((item) => item.id === theme) ?? themes[0];
+  const allMusicAlbums = useMemo(
+    () => [...musicAlbums, ...personalMusicAlbums],
+    [personalMusicAlbums],
+  );
   const selectedAlbum =
-    musicAlbums.find((album) => album.id === selectedAlbumId) ?? musicAlbums[0];
+    allMusicAlbums.find((album) => album.id === selectedAlbumId) ?? musicAlbums[0];
+  const editingPersonalAlbum =
+    personalMusicAlbums.find((album) => album.id === editingPersonalAlbumId) ?? null;
   const currentMusicTrack =
     selectedAlbum.tracks[currentTrackIndex] ?? selectedAlbum.tracks[0] ?? null;
   const isThemeScreen =
@@ -475,6 +498,15 @@ function App() {
     return () => observer.disconnect();
   }, [activeSection, scoredQuizzes.length]);
 
+  useEffect(() => {
+    if (personalMusicAlbumsLoading) return;
+    if (allMusicAlbums.some((album) => album.id === selectedAlbumId)) return;
+    setSelectedAlbumId(DEFAULT_MUSIC_ALBUM);
+    setCurrentTrackIndex(0);
+    setIsMusicPlaying(false);
+    window.localStorage.setItem(MUSIC_ALBUM_STORAGE_KEY, DEFAULT_MUSIC_ALBUM);
+  }, [allMusicAlbums, personalMusicAlbumsLoading, selectedAlbumId]);
+
   const playMusicChangeTransition = useCallback((onComplete) => {
     const sequence = musicChangeSequenceRef.current + 1;
     musicChangeSequenceRef.current = sequence;
@@ -505,7 +537,7 @@ function App() {
   }, []);
 
   const selectMusicAlbum = (albumId) => {
-    const album = musicAlbums.find((item) => item.id === albumId);
+    const album = allMusicAlbums.find((item) => item.id === albumId);
     if (!album) return;
     if (album.tracks.length) {
       playMusicChangeTransition(() => {
@@ -534,6 +566,63 @@ function App() {
     }
   };
 
+  const openPersonalAlbumCreator = () => {
+    setEditingPersonalAlbumId(null);
+    setIsPersonalAlbumModalOpen(true);
+  };
+
+  const openPersonalAlbumEditor = (albumId) => {
+    setEditingPersonalAlbumId(albumId);
+    setIsPersonalAlbumModalOpen(true);
+  };
+
+  const closePersonalAlbumModal = () => {
+    setIsPersonalAlbumModalOpen(false);
+    setEditingPersonalAlbumId(null);
+  };
+
+  const savePersonalAlbum = async (draft) => {
+    const shouldSelect = !draft.id || draft.id === selectedAlbumId;
+    if (draft.id === selectedAlbumId) {
+      musicAudioRef.current?.pause();
+      setIsMusicPlaying(false);
+    }
+
+    const albumId = await savePersonalMusicAlbum(draft);
+    closePersonalAlbumModal();
+    if (shouldSelect) {
+      setSelectedAlbumId(albumId);
+      setCurrentTrackIndex(0);
+      setIsMusicPlaying(true);
+      window.localStorage.setItem(MUSIC_ALBUM_STORAGE_KEY, albumId);
+    }
+    systemNotifications.success(
+      draft.id ? "Álbum actualizado" : "Álbum creado",
+      draft.id ? "Tus cambios quedaron guardados en este navegador." : "Tu música ya está lista para reproducirse.",
+      { sound: false },
+    );
+  };
+
+  const removePersonalAlbum = async (albumId) => {
+    const wasSelected = albumId === selectedAlbumId;
+    if (wasSelected) {
+      musicAudioRef.current?.pause();
+      setIsMusicPlaying(false);
+    }
+    await deletePersonalMusicAlbum(albumId);
+    if (wasSelected) {
+      setSelectedAlbumId(DEFAULT_MUSIC_ALBUM);
+      setCurrentTrackIndex(0);
+      window.localStorage.setItem(MUSIC_ALBUM_STORAGE_KEY, DEFAULT_MUSIC_ALBUM);
+    }
+    closePersonalAlbumModal();
+    systemNotifications.success(
+      "Álbum eliminado",
+      "Las pistas guardadas en este navegador también se eliminaron.",
+      { sound: false },
+    );
+  };
+
   const toggleMusicPlayback = () => {
     if (!currentMusicTrack || isMusicChanging) return;
     setIsMusicPlaying((playing) => !playing);
@@ -558,6 +647,24 @@ function App() {
     if (!MUSIC_VOLUME_LEVELS.includes(volume)) return;
     setMusicVolume(volume);
     window.localStorage.setItem(MUSIC_VOLUME_STORAGE_KEY, String(volume));
+  };
+
+  const recordCatCorrectAnswer = useCallback(() => {
+    const result = catRewards.recordCorrectAnswer();
+    setCatRewardState(result.state);
+    if (result.earned) {
+      setCatRewardSignal((signal) => signal + 1);
+      if (canPlayInterfaceSounds()) {
+        playBufferedSound("/sounds/cat-reward.mp3", {
+          volume: 0.58 * getSoundScale(),
+        });
+      }
+    }
+  }, []);
+
+  const feedSidebarCat = (foodShape) => {
+    const nextState = catRewards.feed(foodShape);
+    setCatRewardState(nextState);
   };
 
   useEffect(() => {
@@ -1032,7 +1139,13 @@ function App() {
       />
       <aside className={`sidebar ${isMenuOpen ? "is-open" : ""}`}>
         <div className="brand" aria-label="MyQwiz">
-          <SidebarMascot />
+          <SidebarMascot
+            rewardSignal={catRewardSignal}
+            onActivate={() => {
+              setIsCatGameOpen(true);
+              setIsMenuOpen(false);
+            }}
+          />
           <img
             className="brand__wordmark"
             src={wordmarkByTheme[theme]}
@@ -1094,7 +1207,17 @@ function App() {
           <div
             className={`sidebar-music ${isMusicPlaying ? "is-playing" : ""}`}
           >
-            <img src={selectedAlbum.cover} alt="" />
+            <button
+              className="sidebar-music__cover"
+              type="button"
+              aria-label="Abrir la sala de música para cambiar de álbum"
+              onClick={() => {
+                selectSection("Ajustes");
+                setSettingsView("music");
+              }}
+            >
+              <AlbumCover album={selectedAlbum} />
+            </button>
             <div>
               <button
                 type="button"
@@ -1433,6 +1556,7 @@ function App() {
                 initialSession={savedGameSession}
                 onExit={exitQuizGame}
                 onComplete={completeQuizGame}
+                onCorrectAnswer={recordCatCorrectAnswer}
                 onProgress={saveQuizGameProgress}
                 onRetry={retryQuizGame}
               />
@@ -1511,6 +1635,7 @@ function App() {
                 gameRules={activeGameRules}
                 onExit={exitQuickQuizGame}
                 onComplete={completeQuickQuizGame}
+                onCorrectAnswer={recordCatCorrectAnswer}
                 onProgress={ignoreQuickQuizProgress}
                 onRetry={retryQuizGame}
                 exitLabel="Volver a quizzes rápidos"
@@ -1571,6 +1696,8 @@ function App() {
               </button>
               <MusicSelector
                 albums={musicAlbums}
+                personalAlbums={personalMusicAlbums}
+                personalAlbumsLoading={personalMusicAlbumsLoading}
                 activeAlbumId={selectedAlbum.id}
                 currentTrack={currentMusicTrack}
                 isPlaying={isMusicPlaying}
@@ -1581,6 +1708,8 @@ function App() {
                 onPrevious={playPreviousMusicTrack}
                 onNext={playNextMusicTrack}
                 onVolumeChange={changeMusicVolume}
+                onCreatePersonalAlbum={openPersonalAlbumCreator}
+                onEditPersonalAlbum={openPersonalAlbumEditor}
               />
             </div>
           ) : settingsView === "sound" ? (
@@ -1661,7 +1790,7 @@ function App() {
                   onClick={() => setSettingsView("music")}
                 >
                   <span className="settings-option__album">
-                    <img src={selectedAlbum.cover} alt="" />
+                    <AlbumCover album={selectedAlbum} />
                   </span>
                   <span className="settings-option__music-copy">
                     <small>Reproductor ambiental</small>
@@ -1760,6 +1889,22 @@ function App() {
         onExport={exportQuizFile}
         onDrive={openGoogleDrive}
       />
+      {isPersonalAlbumModalOpen && (
+        <PersonalAlbumModal
+          album={editingPersonalAlbum}
+          storageEstimate={personalMusicStorageEstimate}
+          onClose={closePersonalAlbumModal}
+          onSave={savePersonalAlbum}
+          onDelete={removePersonalAlbum}
+        />
+      )}
+      {isCatGameOpen && (
+        <CatFeedingGame
+          rewards={catRewardState}
+          onClose={() => setIsCatGameOpen(false)}
+          onFeed={feedSidebarCat}
+        />
+      )}
       <audio
         ref={musicAudioRef}
         src={currentMusicTrack?.src}
