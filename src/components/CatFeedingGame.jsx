@@ -241,7 +241,7 @@ export default function CatFeedingGame({ rewards, onClose, onFeed }) {
                   className={`cat-food ${dragging?.shape === shape ? "is-dragging" : ""}`}
                   data-shape={shape}
                   type="button"
-                  style={dragging?.shape === shape ? { transform: `translate(${dragging.x}px, ${dragging.y}px) scale(1.12)` } : undefined}
+                  style={dragging?.shape === shape ? { transform: `translate3d(${dragging.x}px, ${dragging.y}px, 0) scale(1.12)` } : undefined}
                   aria-label={`Dar esta comida a Qwiz. ${foodStacks[shape]} disponibles.`}
                   onPointerDown={(event) => startDrag(event, shape)}
                   onPointerMove={moveDrag}

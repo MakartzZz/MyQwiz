@@ -41,7 +41,7 @@
 .cat-game__pantry.is-empty { padding: 24px; }
 .cat-food { position: relative; z-index: 2; display: grid; width: 52px; height: 52px; padding: 6px; place-items: center; touch-action: none; color: var(--on-primary); background: color-mix(in srgb, var(--purple-soft) 64%, var(--surface)); transition: transform .16s ease, filter .16s ease; }
 .cat-food:hover { transform: translateY(-3px) rotate(-3deg); filter: brightness(1.08); }
-.cat-food.is-dragging { z-index: 10; transition: none; filter: drop-shadow(7px 8px 0 color-mix(in srgb, var(--card-shadow) 55%, transparent)); cursor: grabbing; }
+.cat-food.is-dragging { z-index: 10; backface-visibility: hidden; -webkit-backface-visibility: hidden; transition: none; filter: none; box-shadow: none; cursor: grabbing; will-change: transform; }
 .cat-food > span { display: block; width: 31px; height: 31px; background: var(--purple); }
 .cat-food > b { position: absolute; display: grid; min-width: 23px; height: 23px; right: -7px; top: -8px; padding: 0 6px; place-items: center; border: 2px solid var(--surface); border-radius: 999px; color: var(--on-primary); background: var(--purple); box-shadow: 2px 2px 0 var(--card-shadow); font-size: .61rem; font-weight: 900; }
 .cat-food:nth-child(5n + 2) > span { background: var(--coral); }
