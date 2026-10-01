@@ -15,10 +15,13 @@
   overflow-y: auto;
   overscroll-behavior-y: contain;
   scrollbar-gutter: stable;
+  direction: rtl;
   -webkit-overflow-scrolling: touch;
   background: var(--sidebar-bg);
   border-right: 1px solid var(--line);
 }
+
+.sidebar > * { direction: ltr; }
 
 .brand { display: flex; min-height: 52px; align-items: center; gap: 8px; padding: 0 5px; }
 .brand__wordmark { display: block; width: 108px; height: auto; flex: 0 0 auto; }
