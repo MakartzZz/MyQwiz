@@ -97,6 +97,8 @@ export default function SidebarMascot({ onActivate, rewardSignal = 0 }) {
     if (event.pointerType !== "touch") return;
     const now = Date.now();
     if (now - lastTouchRef.current < 360) {
+      event.preventDefault();
+      event.stopPropagation();
       lastTouchRef.current = 0;
       onActivate?.();
     } else {

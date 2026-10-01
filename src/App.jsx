@@ -667,6 +667,11 @@ function App() {
     setCatRewardState(nextState);
   };
 
+  const openCatGame = () => {
+    setIsMenuOpen(false);
+    window.setTimeout(() => setIsCatGameOpen(true), 0);
+  };
+
   useEffect(() => {
     const audio = musicAudioRef.current;
     if (!audio) return undefined;
@@ -1141,10 +1146,7 @@ function App() {
         <div className="brand" aria-label="MyQwiz">
           <SidebarMascot
             rewardSignal={catRewardSignal}
-            onActivate={() => {
-              setIsCatGameOpen(true);
-              setIsMenuOpen(false);
-            }}
+            onActivate={openCatGame}
           />
           <img
             className="brand__wordmark"
