@@ -524,11 +524,11 @@ function QuizPlayer({ quiz, theme, gameMode, gameRules = {}, initialSession, onE
       setAutomaticNextSeconds(null);
       return undefined;
     }
-    setAutomaticNextSeconds(3);
+    setAutomaticNextSeconds(10);
     const countdownInterval = window.setInterval(() => {
       setAutomaticNextSeconds((seconds) => Math.max(1, seconds - 1));
     }, 1000);
-    const automaticNextTimer = window.setTimeout(goNext, 3000);
+    const automaticNextTimer = window.setTimeout(goNext, 10000);
     return () => {
       window.clearInterval(countdownInterval);
       window.clearTimeout(automaticNextTimer);
