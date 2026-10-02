@@ -4,6 +4,7 @@ export const DEFAULT_USER_PREFERENCES = Object.freeze({
   interfaceSounds: true,
   typingSounds: true,
   gameplaySounds: true,
+  catRewardSounds: true,
   soundLevel: 2,
   reduceMotion: false,
   highContrast: false,
@@ -17,6 +18,7 @@ const normalizePreferences = (value = {}) => ({
   interfaceSounds: value.interfaceSounds !== false,
   typingSounds: value.typingSounds !== false,
   gameplaySounds: value.gameplaySounds !== false,
+  catRewardSounds: value.catRewardSounds !== false,
   soundLevel: [0, 1, 2].includes(value.soundLevel) ? value.soundLevel : DEFAULT_USER_PREFERENCES.soundLevel,
   reduceMotion: value.reduceMotion === true,
   highContrast: value.highContrast === true,
@@ -64,3 +66,7 @@ export const canPlayTypingSounds = () => {
   return preferences.interfaceSounds && preferences.typingSounds;
 };
 export const canPlayGameplaySounds = () => readUserPreferences().gameplaySounds;
+export const canPlayCatRewardSounds = () => {
+  const preferences = readUserPreferences();
+  return preferences.interfaceSounds && preferences.catRewardSounds;
+};

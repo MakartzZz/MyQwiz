@@ -52,6 +52,7 @@ import {
 } from "./services/soundBuffer.js";
 import {
   applyUserPreferences,
+  canPlayCatRewardSounds,
   canPlayGameplaySounds,
   canPlayInterfaceSounds,
   getSoundScale,
@@ -654,7 +655,7 @@ function App() {
     setCatRewardState(result.state);
     if (result.earned) {
       setCatRewardSignal((signal) => signal + 1);
-      if (canPlayInterfaceSounds()) {
+      if (canPlayCatRewardSounds()) {
         playBufferedSound("/sounds/cat-reward.mp3", {
           volume: 0.58 * getSoundScale(),
         });

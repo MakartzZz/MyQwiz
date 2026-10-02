@@ -2,6 +2,7 @@ import {
   Accessibility,
   BellRing,
   BookOpen,
+  Cat,
   Eye,
   FileJson,
   Gamepad2,
@@ -37,6 +38,7 @@ export function SoundSettings({ preferences, onChange }) {
         <SettingSwitch checked={preferences.interfaceSounds} icon={MousePointer2} label="Sonidos de interfaz" description="Hover, confirmaciones, modales y notificaciones." onChange={(value) => onChange({ interfaceSounds: value })} />
         <SettingSwitch checked={preferences.typingSounds} icon={Type} label="Sonido al escribir" description="Activa o silencia solamente las pulsaciones dentro de campos de texto." onChange={(value) => onChange({ typingSounds: value })} />
         <SettingSwitch checked={preferences.gameplaySounds} icon={Gamepad2} label="Sonidos del juego" description="Respuestas, tiempo, vidas y cambio de pregunta." onChange={(value) => onChange({ gameplaySounds: value })} />
+        <SettingSwitch checked={preferences.catRewardSounds} icon={Cat} label="Maullido de recompensa" description="Silencia el maullido que suena al ganar una comida para Qwiz." onChange={(value) => onChange({ catRewardSounds: value })} />
         <article className="preference-level">
           <div><span className="preference-switch__icon"><BellRing size={22} /></span><span><strong>Intensidad de efectos</strong><small>Se aplica a todos los sonidos activados.</small></span></div>
           <div className="preference-level__options">
