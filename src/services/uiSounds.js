@@ -5,6 +5,8 @@ let confirmSound;
 let notificationSound;
 let modalOpenSound;
 let buttonPressSound;
+let buttonHoverSound;
+let supportHoverSound;
 let lastTypingSoundAt = 0;
 let lastModalOpenAt = 0;
 let lastProminentSoundAt = 0;
@@ -40,6 +42,22 @@ export const playButtonPressSound = () => {
     if (Date.now() - lastProminentSoundAt < 110) return;
     buttonPressSound = playInterfaceSound(buttonPressSound, "/sounds/button-press.mp3", 0.42);
   }, 35);
+};
+
+export const playButtonHoverSound = () => {
+  buttonHoverSound = playInterfaceSound(
+    buttonHoverSound,
+    "/sounds/button-hover.mp3",
+    0.18,
+  );
+};
+
+export const playSupportHoverSound = () => {
+  supportHoverSound = playInterfaceSound(
+    supportHoverSound,
+    "/sounds/support-bell.mp3",
+    0.065,
+  );
 };
 
 export const playTypingSound = () => {

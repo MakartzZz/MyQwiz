@@ -6,6 +6,7 @@ export const SOUND_EFFECT_PATHS = Object.freeze([
   "/sounds/music-change.mp3",
   "/sounds/notification.mp3",
   "/sounds/theme-change.mp3",
+  "/sounds/support-bell.mp3",
   "/sounds/typing.wav",
   "/sounds/cat-eat.mp3",
   "/sounds/cat-happy.mp3",
@@ -25,6 +26,43 @@ export const SOUND_EFFECT_PATHS = Object.freeze([
   "/sounds/results/drumroll.mp3",
   "/sounds/results/reveal.mp3",
 ]);
+
+export const SOUND_EFFECT_GROUPS = Object.freeze({
+  interface: Object.freeze([
+    "/sounds/button-hover.mp3",
+    "/sounds/button-press.mp3",
+    "/sounds/confirm.mp3",
+    "/sounds/modal-open.mp3",
+    "/sounds/music-change.mp3",
+    "/sounds/notification.mp3",
+    "/sounds/theme-change.mp3",
+    "/sounds/support-bell.mp3",
+    "/sounds/typing.wav",
+  ]),
+  gameplay: Object.freeze([
+    "/sounds/game-modes/checkpoint.mp3",
+    "/sounds/game-modes/classic.mp3",
+    "/sounds/game-modes/lives.mp3",
+    "/sounds/game-modes/race.mp3",
+    "/sounds/gameplay/bad-answer.mp3",
+    "/sounds/gameplay/clock.mp3",
+    "/sounds/gameplay/correct-answer.mp3",
+    "/sounds/gameplay/lose-life.mp3",
+    "/sounds/gameplay/next-question.mp3",
+  ]),
+  results: Object.freeze([
+    "/sounds/results/combo.mp3",
+    "/sounds/results/combo-lose.mp3",
+    "/sounds/results/drumroll.mp3",
+    "/sounds/results/reveal.mp3",
+  ]),
+  cat: Object.freeze([
+    "/sounds/cat-eat.mp3",
+    "/sounds/cat-happy.mp3",
+    "/sounds/cat-purr.mp3",
+  ]),
+  catReward: Object.freeze(["/sounds/cat-reward.mp3"]),
+});
 
 let audioContext;
 const buffers = new Map();
@@ -69,13 +107,15 @@ const loadSoundBuffer = (path) => {
   return loading;
 };
 
-export const prepareSoundBuffers = () => Promise.all(SOUND_EFFECT_PATHS.map(loadSoundBuffer));
+export const prepareSoundBuffers = (paths = SOUND_EFFECT_PATHS) => (
+  Promise.all(paths.map(loadSoundBuffer))
+);
 
-export const unlockSoundBuffers = () => {
+export const unlockSoundBuffers = (paths = SOUND_EFFECT_GROUPS.interface) => {
   const context = getAudioContext();
   if (!context) return Promise.resolve(false);
   const resume = context.state === "suspended" ? context.resume().catch(() => undefined) : Promise.resolve();
-  return Promise.all([resume, prepareSoundBuffers()]).then(() => context.state === "running");
+  return Promise.all([resume, prepareSoundBuffers(paths)]).then(() => context.state === "running");
 };
 
 const startBufferedSound = (handle, context, buffer, options) => {

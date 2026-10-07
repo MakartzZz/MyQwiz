@@ -68,7 +68,7 @@ function QuickQuizLibrary({ quizzes, onPlay, onDraw, selectedCategory, searchQue
                     </div>
                     <div className="quick-quiz-card__footer">
                       <div className="quick-quiz-card__meta">
-                        <span>{quiz.questions.length} preguntas</span>
+                        <span>{quiz.questionCount ?? quiz.questions?.length ?? 0} preguntas</span>
                         {Number.isFinite(quiz.stats?.bestScore) && (
                           <strong className={quiz.stats.bestScore === 100 ? "is-perfect" : ""} aria-label={`Mejor nota: ${quiz.stats.bestScore}%`}>{quiz.stats.bestScore}%</strong>
                         )}

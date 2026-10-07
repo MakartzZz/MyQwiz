@@ -78,7 +78,8 @@
 .score-card > button { display: grid; width: 36px; height: 36px; grid-column: 3; grid-row: 3; align-self: end; place-items: center; color: var(--score-card-control-ink); background: var(--score-card-control); clip-path: polygon(8% 0, 100% 7%, 92% 100%, 0 93%); transition: transform .18s ease, filter .18s ease; }
 .score-card > button:hover { filter: brightness(1.08); transform: scale(1.08); }
 .score-card.is-perfect { color: var(--perfect-card-ink); border-color: color-mix(in srgb, var(--perfect-card) 72%, var(--line)); background: linear-gradient(135deg, var(--perfect-card), var(--perfect-card-strong)); }
-.score-card.is-perfect::before { position: absolute; z-index: 0; width: 62px; height: 190%; left: -92px; top: -45%; background: linear-gradient(90deg, transparent, var(--perfect-shine), transparent); content: ""; pointer-events: none; transform: rotate(18deg); animation: perfect-card-shine 5s ease-in-out infinite; }
+.score-card.is-perfect { container-type: inline-size; }
+.score-card.is-perfect::before { position: absolute; z-index: 0; width: 62px; height: 190%; left: -92px; top: -45%; background: linear-gradient(90deg, transparent, var(--perfect-shine), transparent); content: ""; pointer-events: none; transform: translate3d(0, 0, 0) rotate(18deg); animation: perfect-card-shine 5s ease-in-out infinite; }
 .score-card.is-perfect > * { position: relative; z-index: 1; }
 .score-card.is-perfect > .score-card__position { position: absolute; }
 .score-card.is-perfect .score-card__position, .score-card.is-perfect .score-card__copy span, .score-card.is-perfect .score-card__score span { color: color-mix(in srgb, var(--perfect-card-ink) 72%, transparent); }
@@ -93,7 +94,7 @@
 :root[data-theme="sky"] .scoreboard { --score-card-bg: #d9f1f9; --score-card-border: #83c5dc; --score-card-ink: #174f6d; --score-card-muted: #557d90; --score-card-control: #2388bb; --score-card-control-ink: #ffffff; --perfect-card: #35a9d8; --perfect-card-strong: #1679a7; --perfect-card-ink: #ffffff; --perfect-shine: rgba(218, 246, 255, .52); }
 :root[data-theme="midnight"] .scoreboard { --score-card-bg: color-mix(in srgb, var(--page-bg) 48%, var(--surface)); --score-card-border: var(--line); --score-card-ink: var(--ink); --score-card-muted: var(--muted); --score-card-control: var(--purple); --score-card-control-ink: var(--on-primary); --perfect-card: #e3a44c; --perfect-card-strong: #a9612c; --perfect-card-ink: #17191a; --perfect-shine: rgba(255, 231, 183, .5); }
 :root[data-theme="pink"] .scoreboard { --score-card-bg: color-mix(in srgb, var(--page-bg) 48%, var(--surface)); --score-card-border: var(--line); --score-card-ink: var(--ink); --score-card-muted: var(--muted); --score-card-control: var(--purple); --score-card-control-ink: var(--on-primary); --perfect-card: #ed5b91; --perfect-card-strong: #bb1f5e; --perfect-card-ink: #fff8f5; --perfect-shine: rgba(255, 222, 235, .5); }
-@keyframes perfect-card-shine { 0%, 66% { left: -92px; } 88%, 100% { left: calc(100% + 32px); } }
+@keyframes perfect-card-shine { 0%, 66% { transform: translate3d(0, 0, 0) rotate(18deg); } 88%, 100% { transform: translate3d(calc(100cqi + 124px), 0, 0) rotate(18deg); } }
 @keyframes score-title-scroll { 0%, 16% { transform: translateX(0); } 54%, 70% { transform: translateX(calc(-1 * var(--title-scroll-distance))); } 100% { transform: translateX(0); } }
 
 .future-section { display: grid; min-height: 360px; place-content: center; justify-items: center; text-align: center; }

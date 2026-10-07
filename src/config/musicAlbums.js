@@ -6,6 +6,7 @@ export const musicAlbums = [
     title: "Bosque de Cristal",
     description: "Fantasía ambiental, ocarina y ruinas entre la niebla.",
     cover: "/music/bosque-de-cristal/cover.webp",
+    thumbnail: "/music/bosque-de-cristal/cover-card.webp",
     tracks: [
       { title: "Paseo por el Bosque", src: "/music/bosque-de-cristal/01-paseo-por-el-bosque.mp3" },
       { title: "Ruinas antiguas en la niebla", src: "/music/bosque-de-cristal/02-ruinas-antiguas-en-la-niebla.mp3" },
@@ -18,6 +19,7 @@ export const musicAlbums = [
     title: "Órbita Serena",
     description: "Ambient electrónico para concentración profunda.",
     cover: "/music/orbita-serena/cover.webp",
+    thumbnail: "/music/orbita-serena/cover-card.webp",
     tracks: [
       { title: "Contemplando planetas", src: "/music/orbita-serena/01-contemplando-planetas.mp3" },
       { title: "Enfoque constante", src: "/music/orbita-serena/02-enfoque-constante.mp3" },
@@ -30,6 +32,7 @@ export const musicAlbums = [
     title: "Tinta y Madera",
     description: "Piano íntimo, cuerdas y ambiente de biblioteca.",
     cover: "/music/tinta-y-madera/cover.webp",
+    thumbnail: "/music/tinta-y-madera/cover-card.webp",
     tracks: [
       { title: "Estudio cálido", src: "/music/tinta-y-madera/01-estudio-calido.mp3" },
       { title: "Sala de lectura tranquila", src: "/music/tinta-y-madera/02-sala-de-lectura-tranquila.mp3" },
@@ -42,6 +45,7 @@ export const musicAlbums = [
     title: "Café de Medianoche",
     description: "Lo-fi cálido y ambiente nocturno para estudiar con calma.",
     cover: "/music/cafe-de-medianoche/cover.webp",
+    thumbnail: "/music/cafe-de-medianoche/cover-card.webp",
     tracks: [
       { title: "Foco y concentración", src: "/music/cafe-de-medianoche/01-foco-y-concentracion.mp3" },
       { title: "Flujo de enfoque", src: "/music/cafe-de-medianoche/02-flujo-de-enfoque.mp3" },
@@ -53,6 +57,7 @@ export const musicAlbums = [
     title: "Ritmo Trivia",
     description: "Beats vibrantes para pensar, responder y seguir el ritmo.",
     cover: "/music/ritmo-trivia/cover.webp",
+    thumbnail: "/music/ritmo-trivia/cover-card.webp",
     tracks: [
       { title: "Trivia Groove", src: "/music/ritmo-trivia/01-trivia-groove.mp3" },
       { title: "Trivia Pulse", src: "/music/ritmo-trivia/02-trivia-pulse.mp3" },
@@ -65,6 +70,7 @@ export const musicAlbums = [
     title: "Trivia Lounge",
     description: "Jazz elegante y ritmo lounge para pensar sin perder el swing.",
     cover: "/music/trivia-lounge/cover.webp",
+    thumbnail: "/music/trivia-lounge/cover-card.webp",
     tracks: [
       { title: "Lounge Shuffle", src: "/music/trivia-lounge/01-lounge-shuffle.mp3" },
       { title: "Casino Lounge", src: "/music/trivia-lounge/02-casino-lounge.mp3" },
@@ -76,6 +82,7 @@ export const musicAlbums = [
     title: "Impulso Solar",
     description: "Ritmos alegres para estudiar con motivación.",
     cover: "/music/impulso-solar/cover.webp",
+    thumbnail: "/music/impulso-solar/cover-card.webp",
     tracks: [
       { title: "Enfoque hacia adelante", src: "/music/impulso-solar/01-enfoque-hacia-adelante.mp3" },
       { title: "Enfoque tranquilo", src: "/music/impulso-solar/02-enfoque-tranquilo.mp3" },
@@ -88,6 +95,7 @@ export const musicAlbums = [
     title: "Jardín de Papel",
     description: "Koto, shakuhachi y paisajes serenos inspirados en Japón.",
     cover: "/music/jardin-de-papel/cover.webp",
+    thumbnail: "/music/jardin-de-papel/cover-card.webp",
     tracks: [
       { title: "Quietud del Jardín", src: "/music/jardin-de-papel/01-quietud-del-jardin.mp3" },
       { title: "Hojas sobre el Agua", src: "/music/jardin-de-papel/02-hojas-sobre-el-agua.mp3" },

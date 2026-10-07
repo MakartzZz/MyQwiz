@@ -12,7 +12,7 @@ const canAnimate = () => (
   && !readUserPreferences().reduceMotion
 );
 
-function BlinkingCharacter({ src, blinkSrc, theme, className = "" }) {
+function BlinkingCharacter({ src, blinkSrc, theme, className = "", loading = "eager" }) {
   const [isBlinking, setIsBlinking] = useState(false);
   const [animationEnabled, setAnimationEnabled] = useState(canAnimate);
 
@@ -63,9 +63,9 @@ function BlinkingCharacter({ src, blinkSrc, theme, className = "" }) {
       aria-hidden="true"
     >
       <span className="blinking-character__motion">
-        <img className="blinking-character__frame blinking-character__frame--base" src={src} alt="" draggable="false" />
+        <img className="blinking-character__frame blinking-character__frame--base" src={src} alt="" draggable="false" loading={loading} decoding="async" />
         {blinkSrc && (
-          <img className="blinking-character__frame blinking-character__frame--blink" src={blinkSrc} alt="" draggable="false" />
+          <img className="blinking-character__frame blinking-character__frame--blink" src={blinkSrc} alt="" draggable="false" loading={loading} decoding="async" />
         )}
       </span>
     </span>

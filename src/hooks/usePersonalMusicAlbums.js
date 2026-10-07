@@ -36,23 +36,12 @@ export const createPersonalAlbumCover = (requestedColor) => {
   return `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(svg)}`;
 };
 
-const releaseAlbumUrls = (albums) => {
-  albums.forEach((album) => {
-    album.tracks.forEach((track) => {
-      if (track.src?.startsWith("blob:")) URL.revokeObjectURL(track.src);
-    });
-  });
-};
-
-const hydrateAlbums = (records) => records.map((album) => ({
+const hydrateAlbumMetadata = (album) => ({
   ...album,
   isPersonal: true,
   cover: createPersonalAlbumCover(album.color),
-  tracks: album.tracks.map((track) => ({
-    ...track,
-    src: URL.createObjectURL(track.blob),
-  })),
-}));
+  tracks: (album.tracks ?? []).map(({ blob: _blob, src: _src, albumId: _albumId, ...track }) => track),
+});
 
 const serializeAlbum = (album) => ({
   id: album.id,
@@ -60,25 +49,32 @@ const serializeAlbum = (album) => ({
   color: normalizeHexColor(album.color),
   createdAt: album.createdAt,
   updatedAt: album.updatedAt,
-  tracks: album.tracks.map(({ src: _src, ...track }) => track),
+  tracks: album.tracks.map(({ src: _src, albumId: _albumId, ...track }) => track),
 });
 
-export function usePersonalMusicAlbums() {
+export function usePersonalMusicAlbums({
+  enabled = true,
+  activeAlbumId = null,
+  activeTrackIndex = 0,
+} = {}) {
   const [albums, setAlbums] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(enabled);
   const [storageEstimate, setStorageEstimate] = useState(null);
-  const albumsRef = useRef([]);
+  const [catalogRevision, setCatalogRevision] = useState(0);
+  const albumRecordsRef = useRef([]);
+  const activeTrackUrlRef = useRef(null);
   const mountedRef = useRef(true);
+  const loadedRef = useRef(false);
+
+  const releaseActiveTrackUrl = useCallback(() => {
+    if (activeTrackUrlRef.current) URL.revokeObjectURL(activeTrackUrlRef.current);
+    activeTrackUrlRef.current = null;
+  }, []);
 
   const replaceAlbums = useCallback((records) => {
-    const hydrated = hydrateAlbums(records);
-    if (!mountedRef.current) {
-      releaseAlbumUrls(hydrated);
-      return;
-    }
-    releaseAlbumUrls(albumsRef.current);
-    albumsRef.current = hydrated;
-    setAlbums(hydrated);
+    albumRecordsRef.current = records;
+    setAlbums(records.map(hydrateAlbumMetadata));
+    setCatalogRevision((revision) => revision + 1);
   }, []);
 
   const refreshStorageEstimate = useCallback(async () => {
@@ -88,17 +84,24 @@ export function usePersonalMusicAlbums() {
 
   const reload = useCallback(async () => {
     const records = await personalMusicStorage.getAll();
-    replaceAlbums(records);
+    loadedRef.current = true;
+    if (mountedRef.current) replaceAlbums(records);
     await refreshStorageEstimate();
     return records;
   }, [refreshStorageEstimate, replaceAlbums]);
 
   useEffect(() => {
     mountedRef.current = true;
-    let active = true;
+    if (!enabled || loadedRef.current) {
+      setIsLoading(false);
+      return undefined;
+    }
 
+    let active = true;
+    setIsLoading(true);
     personalMusicStorage.getAll()
       .then((records) => {
+        loadedRef.current = true;
         if (active) replaceAlbums(records);
       })
       .catch(() => {
@@ -111,11 +114,46 @@ export function usePersonalMusicAlbums() {
 
     return () => {
       active = false;
-      mountedRef.current = false;
-      releaseAlbumUrls(albumsRef.current);
-      albumsRef.current = [];
     };
-  }, [refreshStorageEstimate, replaceAlbums]);
+  }, [enabled, refreshStorageEstimate, replaceAlbums]);
+
+  useEffect(() => {
+    releaseActiveTrackUrl();
+    setAlbums(albumRecordsRef.current.map(hydrateAlbumMetadata));
+    if (!enabled || !activeAlbumId?.startsWith("personal-album-")) return undefined;
+
+    const album = albumRecordsRef.current.find((item) => item.id === activeAlbumId);
+    const track = album?.tracks?.[activeTrackIndex] ?? album?.tracks?.[0];
+    if (!track) return undefined;
+
+    let active = true;
+    let objectUrl = null;
+    personalMusicStorage.getTrack(track.id).then((record) => {
+      if (!active || !record?.blob) return;
+      objectUrl = URL.createObjectURL(record.blob);
+      activeTrackUrlRef.current = objectUrl;
+      setAlbums(albumRecordsRef.current.map((item) => hydrateAlbumMetadata({
+        ...item,
+        tracks: item.id === activeAlbumId
+          ? item.tracks.map((candidate) => (
+            candidate.id === track.id ? { ...candidate, ...record, src: objectUrl } : candidate
+          ))
+          : item.tracks,
+      })));
+    }).catch(() => undefined);
+
+    return () => {
+      active = false;
+      if (objectUrl) URL.revokeObjectURL(objectUrl);
+      if (activeTrackUrlRef.current === objectUrl) activeTrackUrlRef.current = null;
+    };
+  }, [activeAlbumId, activeTrackIndex, catalogRevision, enabled, releaseActiveTrackUrl]);
+
+  useEffect(() => () => {
+    mountedRef.current = false;
+    releaseActiveTrackUrl();
+    albumRecordsRef.current = [];
+  }, [releaseActiveTrackUrl]);
 
   const saveAlbum = useCallback(async (draft) => {
     const now = new Date().toISOString();
@@ -140,12 +178,17 @@ export function usePersonalMusicAlbums() {
     await reload();
   }, [reload]);
 
+  const loadAlbum = useCallback(async (albumId) => {
+    const album = await personalMusicStorage.getAlbum(albumId);
+    return album ? hydrateAlbumMetadata(album) : null;
+  }, []);
+
   return {
     albums,
     isLoading,
     storageEstimate,
     saveAlbum,
     deleteAlbum,
+    loadAlbum,
   };
 }
-

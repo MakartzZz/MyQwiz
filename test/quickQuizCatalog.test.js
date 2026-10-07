@@ -3,6 +3,7 @@ import { readdirSync, readFileSync } from "node:fs";
 import test from "node:test";
 import { fileURLToPath } from "node:url";
 import { QUESTION_TYPES, QUIZ_ICONS } from "../src/domain/quizConstants.js";
+import { quickQuizCatalog } from "../src/data/quick-quizzes/catalog.generated.js";
 import { quickQuizProgress } from "../src/services/quickQuizProgress.js";
 
 const catalogDirectory = fileURLToPath(new URL("../src/data/quick-quizzes/", import.meta.url));
@@ -92,4 +93,16 @@ test("quick quiz progress keeps attempts and the highest score separately", () =
   } finally {
     globalThis.window = previousWindow;
   }
+});
+
+test("the lightweight quick quiz catalog stays synchronized with question files", () => {
+  assert.equal(quickQuizCatalog.length, 80);
+  const ids = new Set(quickQuizCatalog.map((quiz) => quiz.id));
+  assert.equal(ids.size, quickQuizCatalog.length);
+  quickQuizCatalog.forEach((quiz) => {
+    const countedQuestions = Object.values(quiz.questionTypeCounts)
+      .reduce((total, count) => total + count, 0);
+    assert.equal(countedQuestions, quiz.questionCount, quiz.id);
+    assert.ok(quiz.questionCount >= 5 && quiz.questionCount <= 10, quiz.id);
+  });
 });

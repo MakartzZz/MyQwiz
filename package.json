@@ -4,8 +4,12 @@
   "version": "0.1.0",
   "type": "module",
   "scripts": {
+    "generate:quick-catalog": "node scripts/generate_quick_quiz_catalog.mjs",
+    "predev": "npm run generate:quick-catalog",
     "dev": "vite",
+    "prebuild": "npm run generate:quick-catalog",
     "build": "vite build",
+    "pretest": "npm run generate:quick-catalog",
     "test": "node --test",
     "preview": "vite preview"
   },

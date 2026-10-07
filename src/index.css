@@ -1,3 +1,19 @@
+@font-face {
+  font-family: "Archivo";
+  font-style: normal;
+  font-weight: 400 900;
+  font-display: swap;
+  src: url("./assets/fonts/archivo-latin.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Archivo";
+  font-style: italic;
+  font-weight: 600 900;
+  font-display: swap;
+  src: url("./assets/fonts/archivo-latin-italic.woff2") format("woff2");
+}
+
 :root {
   font-family: "Archivo", Arial, sans-serif;
   font-synthesis: none;

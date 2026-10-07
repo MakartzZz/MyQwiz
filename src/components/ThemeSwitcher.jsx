@@ -80,9 +80,10 @@ function ThemeSwitcher({ activeTheme, onChange }) {
           >
             <BlinkingCharacter
               className="theme-card__character"
-              src={theme.character}
-              blinkSrc={theme.blinkCharacter}
+              src={theme.previewCharacter ?? theme.character}
+              blinkSrc={theme.previewBlinkCharacter ?? theme.blinkCharacter}
               theme={theme.id}
+              loading="lazy"
             />
             <span className="theme-card__poster" aria-hidden="true">
               <span className="theme-card__poster-top">

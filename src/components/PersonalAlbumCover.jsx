@@ -1,4 +1,5 @@
 import { useEffect, useRef } from "react";
+import { subscribeToPointer } from "../services/pointerTracker.js";
 
 const MAX_EYE_OFFSET_X = 4;
 const MAX_EYE_OFFSET_Y = 3.5;
@@ -21,19 +22,17 @@ const readableForeground = (color) => {
 export function PersonalAlbumCover({ color, className = "", label, decorative = false }) {
   const coverRef = useRef(null);
   const movingEyesRef = useRef(null);
-  const pointerRef = useRef({ x: 0, y: 0 });
-  const animationFrameRef = useRef(null);
+  const isVisibleRef = useRef(true);
   const background = normalizeHexColor(color);
   const foreground = readableForeground(background);
 
   useEffect(() => {
-    const updateEyes = () => {
-      animationFrameRef.current = null;
-      if (!coverRef.current || !movingEyesRef.current) return;
+    const updateEyes = (pointer) => {
+      if (!isVisibleRef.current || !coverRef.current || !movingEyesRef.current) return;
 
       const bounds = coverRef.current.getBoundingClientRect();
-      const deltaX = pointerRef.current.x - (bounds.left + bounds.width / 2);
-      const deltaY = pointerRef.current.y - (bounds.top + bounds.height / 2);
+      const deltaX = pointer.x - (bounds.left + bounds.width / 2);
+      const deltaY = pointer.y - (bounds.top + bounds.height / 2);
       const distance = Math.hypot(deltaX, deltaY);
       const angle = Math.atan2(deltaY, deltaX);
       const strength = Math.min(1, distance / FULL_GAZE_DISTANCE);
@@ -43,18 +42,17 @@ export function PersonalAlbumCover({ color, className = "", label, decorative = 
       movingEyesRef.current.setAttribute("transform", `translate(${eyeX} ${eyeY})`);
     };
 
-    const handlePointerMove = (event) => {
-      if (event.pointerType === "touch") return;
-      pointerRef.current = { x: event.clientX, y: event.clientY };
-      if (!animationFrameRef.current) {
-        animationFrameRef.current = window.requestAnimationFrame(updateEyes);
-      }
-    };
+    const unsubscribe = subscribeToPointer(updateEyes);
+    const observer = typeof IntersectionObserver === "undefined"
+      ? null
+      : new IntersectionObserver(([entry]) => {
+        isVisibleRef.current = entry.isIntersecting;
+      });
+    if (coverRef.current) observer?.observe(coverRef.current);
 
-    window.addEventListener("pointermove", handlePointerMove, { passive: true });
     return () => {
-      window.removeEventListener("pointermove", handlePointerMove);
-      if (animationFrameRef.current) window.cancelAnimationFrame(animationFrameRef.current);
+      unsubscribe();
+      observer?.disconnect();
     };
   }, []);
 
@@ -83,9 +81,17 @@ export function PersonalAlbumCover({ color, className = "", label, decorative = 
   );
 }
 
-export default function AlbumCover({ album, alt = "", className = "" }) {
+export default function AlbumCover({ album, alt = "", className = "", thumbnail = false }) {
   if (!album?.isPersonal) {
-    return <img className={className || undefined} src={album?.cover} alt={alt} />;
+    return (
+      <img
+        className={className || undefined}
+        src={thumbnail ? (album?.thumbnail ?? album?.cover) : album?.cover}
+        alt={alt}
+        loading={thumbnail ? "lazy" : "eager"}
+        decoding="async"
+      />
+    );
   }
 
   return (

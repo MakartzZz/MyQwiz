@@ -100,6 +100,7 @@ export function HelpSettings({ onCreate, onImport, onPromptRoom }) {
         </details>
         <details><summary>¿Puedo importar contenido creado por una IA?</summary><p>Sí. Puedes descargar el JSON o copiarlo completo y pegarlo directamente en la ventana de importación.</p></details>
       </div>
+
     </section>
   );
 }

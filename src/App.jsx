@@ -1,27 +1,11 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { lazy, Suspense, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Play, SwatchBook } from "lucide-react";
 import { Toaster } from "sileo";
 import myQwizWordmarkMidnight from "./assets/branding/myqwiz-wordmark-midnight.webp";
 import myQwizWordmarkPink from "./assets/branding/myqwiz-wordmark-pink.webp";
 import myQwizWordmarkSky from "./assets/branding/myqwiz-wordmark-sky.webp";
 import myQwizWordmarkViolet from "./assets/branding/myqwiz-wordmark-violet.webp";
-import QuizCreatorModal from "./components/QuizCreatorModal.jsx";
-import QuizEditor from "./components/QuizEditor.jsx";
-import QuizExportModal from "./components/QuizExportModal.jsx";
-import GameModeSelector from "./components/GameModeSelector.jsx";
-import QuizImportConflictModal from "./components/QuizImportConflictModal.jsx";
-import QuizImportModal from "./components/QuizImportModal.jsx";
-import QuizLibrary from "./components/QuizLibrary.jsx";
-import QuickQuizLibrary from "./components/QuickQuizLibrary.jsx";
-import QuickQuizDrawModal from "./components/QuickQuizDrawModal.jsx";
-import QuizManageModal from "./components/QuizManageModal.jsx";
-import QuizEditWarningModal from "./components/QuizEditWarningModal.jsx";
-import QuizPlayer from "./components/QuizPlayer.jsx";
-import MusicSelector from "./components/MusicSelector.jsx";
-import PersonalAlbumModal from "./components/PersonalAlbumModal.jsx";
 import AlbumCover from "./components/PersonalAlbumCover.jsx";
-import CatFeedingGame from "./components/CatFeedingGame.jsx";
-import PromptRoom from "./components/PromptRoom.jsx";
 import { QuizIcon } from "./components/QuizIcon.jsx";
 import {
   AccessibilitySettings,
@@ -30,7 +14,7 @@ import {
 } from "./components/SettingsPanels.jsx";
 import BlinkingCharacter from "./components/BlinkingCharacter.jsx";
 import SidebarMascot from "./components/SidebarMascot.jsx";
-import ThemeSwitcher from "./components/ThemeSwitcher.jsx";
+import SupportCoffee from "./components/SupportCoffee.jsx";
 import { themes } from "./config/themes.js";
 import {
   DEFAULT_MUSIC_ALBUM,
@@ -38,7 +22,6 @@ import {
   musicAlbums,
 } from "./config/musicAlbums.js";
 import { QUESTION_TYPES } from "./domain/quizConstants.js";
-import { quickQuizzes } from "./data/quick-quizzes/index.js";
 import { useQuizLibrary } from "./hooks/useQuizLibrary.js";
 import { usePersonalMusicAlbums } from "./hooks/usePersonalMusicAlbums.js";
 import { useTheme } from "./hooks/useTheme.js";
@@ -47,6 +30,7 @@ import { catRewards } from "./services/catRewards.js";
 import {
   playBufferedSound,
   prepareSoundBuffers,
+  SOUND_EFFECT_GROUPS,
   stopBufferedSound,
   unlockSoundBuffers,
 } from "./services/soundBuffer.js";
@@ -63,7 +47,9 @@ import { quizSessionStorage } from "./services/quizSessionStorage.js";
 import { quickQuizProgress } from "./services/quickQuizProgress.js";
 import {
   playButtonPressSound,
+  playButtonHoverSound,
   playConfirmSound,
+  playSupportHoverSound,
   playTypingSound,
 } from "./services/uiSounds.js";
 import {
@@ -74,6 +60,24 @@ import {
   parseQuizImport,
 } from "./services/quizTransfer.js";
 import "./App.css";
+
+const QuizCreatorModal = lazy(() => import("./components/QuizCreatorModal.jsx"));
+const QuizEditor = lazy(() => import("./components/QuizEditor.jsx"));
+const QuizExportModal = lazy(() => import("./components/QuizExportModal.jsx"));
+const GameModeSelector = lazy(() => import("./components/GameModeSelector.jsx"));
+const QuizImportConflictModal = lazy(() => import("./components/QuizImportConflictModal.jsx"));
+const QuizImportModal = lazy(() => import("./components/QuizImportModal.jsx"));
+const QuizLibrary = lazy(() => import("./components/QuizLibrary.jsx"));
+const QuickQuizLibrary = lazy(() => import("./components/QuickQuizLibrary.jsx"));
+const QuickQuizDrawModal = lazy(() => import("./components/QuickQuizDrawModal.jsx"));
+const QuizManageModal = lazy(() => import("./components/QuizManageModal.jsx"));
+const QuizEditWarningModal = lazy(() => import("./components/QuizEditWarningModal.jsx"));
+const QuizPlayer = lazy(() => import("./components/QuizPlayer.jsx"));
+const MusicSelector = lazy(() => import("./components/MusicSelector.jsx"));
+const PersonalAlbumModal = lazy(() => import("./components/PersonalAlbumModal.jsx"));
+const CatFeedingGame = lazy(() => import("./components/CatFeedingGame.jsx"));
+const PromptRoom = lazy(() => import("./components/PromptRoom.jsx"));
+const ThemeSwitcher = lazy(() => import("./components/ThemeSwitcher.jsx"));
 
 const wordmarkByTheme = {
   violet: myQwizWordmarkViolet,
@@ -305,10 +309,14 @@ function App() {
   const [editingQuizId, setEditingQuizId] = useState(null);
   const [playingQuizId, setPlayingQuizId] = useState(null);
   const [quickQuizId, setQuickQuizId] = useState(null);
+  const [playingQuickQuiz, setPlayingQuickQuiz] = useState(null);
+  const [quickQuizLoading, setQuickQuizLoading] = useState(false);
   const [drawnQuickQuiz, setDrawnQuickQuiz] = useState(null);
   const [quickQuizStats, setQuickQuizStats] = useState(() =>
     quickQuizProgress.getAll(),
   );
+  const [quickQuizCatalog, setQuickQuizCatalog] = useState([]);
+  const [quickQuizCatalogLoading, setQuickQuizCatalogLoading] = useState(false);
   const [quickQuizLibraryState, setQuickQuizLibraryState] = useState({
     selectedCategory: "all",
     searchQuery: "",
@@ -346,18 +354,31 @@ function App() {
   const [isMusicChanging, setIsMusicChanging] = useState(false);
   const [musicVolume, setMusicVolume] = useState(readStoredMusicVolume);
   const [isPersonalAlbumModalOpen, setIsPersonalAlbumModalOpen] = useState(false);
-  const [editingPersonalAlbumId, setEditingPersonalAlbumId] = useState(null);
+  const [editingPersonalAlbum, setEditingPersonalAlbum] = useState(null);
   const musicAudioRef = useRef(null);
   const musicChangeSoundRef = useRef(null);
   const musicChangeSequenceRef = useRef(0);
+  const quickQuizCatalogPromiseRef = useRef(null);
+  const quickQuizLoaderRef = useRef(null);
+  const quickQuizLoadSequenceRef = useRef(0);
   const { theme, changeTheme } = useTheme();
+  const shouldLoadPersonalMusic = (
+    (activeSection === "Ajustes" && settingsView === "music")
+    || selectedAlbumId.startsWith("personal-album-")
+    || isPersonalAlbumModalOpen
+  );
   const {
     albums: personalMusicAlbums,
     isLoading: personalMusicAlbumsLoading,
     storageEstimate: personalMusicStorageEstimate,
     saveAlbum: savePersonalMusicAlbum,
     deleteAlbum: deletePersonalMusicAlbum,
-  } = usePersonalMusicAlbums();
+    loadAlbum: loadPersonalMusicAlbum,
+  } = usePersonalMusicAlbums({
+    enabled: shouldLoadPersonalMusic,
+    activeAlbumId: selectedAlbumId,
+    activeTrackIndex: currentTrackIndex,
+  });
   const {
     quizzes,
     createDraft,
@@ -370,12 +391,10 @@ function App() {
 
   const editingQuiz = quizzes.find((quiz) => quiz.id === editingQuizId) ?? null;
   const playingQuiz = quizzes.find((quiz) => quiz.id === playingQuizId) ?? null;
-  const quickQuizzesWithStats = quickQuizzes.map((quiz) => ({
+  const quickQuizzesWithStats = useMemo(() => quickQuizCatalog.map((quiz) => ({
     ...quiz,
     stats: quickQuizStats[quiz.id] ?? quiz.stats,
-  }));
-  const playingQuickQuiz =
-    quickQuizzesWithStats.find((quiz) => quiz.id === quickQuizId) ?? null;
+  })), [quickQuizCatalog, quickQuizStats]);
   const activeTheme = themes.find((item) => item.id === theme) ?? themes[0];
   const allMusicAlbums = useMemo(
     () => [...musicAlbums, ...personalMusicAlbums],
@@ -383,8 +402,6 @@ function App() {
   );
   const selectedAlbum =
     allMusicAlbums.find((album) => album.id === selectedAlbumId) ?? musicAlbums[0];
-  const editingPersonalAlbum =
-    personalMusicAlbums.find((album) => album.id === editingPersonalAlbumId) ?? null;
   const currentMusicTrack =
     selectedAlbum.tracks[currentTrackIndex] ?? selectedAlbum.tracks[0] ?? null;
   const isThemeScreen =
@@ -401,17 +418,17 @@ function App() {
   const isQuizActivityScreen =
     isQuizScreen && Boolean(editingQuiz || playingQuiz);
   const isQuickQuizActivityScreen =
-    isQuickQuizScreen && Boolean(playingQuickQuiz);
-  const scoredQuizzes = quizzes
+    isQuickQuizScreen && Boolean(quickQuizId);
+  const scoredQuizzes = useMemo(() => quizzes
     .filter((quiz) => Number.isFinite(quiz.stats?.bestScore))
     .sort(
       (first, second) =>
         second.stats.bestScore - first.stats.bestScore ||
         new Date(second.stats.lastPlayedAt ?? 0) -
           new Date(first.stats.lastPlayedAt ?? 0),
-    );
+    ), [quizzes]);
   const visibleScoredQuizzes = scoredQuizzes.slice(0, scoreCardCapacity);
-  const visibleScoredQuickQuizzes = quickQuizzesWithStats
+  const visibleScoredQuickQuizzes = useMemo(() => quickQuizzesWithStats
     .filter((quiz) => Number.isFinite(quiz.stats?.bestScore))
     .sort(
       (first, second) =>
@@ -419,7 +436,7 @@ function App() {
         new Date(second.stats.lastPlayedAt ?? 0) -
           new Date(first.stats.lastPlayedAt ?? 0),
     )
-    .slice(0, 5);
+    .slice(0, 5), [quickQuizzesWithStats]);
   const resumableQuiz = savedGameSession
     ? (quizzes.find((quiz) => quiz.id === savedGameSession.quizId) ?? null)
     : null;
@@ -432,7 +449,41 @@ function App() {
 
   useEffect(() => {
     applyUserPreferences(userPreferences);
+    if (userPreferences.interfaceSounds) {
+      prepareSoundBuffers(SOUND_EFFECT_GROUPS.interface);
+    }
   }, [userPreferences]);
+
+  useEffect(() => {
+    const hasQuickQuizHistory = Object.keys(quickQuizStats).length > 0;
+    const needsCatalog = activeSection === "Quizzes rápidos" || hasQuickQuizHistory;
+    if (!needsCatalog || quickQuizCatalog.length) return undefined;
+
+    let active = true;
+    setQuickQuizCatalogLoading(true);
+    quickQuizCatalogPromiseRef.current ??= import("./data/quick-quizzes/catalog.js");
+    quickQuizCatalogPromiseRef.current
+      .then(({ quickQuizCatalog: catalog, loadQuickQuiz }) => {
+        quickQuizLoaderRef.current = loadQuickQuiz;
+        if (active) setQuickQuizCatalog(catalog);
+      })
+      .catch(() => {
+        if (active) {
+          systemNotifications.error(
+            "No se pudieron cargar los quizzes rápidos",
+            "Inténtalo de nuevo en unos segundos.",
+          );
+          quickQuizCatalogPromiseRef.current = null;
+        }
+      })
+      .finally(() => {
+        if (active) setQuickQuizCatalogLoading(false);
+      });
+
+    return () => {
+      active = false;
+    };
+  }, [activeSection, quickQuizCatalog.length, quickQuizStats]);
 
   useEffect(() => {
     if (previousSectionRef.current === activeSection) return;
@@ -457,9 +508,11 @@ function App() {
   }, [isQuickQuizScreen, quickQuizId]);
 
   useEffect(() => {
-    prepareSoundBuffers();
+    if (canPlayInterfaceSounds()) prepareSoundBuffers(SOUND_EFFECT_GROUPS.interface);
 
-    const unlockAudio = () => unlockSoundBuffers();
+    const unlockAudio = () => {
+      if (canPlayInterfaceSounds()) unlockSoundBuffers(SOUND_EFFECT_GROUPS.interface);
+    };
     window.addEventListener("pointerdown", unlockAudio, { capture: true });
     window.addEventListener("keydown", unlockAudio, { capture: true });
 
@@ -470,6 +523,27 @@ function App() {
       stopBufferedSound(musicChangeSoundRef.current);
     };
   }, []);
+
+  useEffect(() => {
+    if (!playingQuiz && !playingQuickQuiz) return;
+    if (canPlayGameplaySounds()) {
+      prepareSoundBuffers([
+        ...SOUND_EFFECT_GROUPS.gameplay,
+        ...SOUND_EFFECT_GROUPS.results,
+      ]);
+    }
+    if (canPlayCatRewardSounds()) prepareSoundBuffers(SOUND_EFFECT_GROUPS.catReward);
+  }, [playingQuiz, playingQuickQuiz]);
+
+  useEffect(() => {
+    if (!drawnQuickQuiz || !canPlayInterfaceSounds()) return;
+    prepareSoundBuffers(SOUND_EFFECT_GROUPS.results);
+  }, [drawnQuickQuiz]);
+
+  useEffect(() => {
+    if (!isCatGameOpen || !canPlayInterfaceSounds()) return;
+    prepareSoundBuffers(SOUND_EFFECT_GROUPS.cat);
+  }, [isCatGameOpen]);
 
   useEffect(() => {
     const scoreboard = scoreboardRef.current;
@@ -568,18 +642,27 @@ function App() {
   };
 
   const openPersonalAlbumCreator = () => {
-    setEditingPersonalAlbumId(null);
+    setEditingPersonalAlbum(null);
     setIsPersonalAlbumModalOpen(true);
   };
 
-  const openPersonalAlbumEditor = (albumId) => {
-    setEditingPersonalAlbumId(albumId);
-    setIsPersonalAlbumModalOpen(true);
+  const openPersonalAlbumEditor = async (albumId) => {
+    try {
+      const album = await loadPersonalMusicAlbum(albumId);
+      if (!album) throw new Error("Álbum inexistente");
+      setEditingPersonalAlbum(album);
+      setIsPersonalAlbumModalOpen(true);
+    } catch {
+      systemNotifications.error(
+        "No se pudo abrir el álbum",
+        "Las pistas guardadas no están disponibles en este momento.",
+      );
+    }
   };
 
   const closePersonalAlbumModal = () => {
     setIsPersonalAlbumModalOpen(false);
-    setEditingPersonalAlbumId(null);
+    setEditingPersonalAlbum(null);
   };
 
   const savePersonalAlbum = async (draft) => {
@@ -625,7 +708,7 @@ function App() {
   };
 
   const toggleMusicPlayback = () => {
-    if (!currentMusicTrack || isMusicChanging) return;
+    if (!currentMusicTrack?.src || isMusicChanging) return;
     setIsMusicPlaying((playing) => !playing);
   };
 
@@ -652,8 +735,8 @@ function App() {
 
   const recordCatCorrectAnswer = useCallback(() => {
     const result = catRewards.recordCorrectAnswer();
-    setCatRewardState(result.state);
     if (result.earned) {
+      setCatRewardState(result.state);
       setCatRewardSignal((signal) => signal + 1);
       if (canPlayCatRewardSounds()) {
         playBufferedSound("/sounds/cat-reward.mp3", {
@@ -669,6 +752,7 @@ function App() {
   };
 
   const openCatGame = () => {
+    setCatRewardState(catRewards.get());
     setIsMenuOpen(false);
     window.setTimeout(() => setIsCatGameOpen(true), 0);
   };
@@ -686,7 +770,7 @@ function App() {
     const syncMusicPlayback = () => {
       audio.volume = musicVolume;
 
-      if (!isMusicPlaying || !currentMusicTrack || document.hidden) {
+      if (!isMusicPlaying || !currentMusicTrack?.src || document.hidden) {
         pauseMusic();
         return;
       }
@@ -731,9 +815,7 @@ function App() {
           button.contains(event.relatedTarget))
       )
         return;
-      playBufferedSound("/sounds/button-hover.mp3", {
-        volume: 0.18 * getSoundScale(),
-      });
+      playButtonHoverSound();
     };
 
     document.addEventListener("pointerover", playHoverSound);
@@ -802,7 +884,10 @@ function App() {
     }
 
     if (label !== "Quizzes rápidos") {
+      quickQuizLoadSequenceRef.current += 1;
       setQuickQuizId(null);
+      setPlayingQuickQuiz(null);
+      setQuickQuizLoading(false);
     }
 
     if (label === "Ajustes") {
@@ -863,7 +948,9 @@ function App() {
     setActiveGameRules({});
   };
 
-  const openQuickQuizGame = (quiz) => {
+  const openQuickQuizGame = async (quiz) => {
+    const loadSequence = quickQuizLoadSequenceRef.current + 1;
+    quickQuizLoadSequenceRef.current = loadSequence;
     if (activeSection === "Quizzes rápidos" && !quickQuizId) {
       quickQuizLibraryScrollRef.current = window.scrollY;
       shouldRestoreQuickQuizScrollRef.current = true;
@@ -871,8 +958,32 @@ function App() {
 
     setActiveSection("Quizzes rápidos");
     setQuickQuizId(quiz.id);
+    setPlayingQuickQuiz(null);
+    setQuickQuizLoading(true);
     setActiveGameMode(null);
     setActiveGameRules({});
+    try {
+      if (!quickQuizLoaderRef.current) {
+        const catalogModule = await import("./data/quick-quizzes/catalog.js");
+        quickQuizLoaderRef.current = catalogModule.loadQuickQuiz;
+      }
+      const loadedQuiz = await quickQuizLoaderRef.current(quiz.id);
+      if (quickQuizLoadSequenceRef.current !== loadSequence) return;
+      if (!loadedQuiz) throw new Error("Quiz inexistente");
+      setPlayingQuickQuiz({
+        ...loadedQuiz,
+        stats: quickQuizStats[loadedQuiz.id] ?? loadedQuiz.stats,
+      });
+    } catch {
+      if (quickQuizLoadSequenceRef.current !== loadSequence) return;
+      setQuickQuizId(null);
+      systemNotifications.error(
+        "No se pudo cargar el quiz",
+        "Inténtalo nuevamente en unos segundos.",
+      );
+    } finally {
+      if (quickQuizLoadSequenceRef.current === loadSequence) setQuickQuizLoading(false);
+    }
   };
 
   const drawQuickQuiz = () => {
@@ -889,10 +1000,12 @@ function App() {
   };
 
   const exitQuickQuizGame = () => {
+    quickQuizLoadSequenceRef.current += 1;
     quizSessionStorage.clear();
     setActiveGameMode(null);
     setActiveGameRules({});
     setQuickQuizId(null);
+    setPlayingQuickQuiz(null);
   };
 
   const completeQuickQuizGame = useCallback(
@@ -1225,7 +1338,7 @@ function App() {
               <button
                 type="button"
                 onClick={playPreviousMusicTrack}
-                disabled={!currentMusicTrack || isMusicChanging}
+                disabled={!currentMusicTrack?.src || isMusicChanging}
                 aria-label="Pista anterior"
               >
                 <svg
@@ -1242,7 +1355,7 @@ function App() {
               <button
                 type="button"
                 onClick={toggleMusicPlayback}
-                disabled={!currentMusicTrack || isMusicChanging}
+                disabled={!currentMusicTrack?.src || isMusicChanging}
                 aria-label={
                   isMusicPlaying ? "Pausar música" : "Reproducir música"
                 }
@@ -1273,7 +1386,7 @@ function App() {
               <button
                 type="button"
                 onClick={playNextMusicTrack}
-                disabled={!currentMusicTrack || isMusicChanging}
+                disabled={!currentMusicTrack?.src || isMusicChanging}
                 aria-label="Siguiente pista"
               >
                 <svg
@@ -1290,6 +1403,25 @@ function App() {
             </div>
           </div>
         </div>
+
+        <a
+          className="sidebar-support"
+          href="https://ko-fi.com/makartzzz"
+          target="_blank"
+          rel="noopener noreferrer"
+          data-button-sound="interface"
+          aria-label="Invitar al creador un café en Ko-fi"
+          onPointerEnter={(event) => {
+            if (event.pointerType !== "touch") playButtonHoverSound();
+          }}
+        >
+          <SupportCoffee className="sidebar-support__coffee" />
+          <span>
+            <small>¿Te gusta MyQwiz?</small>
+            <strong>Invítame un café</strong>
+          </span>
+          <Icon name="arrow" size={16} />
+        </a>
 
         <button
           className="nav-item nav-item--settings"
@@ -1312,6 +1444,7 @@ function App() {
       <main
         className={`main-content ${isThemeScreen ? "main-content--themes" : ""} ${isSettingsHome ? "main-content--settings" : ""} ${isMusicScreen ? "main-content--music" : ""} ${isHomeScreen || isQuizScreen || isQuickQuizScreen ? "main-content--workspace" : ""} ${isHomeScreen ? "main-content--home" : ""} ${isQuizScreen || isQuickQuizScreen ? "main-content--library" : ""}`}
       >
+        <Suspense fallback={<section className="feature-loading" role="status">Preparando esta sección…</section>}>
         {!hidesSettingsHeading &&
           !isQuizActivityScreen &&
           !isQuickQuizActivityScreen && (
@@ -1393,7 +1526,7 @@ function App() {
                       const questionTypeCounts = SCORE_QUESTION_TYPES.map(
                         (type) => ({
                           ...type,
-                          count: quiz.questions.filter(
+                          count: quiz.questionTypeCounts?.[type.id] ?? quiz.questions.filter(
                             (question) => question.type === type.id,
                           ).length,
                         }),
@@ -1412,7 +1545,7 @@ function App() {
                           </span>
                           <div className="score-card__copy">
                             <AutoScrollTitle>{quiz.title}</AutoScrollTitle>
-                            <span>{quiz.questions.length} preguntas</span>
+                            <span>{quiz.questionCount ?? quiz.questions.length} preguntas</span>
                           </div>
                           <div
                             className="score-card__types"
@@ -1482,9 +1615,9 @@ function App() {
                       const questionTypeCounts = SCORE_QUESTION_TYPES.map(
                         (type) => ({
                           ...type,
-                          count: quiz.questions.filter(
+                          count: quiz.questionTypeCounts?.[type.id] ?? quiz.questions?.filter(
                             (question) => question.type === type.id,
-                          ).length,
+                          ).length ?? 0,
                         }),
                       ).filter((type) => type.count > 0);
 
@@ -1501,7 +1634,7 @@ function App() {
                           </span>
                           <div className="score-card__copy">
                             <AutoScrollTitle>{quiz.title}</AutoScrollTitle>
-                            <span>{quiz.questions.length} preguntas</span>
+                            <span>{quiz.questionCount ?? quiz.questions?.length ?? 0} preguntas</span>
                           </div>
                           <div
                             className="score-card__types"
@@ -1628,7 +1761,11 @@ function App() {
           ))}
 
         {activeSection === "Quizzes rápidos" &&
-          (playingQuickQuiz ? (
+          (quickQuizCatalogLoading && !quickQuizCatalog.length ? (
+            <section className="feature-loading" role="status">Cargando quizzes rápidos…</section>
+          ) : quickQuizLoading ? (
+            <section className="feature-loading" role="status">Preparando el quiz…</section>
+          ) : playingQuickQuiz ? (
             activeGameMode ? (
               <QuizPlayer
                 key={`${playingQuickQuiz.id}-${activeGameMode}-${gameAttemptKey}`}
@@ -1850,64 +1987,100 @@ function App() {
                   </button>
                 </div>
               </div>
+              <a
+                className="help-support settings-support"
+                href="https://ko-fi.com/makartzzz"
+                target="_blank"
+                rel="noopener noreferrer"
+                data-button-sound="interface"
+                aria-label="Invitar al creador un café en Ko-fi"
+                onPointerEnter={(event) => {
+                  if (event.pointerType !== "touch") playSupportHoverSound();
+                }}
+              >
+                <SupportCoffee className="help-support__coffee" />
+                <span>
+                  <small>¿Te gusta MyQwiz?</small>
+                  <strong>Invítame un café</strong>
+                  <p>Invítame un café desde $1 y apoya mi trabajo como desarrollador indie.</p>
+                </span>
+                <b>Invitar un café →</b>
+              </a>
             </section>
           ))}
+        </Suspense>
       </main>
 
-      <QuizCreatorModal
-        isOpen={isCreatorOpen}
-        onClose={() => setIsCreatorOpen(false)}
-        onCreate={createQuizDraft}
-      />
-      <QuickQuizDrawModal
-        quiz={drawnQuickQuiz}
-        onCancel={() => setDrawnQuickQuiz(null)}
-        onComplete={finishQuickQuizDraw}
-      />
-      <QuizEditWarningModal
-        quiz={quizPendingEdit}
-        onClose={() => setQuizPendingEdit(null)}
-        onConfirm={confirmQuizEdit}
-      />
-      <QuizManageModal
-        quiz={managedQuiz}
-        mode={manageMode}
-        onClose={closeManageQuiz}
-        onConfirm={confirmManageQuiz}
-      />
-      <QuizImportModal
-        isOpen={isImportModalOpen}
-        onClose={() => setIsImportModalOpen(false)}
-        onChooseFile={chooseQuizImportFile}
-        onImportText={importQuizContent}
-      />
-      <QuizImportConflictModal
-        conflict={importConflict}
-        onClose={() => setImportConflict(null)}
-        onConfirm={confirmConflictingImport}
-      />
-      <QuizExportModal
-        quiz={exportingQuiz}
-        onClose={() => setExportingQuiz(null)}
-        onExport={exportQuizFile}
-        onDrive={openGoogleDrive}
-      />
-      {isPersonalAlbumModalOpen && (
-        <PersonalAlbumModal
-          album={editingPersonalAlbum}
-          storageEstimate={personalMusicStorageEstimate}
-          onClose={closePersonalAlbumModal}
-          onSave={savePersonalAlbum}
-          onDelete={removePersonalAlbum}
-        />
-      )}
-      {isCatGameOpen && (
-        <CatFeedingGame
-          rewards={catRewardState}
-          onClose={() => setIsCatGameOpen(false)}
-          onFeed={feedSidebarCat}
-        />
-      )}
+      <Suspense fallback={null}>
+        {isCreatorOpen && (
+          <QuizCreatorModal
+            isOpen
+            onClose={() => setIsCreatorOpen(false)}
+            onCreate={createQuizDraft}
+          />
+        )}
+        {drawnQuickQuiz && (
+          <QuickQuizDrawModal
+            quiz={drawnQuickQuiz}
+            onCancel={() => setDrawnQuickQuiz(null)}
+            onComplete={finishQuickQuizDraw}
+          />
+        )}
+        {quizPendingEdit && (
+          <QuizEditWarningModal
+            quiz={quizPendingEdit}
+            onClose={() => setQuizPendingEdit(null)}
+            onConfirm={confirmQuizEdit}
+          />
+        )}
+        {managedQuiz && (
+          <QuizManageModal
+            quiz={managedQuiz}
+            mode={manageMode}
+            onClose={closeManageQuiz}
+            onConfirm={confirmManageQuiz}
+          />
+        )}
+        {isImportModalOpen && (
+          <QuizImportModal
+            isOpen
+            onClose={() => setIsImportModalOpen(false)}
+            onChooseFile={chooseQuizImportFile}
+            onImportText={importQuizContent}
+          />
+        )}
+        {importConflict && (
+          <QuizImportConflictModal
+            conflict={importConflict}
+            onClose={() => setImportConflict(null)}
+            onConfirm={confirmConflictingImport}
+          />
+        )}
+        {exportingQuiz && (
+          <QuizExportModal
+            quiz={exportingQuiz}
+            onClose={() => setExportingQuiz(null)}
+            onExport={exportQuizFile}
+            onDrive={openGoogleDrive}
+          />
+        )}
+        {isPersonalAlbumModalOpen && (
+          <PersonalAlbumModal
+            album={editingPersonalAlbum}
+            storageEstimate={personalMusicStorageEstimate}
+            onClose={closePersonalAlbumModal}
+            onSave={savePersonalAlbum}
+            onDelete={removePersonalAlbum}
+          />
+        )}
+        {isCatGameOpen && (
+          <CatFeedingGame
+            rewards={catRewardState}
+            onClose={() => setIsCatGameOpen(false)}
+            onFeed={feedSidebarCat}
+          />
+        )}
+      </Suspense>
       <audio
         ref={musicAudioRef}
         src={currentMusicTrack?.src}

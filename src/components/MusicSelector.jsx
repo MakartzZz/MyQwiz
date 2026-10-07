@@ -92,13 +92,13 @@ function MusicSelector({
           <small>{currentTrack ? activeAlbum.title : "Este álbum todavía no tiene pistas"}</small>
         </div>
         <div className="music-player-bar__controls">
-          <button type="button" onClick={onPrevious} disabled={!currentTrack || isChanging} aria-label="Pista anterior">
+          <button type="button" onClick={onPrevious} disabled={!currentTrack?.src || isChanging} aria-label="Pista anterior">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="6" y="5" width="2" height="14" /><path d="m18 5-9 7 9 7V5Z" /></svg>
           </button>
-          <button type="button" onClick={onToggle} disabled={!currentTrack || isChanging} aria-label={isPlaying ? "Pausar música" : "Reproducir música"}>
+          <button type="button" onClick={onToggle} disabled={!currentTrack?.src || isChanging} aria-label={isPlaying ? "Pausar música" : "Reproducir música"}>
             <PlayerIcon playing={isPlaying} />
           </button>
-          <button type="button" onClick={onNext} disabled={!currentTrack || isChanging} aria-label="Siguiente pista">
+          <button type="button" onClick={onNext} disabled={!currentTrack?.src || isChanging} aria-label="Siguiente pista">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="m6 5 9 7-9 7V5Z" /><rect x="16" y="5" width="2" height="14" /></svg>
           </button>
         </div>
@@ -135,7 +135,7 @@ function MusicSelector({
               onClick={() => onChange(album.id)}
             >
               <span className="music-album-card__number">0{index + 1}</span>
-              <AlbumCover album={album} alt={`Portada de ${album.title}`} />
+              <AlbumCover album={album} alt={`Portada de ${album.title}`} thumbnail />
               <span className="music-album-card__copy">
                 <strong>{album.title}</strong>
                 <small>{album.description}</small>
@@ -178,7 +178,7 @@ function MusicSelector({
                     onClick={() => onChange(album.id)}
                   >
                     <span className="music-album-card__number">P{String(index + 1).padStart(2, "0")}</span>
-                    <AlbumCover album={album} alt={`Portada de ${album.title}`} />
+                    <AlbumCover album={album} alt={`Portada de ${album.title}`} thumbnail />
                     <span className="music-album-card__copy">
                       <strong>{album.title}</strong>
                       <span>{album.tracks.length} {album.tracks.length === 1 ? "pista" : "pistas"}</span>

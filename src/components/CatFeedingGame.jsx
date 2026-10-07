@@ -24,6 +24,8 @@ export default function CatFeedingGame({ rewards, onClose, onFeed }) {
   const petPointerRef = useRef(null);
   const petDistanceRef = useRef(0);
   const wasPettedRef = useRef(false);
+  const dragRef = useRef(null);
+  const draggedFoodRef = useRef(null);
 
   useEffect(() => () => {
     window.clearTimeout(eatTimerRef.current);
@@ -31,6 +33,9 @@ export default function CatFeedingGame({ rewards, onClose, onFeed }) {
     stopBufferedSound(eatSoundRef.current);
     stopBufferedSound(happySoundRef.current);
     stopBufferedSound(purrSoundRef.current);
+    draggedFoodRef.current?.style.removeProperty("transform");
+    dragRef.current = null;
+    draggedFoodRef.current = null;
   }, []);
 
   useEffect(() => {
@@ -106,27 +111,27 @@ export default function CatFeedingGame({ rewards, onClose, onFeed }) {
 
   const startDrag = (event, shape) => {
     event.currentTarget.setPointerCapture(event.pointerId);
-    setDragging({
+    dragRef.current = {
       shape,
       pointerId: event.pointerId,
       startX: event.clientX,
       startY: event.clientY,
-      x: 0,
-      y: 0,
-    });
+    };
+    draggedFoodRef.current = event.currentTarget;
+    setDragging(shape);
   };
 
   const moveDrag = (event) => {
-    setDragging((current) => {
-      if (!current || current.pointerId !== event.pointerId) return current;
-      const x = event.clientX - current.startX;
-      const y = event.clientY - current.startY;
-      return { ...current, x, y };
-    });
+    const current = dragRef.current;
+    if (!current || current.pointerId !== event.pointerId || !draggedFoodRef.current) return;
+    const x = event.clientX - current.startX;
+    const y = event.clientY - current.startY;
+    draggedFoodRef.current.style.transform = `translate3d(${x}px, ${y}px, 0) scale(1.12)`;
   };
 
   const finishDrag = (event) => {
-    if (!dragging || dragging.pointerId !== event.pointerId) return;
+    const current = dragRef.current;
+    if (!current || current.pointerId !== event.pointerId) return;
     const catBounds = catRef.current?.getBoundingClientRect();
     const droppedOnCat = catBounds
       && event.clientX >= catBounds.left
@@ -134,7 +139,17 @@ export default function CatFeedingGame({ rewards, onClose, onFeed }) {
       && event.clientY >= catBounds.top
       && event.clientY <= catBounds.bottom;
 
-    if (droppedOnCat) celebrateFeed(dragging.shape);
+    if (droppedOnCat) celebrateFeed(current.shape);
+    draggedFoodRef.current?.style.removeProperty("transform");
+    dragRef.current = null;
+    draggedFoodRef.current = null;
+    setDragging(null);
+  };
+
+  const cancelDrag = () => {
+    draggedFoodRef.current?.style.removeProperty("transform");
+    dragRef.current = null;
+    draggedFoodRef.current = null;
     setDragging(null);
   };
 
@@ -193,9 +208,8 @@ export default function CatFeedingGame({ rewards, onClose, onFeed }) {
         <button className="cat-game__close" type="button" onClick={onClose} aria-label="Cerrar minijuego"><X size={20} /></button>
 
         <header className="cat-game__heading">
-          <span className="eyebrow">Secreto desbloqueado</span>
           <h2 id="cat-game-title">Alimenta a Qwiz</h2>
-          <p>Arrastra una forma hasta el gato o mantén pulsado sobre él y mueve el puntero para acariciarlo.</p>
+          <p>Arrastra una forma hasta Qwiz o mantén pulsado sobre él y mueve el puntero para acariciarlo.</p>
         </header>
 
         <div className="cat-game__playfield">
@@ -238,15 +252,14 @@ export default function CatFeedingGame({ rewards, onClose, onFeed }) {
             <>
               {FOOD_SHAPES.filter((shape) => foodStacks[shape] > 0).map((shape) => (
                 <button
-                  className={`cat-food ${dragging?.shape === shape ? "is-dragging" : ""}`}
+                  className={`cat-food ${dragging === shape ? "is-dragging" : ""}`}
                   data-shape={shape}
                   type="button"
-                  style={dragging?.shape === shape ? { transform: `translate3d(${dragging.x}px, ${dragging.y}px, 0) scale(1.12)` } : undefined}
                   aria-label={`Dar esta comida a Qwiz. ${foodStacks[shape]} disponibles.`}
                   onPointerDown={(event) => startDrag(event, shape)}
                   onPointerMove={moveDrag}
                   onPointerUp={finishDrag}
-                  onPointerCancel={() => setDragging(null)}
+                  onPointerCancel={cancelDrag}
                   key={shape}
                 >
                   <span />
@@ -265,7 +278,6 @@ export default function CatFeedingGame({ rewards, onClose, onFeed }) {
 
         <footer className="cat-game__footer">
           <span>Qwiz ha comido {rewards.totalFed} {rewards.totalFed === 1 ? "vez" : "veces"}.</span>
-          <small>Arrastra una forma hasta Qwiz para alimentarlo.</small>
         </footer>
       </section>
     </div>
