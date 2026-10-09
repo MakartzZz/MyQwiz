@@ -110,6 +110,78 @@ const focusSpatialOption = (refs, currentIndex, direction) => {
   candidates[0]?.element.focus();
 };
 
+const getAnswerText = (question, submittedAnswer) => {
+  if (question.type === QUESTION_TYPES.MULTIPLE_CHOICE) {
+    return question.options.find((option) => option.id === submittedAnswer)?.text ?? "Sin respuesta";
+  }
+  if (question.type === QUESTION_TYPES.TRUE_FALSE) {
+    return typeof submittedAnswer === "boolean" ? (submittedAnswer ? "Verdadero" : "Falso") : "Sin respuesta";
+  }
+  if (question.type === QUESTION_TYPES.FILL_BLANK || question.type === QUESTION_TYPES.SHORT_ANSWER) {
+    return String(submittedAnswer ?? "").trim() || "Sin respuesta";
+  }
+  return "";
+};
+
+const getCorrectAnswerText = (question) => {
+  if (question.type === QUESTION_TYPES.MULTIPLE_CHOICE) {
+    return question.options.filter((option) => option.isCorrect).map((option) => option.text).join(" / ");
+  }
+  if (question.type === QUESTION_TYPES.TRUE_FALSE) return question.correctAnswer ? "Verdadero" : "Falso";
+  if (question.type === QUESTION_TYPES.FILL_BLANK) return question.acceptedAnswers.filter((item) => item.trim()).join(" / ");
+  if (question.type === QUESTION_TYPES.SHORT_ANSWER) return question.referenceAnswer;
+  return "";
+};
+
+const QuizAnswerReview = ({ questions, answerHistory }) => (
+  <div className="quiz-result__answer-review" id="quiz-answer-review">
+    {questions.map((question, index) => {
+      const submitted = answerHistory[question.id] ?? { answer: createEmptyAnswer(question), isCorrect: false };
+      const isMatching = question.type === QUESTION_TYPES.MATCHING;
+      const incorrectPairs = isMatching
+        ? question.pairs.filter((pair) => submitted.answer?.[pair.id] !== pair.id)
+        : [];
+
+      return (
+        <article className={`quiz-result__answer-item ${submitted.isCorrect ? "is-correct" : "is-wrong"}`} key={question.id}>
+          <header>
+            <span>Pregunta {index + 1}</span>
+            <b>{questionTypeLabels[question.type]}</b>
+            <i>{submitted.isCorrect ? "Correcta" : "Incorrecta"}</i>
+          </header>
+          <h3>{question.prompt}</h3>
+          <div className="quiz-result__submitted-answer">
+            <strong>Tu respuesta</strong>
+            {isMatching ? (
+              <div className="quiz-result__answer-pairs">
+                {question.pairs.map((pair) => {
+                  const selectedPairId = submitted.answer?.[pair.id];
+                  const selectedRight = question.pairs.find((candidate) => candidate.id === selectedPairId)?.right ?? "Sin pareja";
+                  return <div key={pair.id}><span>{pair.left}</span><i aria-hidden="true">→</i><b>{selectedRight}</b></div>;
+                })}
+              </div>
+            ) : (
+              <p>{getAnswerText(question, submitted.answer)}</p>
+            )}
+          </div>
+          {!submitted.isCorrect && (
+            <div className="quiz-result__correct-answer">
+              <strong>{isMatching ? "La asociación correcta era:" : "Respuesta correcta"}</strong>
+              {isMatching ? (
+                <div className="quiz-result__answer-pairs">
+                  {incorrectPairs.map((pair) => <div key={pair.id}><span>{pair.left}</span><i aria-hidden="true">→</i><b>{pair.right}</b></div>)}
+                </div>
+              ) : (
+                <p>{getCorrectAnswerText(question)}</p>
+              )}
+            </div>
+          )}
+        </article>
+      );
+    })}
+  </div>
+);
+
 function QuizPlayer({ quiz, theme, gameMode, gameRules = {}, initialSession, onExit, onComplete, onProgress, onRetry, onCorrectAnswer, exitLabel = "Volver a la biblioteca", recordsScore = true, automaticQuestionAdvance = true }) {
   const restoredSession = initialSession?.quizId === quiz.id && initialSession?.gameMode === gameMode
     ? initialSession
@@ -119,6 +191,17 @@ function QuizPlayer({ quiz, theme, gameMode, gameRules = {}, initialSession, onE
   const [answer, setAnswer] = useState(() => restoredSession?.answer ?? createEmptyAnswer(questions[restoredSession?.questionIndex ?? 0]));
   const [isChecked, setIsChecked] = useState(restoredSession?.isChecked ?? false);
   const [isCorrect, setIsCorrect] = useState(restoredSession?.isCorrect ?? false);
+  const [answerHistory, setAnswerHistory] = useState(() => {
+    if (restoredSession?.answerHistory) return restoredSession.answerHistory;
+    if (!restoredSession?.isChecked) return {};
+    const restoredQuestion = questions[restoredSession.questionIndex ?? 0];
+    return restoredQuestion ? {
+      [restoredQuestion.id]: {
+        answer: restoredSession.answer,
+        isCorrect: restoredSession.isCorrect,
+      },
+    } : {};
+  });
   const [feedbackReaction, setFeedbackReaction] = useState(() => (
     restoredSession?.isChecked ? (restoredSession.isCorrect ? "correct" : "wrong") : null
   ));
@@ -150,6 +233,7 @@ function QuizPlayer({ quiz, theme, gameMode, gameRules = {}, initialSession, onE
   const [activeResultType, setActiveResultType] = useState(null);
   const [penalizedResultType, setPenalizedResultType] = useState(null);
   const [resultImpact, setResultImpact] = useState(false);
+  const [showAnswerReview, setShowAnswerReview] = useState(false);
   const completionSent = useRef(false);
   const previousBestScore = useRef(Number.isFinite(quiz.stats?.bestScore) ? quiz.stats.bestScore : null);
   const clockSoundRef = useRef(null);
@@ -239,7 +323,14 @@ function QuizPlayer({ quiz, theme, gameMode, gameRules = {}, initialSession, onE
     return () => window.cancelAnimationFrame(frame);
   }, [currentQuestion.type, isChecked, isFinished, questionIndex]);
 
-  const applyAnswerResult = useCallback((result, withSound = true, reason = "answer") => {
+  const applyAnswerResult = useCallback((result, withSound = true, reason = "answer", submittedAnswer = answer) => {
+    const storedAnswer = currentQuestion.type === QUESTION_TYPES.MATCHING
+      ? { ...(submittedAnswer ?? {}) }
+      : submittedAnswer;
+    setAnswerHistory((current) => ({
+      ...current,
+      [currentQuestion.id]: { answer: storedAnswer, isCorrect: result },
+    }));
     setIsCorrect(result);
     setIsChecked(true);
     setFeedbackReaction(result ? "correct" : reason === "timeout" ? "timeout" : gameMode === GAME_MODES.LIVES ? "life" : "wrong");
@@ -267,7 +358,7 @@ function QuizPlayer({ quiz, theme, gameMode, gameRules = {}, initialSession, onE
         setTimeLeft((value) => Math.max(0, value - (gameRules.incorrectPenaltySeconds ?? DEFAULT_GAME_RULES.checkpoint.incorrectPenaltySeconds)));
       }
     }
-  }, [currentQuestion.type, gameMode, gameRules.correctBonusSeconds, gameRules.incorrectPenaltySeconds, lives, onCorrectAnswer]);
+  }, [answer, currentQuestion.id, currentQuestion.type, gameMode, gameRules.correctBonusSeconds, gameRules.incorrectPenaltySeconds, lives, onCorrectAnswer]);
 
   const checkAnswer = useCallback((forcedAnswer = answer, { reason = "answer" } = {}) => {
     if (isChecked || isFinished || isReviewingMatching) return;
@@ -275,7 +366,7 @@ function QuizPlayer({ quiz, theme, gameMode, gameRules = {}, initialSession, onE
     setAnswer(forcedAnswer);
 
     if (currentQuestion.type !== QUESTION_TYPES.MATCHING) {
-      applyAnswerResult(result, true, reason);
+      applyAnswerResult(result, true, reason, forcedAnswer);
       return;
     }
 
@@ -293,7 +384,7 @@ function QuizPlayer({ quiz, theme, gameMode, gameRules = {}, initialSession, onE
         if (index === currentQuestion.leftItems.length - 1) {
           queueSequenceStep(() => {
             setIsReviewingMatching(false);
-            applyAnswerResult(result, false, reason);
+            applyAnswerResult(result, false, reason, forcedAnswer);
           }, 420);
         }
       }, startDelay + 260);
@@ -476,6 +567,7 @@ function QuizPlayer({ quiz, theme, gameMode, gameRules = {}, initialSession, onE
       questions,
       questionIndex,
       answer,
+      answerHistory,
       isChecked,
       isCorrect,
       showReference,
@@ -484,7 +576,7 @@ function QuizPlayer({ quiz, theme, gameMode, gameRules = {}, initialSession, onE
       lives,
       timeLeft,
     });
-  }, [answer, correctAnswers, correctAnswersByType, gameMode, gameRules, isChecked, isCorrect, isFinished, lives, onProgress, questionIndex, questions, quiz.iconId, quiz.id, quiz.title, showReference, timeLeft]);
+  }, [answer, answerHistory, correctAnswers, correctAnswersByType, gameMode, gameRules, isChecked, isCorrect, isFinished, lives, onProgress, questionIndex, questions, quiz.iconId, quiz.id, quiz.title, showReference, timeLeft]);
 
   const canSubmit = currentQuestion.type === QUESTION_TYPES.MATCHING
     ? !isReviewingMatching && currentQuestion.leftItems.every((item) => answer[item.id])
@@ -627,9 +719,19 @@ function QuizPlayer({ quiz, theme, gameMode, gameRules = {}, initialSession, onE
               <div className="quiz-result__record">Partida rápida completada. Puedes repetirla cuando quieras.</div>
             )}
             <div className="quiz-result__actions">
-              <button type="button" className="quiz-play-secondary" onClick={onExit}>{exitLabel}</button>
+              <button type="button" className="quiz-play-secondary quiz-result__exit" onClick={onExit}>{exitLabel}</button>
+              <button
+                type="button"
+                className="quiz-play-secondary quiz-result__review-toggle"
+                aria-expanded={showAnswerReview}
+                aria-controls="quiz-answer-review"
+                onClick={() => setShowAnswerReview((current) => !current)}
+              >
+                {showAnswerReview ? "Ocultar respuestas" : "Ver respuestas"}
+              </button>
               <button type="button" className="quiz-play-primary" onClick={onRetry}>Volver a intentar</button>
             </div>
+            {showAnswerReview && <QuizAnswerReview questions={questions} answerHistory={answerHistory} />}
           </div>
         )}
       </section>
