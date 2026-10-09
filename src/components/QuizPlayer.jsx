@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { DEFAULT_GAME_RULES, GAME_MODES, QUESTION_TYPES } from "../domain/quizConstants.js";
 import { getRaceTimeForQuestion } from "../domain/gameModes.js";
-import { calculateScore, calculateShortAnswerSimilarity, evaluateQuestionAnswer, prepareQuizForPlay } from "../domain/quizGameplay.js";
+import { calculateScore, calculateShortAnswerSimilarity, evaluateQuestionAnswer, prepareQuizForPlay, shouldAutomaticallyAdvanceQuestion } from "../domain/quizGameplay.js";
 import { playBufferedSound, stopBufferedSound } from "../services/soundBuffer.js";
 import { canPlayGameplaySounds, getSoundScale, readUserPreferences } from "../services/userPreferences.js";
 import GameFeedbackReaction from "./GameFeedbackReaction.jsx";
@@ -110,7 +110,7 @@ const focusSpatialOption = (refs, currentIndex, direction) => {
   candidates[0]?.element.focus();
 };
 
-function QuizPlayer({ quiz, theme, gameMode, gameRules = {}, initialSession, onExit, onComplete, onProgress, onRetry, onCorrectAnswer, exitLabel = "Volver a la biblioteca", recordsScore = true }) {
+function QuizPlayer({ quiz, theme, gameMode, gameRules = {}, initialSession, onExit, onComplete, onProgress, onRetry, onCorrectAnswer, exitLabel = "Volver a la biblioteca", recordsScore = true, automaticQuestionAdvance = true }) {
   const restoredSession = initialSession?.quizId === quiz.id && initialSession?.gameMode === gameMode
     ? initialSession
     : null;
@@ -494,6 +494,15 @@ function QuizPlayer({ quiz, theme, gameMode, gameRules = {}, initialSession, onE
   const shortAnswerSimilarity = currentQuestion.type === QUESTION_TYPES.SHORT_ANSWER
     ? calculateShortAnswerSimilarity(answer, currentQuestion.referenceAnswer, currentQuestion.keywords)
     : 0;
+  const incorrectMatchingPairs = currentQuestion.type === QUESTION_TYPES.MATCHING
+    ? currentQuestion.leftItems
+      .filter((item) => answer?.[item.id] !== item.id)
+      .map((item) => ({
+        id: item.id,
+        left: item.text,
+        right: currentQuestion.rightItems.find((rightItem) => rightItem.id === item.id)?.text ?? "",
+      }))
+    : [];
 
   const goNext = useCallback(() => {
     if (questionTransition !== "idle" || isReviewingMatching) return;
@@ -520,7 +529,16 @@ function QuizPlayer({ quiz, theme, gameMode, gameRules = {}, initialSession, onE
   }, [finish, gameMode, gameRules.secondsByQuestionType, isReviewingMatching, questionIndex, questionTransition, questions, queueSequenceStep]);
 
   useEffect(() => {
-    if (!isChecked || !isCorrect || isFinished || isReviewingMatching || isTerminalGameOver || questionTransition !== "idle") {
+    const shouldAdvance = shouldAutomaticallyAdvanceQuestion({
+      enabled: automaticQuestionAdvance,
+      isChecked,
+      isCorrect,
+      isFinished,
+      isReviewingMatching,
+      isTerminalGameOver,
+      questionTransition,
+    });
+    if (!shouldAdvance) {
       setAutomaticNextSeconds(null);
       return undefined;
     }
@@ -533,7 +551,7 @@ function QuizPlayer({ quiz, theme, gameMode, gameRules = {}, initialSession, onE
       window.clearInterval(countdownInterval);
       window.clearTimeout(automaticNextTimer);
     };
-  }, [goNext, isChecked, isCorrect, isFinished, isReviewingMatching, isTerminalGameOver, questionTransition]);
+  }, [automaticQuestionAdvance, goNext, isChecked, isCorrect, isFinished, isReviewingMatching, isTerminalGameOver, questionTransition]);
 
   const assignMatchingPair = (rightItemId, { moveFocus = false } = {}) => {
     if (!activeMatchingItem || isChecked || isReviewingMatching) return;
@@ -868,6 +886,24 @@ function QuizPlayer({ quiz, theme, gameMode, gameRules = {}, initialSession, onE
         {isChecked && currentQuestion.type !== QUESTION_TYPES.MATCHING && (
           <div className={`quiz-feedback ${isCorrect ? "is-correct" : "is-wrong"}`}>
             <strong>{isCorrect ? "¡Correcto!" : "No fue la respuesta correcta"}</strong>
+            {!isCorrect && currentQuestion.type === QUESTION_TYPES.FILL_BLANK && (
+              <div className="quiz-feedback__correction">
+                <span>Respuesta correcta</span>
+                <b>{currentQuestion.acceptedAnswers.find((accepted) => accepted.trim())}</b>
+              </div>
+            )}
+            {currentQuestion.explanation && <p>{currentQuestion.explanation}</p>}
+          </div>
+        )}
+
+        {isChecked && !isCorrect && currentQuestion.type === QUESTION_TYPES.MATCHING && (
+          <div className="quiz-feedback is-wrong quiz-feedback--matching">
+            <strong>La asociación correcta era:</strong>
+            <div className="quiz-feedback__matching-corrections">
+              {incorrectMatchingPairs.map((pair) => (
+                <div key={pair.id}><span>{pair.left}</span><i aria-hidden="true">→</i><b>{pair.right}</b></div>
+              ))}
+            </div>
             {currentQuestion.explanation && <p>{currentQuestion.explanation}</p>}
           </div>
         )}

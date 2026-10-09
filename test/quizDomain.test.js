@@ -3,11 +3,12 @@ import test from "node:test";
 import { DEFAULT_GAME_RULES, GAME_MODES, QUESTION_TYPES, QUIZ_ICONS, QUIZ_SCHEMA_VERSION } from "../src/domain/quizConstants.js";
 import { canUseGameMode, getRaceTimeForQuestion } from "../src/domain/gameModes.js";
 import { createQuestion, createQuiz, duplicateQuiz, prepareQuizForReady } from "../src/domain/quizFactory.js";
-import { calculateScore, calculateShortAnswerSimilarity, evaluateQuestionAnswer, prepareQuizForPlay, shuffleItems } from "../src/domain/quizGameplay.js";
+import { calculateScore, calculateShortAnswerSimilarity, evaluateQuestionAnswer, prepareQuizForPlay, shouldAutomaticallyAdvanceQuestion, shuffleItems } from "../src/domain/quizGameplay.js";
 import { migrateQuiz } from "../src/domain/quizMigration.js";
 import { validateQuiz } from "../src/domain/quizValidation.js";
 import { buildQuizPrompt } from "../src/services/quizPrompt.js";
 import { areQuizzesEquivalent, parseQuizImport, serializeQuiz } from "../src/services/quizTransfer.js";
+import { DEFAULT_USER_PREFERENCES, normalizeUserPreferences } from "../src/services/userPreferences.js";
 
 test("createQuiz generates a versioned draft without fixing a game mode", () => {
   const quiz = createQuiz({
@@ -336,6 +337,30 @@ test("score calculation rounds to a whole percentage", () => {
   assert.equal(calculateScore(2, 3), 67);
   assert.equal(calculateScore(0, 0), 0);
   assert.deepEqual(shuffleItems([1], () => 0), [1]);
+});
+
+test("automatic question advance is enabled for new and existing preference sets", () => {
+  assert.equal(DEFAULT_USER_PREFERENCES.automaticQuestionAdvance, true);
+  assert.equal(normalizeUserPreferences({}).automaticQuestionAdvance, true);
+  assert.equal(normalizeUserPreferences({ largeText: true }).automaticQuestionAdvance, true);
+  assert.equal(normalizeUserPreferences({ automaticQuestionAdvance: false }).automaticQuestionAdvance, false);
+});
+
+test("automatic question advance only runs after a correct checked answer when enabled", () => {
+  const readyState = {
+    enabled: true,
+    isChecked: true,
+    isCorrect: true,
+    isFinished: false,
+    isReviewingMatching: false,
+    isTerminalGameOver: false,
+    questionTransition: "idle",
+  };
+
+  assert.equal(shouldAutomaticallyAdvanceQuestion(readyState), true);
+  assert.equal(shouldAutomaticallyAdvanceQuestion({ ...readyState, enabled: false }), false);
+  assert.equal(shouldAutomaticallyAdvanceQuestion({ ...readyState, isCorrect: false }), false);
+  assert.equal(shouldAutomaticallyAdvanceQuestion({ ...readyState, questionTransition: "out" }), false);
 });
 
 test("short-answer similarity ignores accents and reports exact matches", () => {

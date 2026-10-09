@@ -135,3 +135,21 @@ export const evaluateQuestionAnswer = (question, answer) => {
 export const calculateScore = (correctAnswers, totalQuestions) => (
   totalQuestions > 0 ? Math.round((correctAnswers / totalQuestions) * 100) : 0
 );
+
+export const shouldAutomaticallyAdvanceQuestion = ({
+  enabled = true,
+  isChecked,
+  isCorrect,
+  isFinished,
+  isReviewingMatching,
+  isTerminalGameOver,
+  questionTransition,
+}) => Boolean(
+  enabled
+  && isChecked
+  && isCorrect
+  && !isFinished
+  && !isReviewingMatching
+  && !isTerminalGameOver
+  && questionTransition === "idle"
+);

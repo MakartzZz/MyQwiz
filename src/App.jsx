@@ -1689,6 +1689,7 @@ function App() {
                 theme={theme}
                 gameMode={activeGameMode}
                 gameRules={activeGameRules}
+                automaticQuestionAdvance={userPreferences.automaticQuestionAdvance}
                 initialSession={savedGameSession}
                 onExit={exitQuizGame}
                 onComplete={completeQuizGame}
@@ -1773,6 +1774,7 @@ function App() {
                 theme={theme}
                 gameMode={activeGameMode}
                 gameRules={activeGameRules}
+                automaticQuestionAdvance={userPreferences.automaticQuestionAdvance}
                 onExit={exitQuickQuizGame}
                 onComplete={completeQuickQuizGame}
                 onCorrectAnswer={recordCatCorrectAnswer}

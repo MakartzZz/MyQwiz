@@ -7,6 +7,7 @@ import {
   FileJson,
   Gamepad2,
   MousePointer2,
+  PauseCircle,
   Play,
   Sparkles,
   Type,
@@ -117,6 +118,7 @@ export function AccessibilitySettings({ preferences, onChange }) {
         <SettingSwitch checked={preferences.largeText} icon={Type} label="Texto ampliado" description="Aumenta el tamaño general del contenido y los controles." onChange={(value) => onChange({ largeText: value })} />
         <SettingSwitch checked={preferences.highContrast} icon={Eye} label="Contraste reforzado" description="Distingue mejor bordes, controles y elementos enfocados." onChange={(value) => onChange({ highContrast: value })} />
         <SettingSwitch checked={preferences.reduceMotion} icon={Sparkles} label="Reducir movimiento" description="Detiene giros, cintas, brillos y transiciones decorativas." onChange={(value) => onChange({ reduceMotion: value })} />
+        <SettingSwitch checked={preferences.automaticQuestionAdvance} icon={PauseCircle} label="Avance automático" description="Pasa a la siguiente pregunta después de acertar. Desactívalo para avanzar manualmente." onChange={(value) => onChange({ automaticQuestionAdvance: value })} />
       </div>
     </section>
   );

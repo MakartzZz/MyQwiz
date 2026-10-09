@@ -9,12 +9,13 @@ export const DEFAULT_USER_PREFERENCES = Object.freeze({
   reduceMotion: false,
   highContrast: false,
   largeText: false,
+  automaticQuestionAdvance: true,
 });
 
 const SOUND_LEVEL_SCALE = Object.freeze([0.45, 0.72, 1]);
 let cachedPreferences;
 
-const normalizePreferences = (value = {}) => ({
+export const normalizeUserPreferences = (value = {}) => ({
   interfaceSounds: value.interfaceSounds !== false,
   typingSounds: value.typingSounds !== false,
   gameplaySounds: value.gameplaySounds !== false,
@@ -23,6 +24,7 @@ const normalizePreferences = (value = {}) => ({
   reduceMotion: value.reduceMotion === true,
   highContrast: value.highContrast === true,
   largeText: value.largeText === true,
+  automaticQuestionAdvance: value.automaticQuestionAdvance !== false,
 });
 
 export const readUserPreferences = () => {
@@ -30,7 +32,7 @@ export const readUserPreferences = () => {
 
   try {
     const stored = JSON.parse(window.localStorage.getItem(USER_PREFERENCES_STORAGE_KEY) ?? "{}");
-    cachedPreferences = normalizePreferences(stored);
+    cachedPreferences = normalizeUserPreferences(stored);
   } catch {
     cachedPreferences = { ...DEFAULT_USER_PREFERENCES };
   }
@@ -46,7 +48,7 @@ export const applyUserPreferences = (preferences = readUserPreferences()) => {
 };
 
 export const saveUserPreferences = (nextPreferences) => {
-  cachedPreferences = normalizePreferences(nextPreferences);
+  cachedPreferences = normalizeUserPreferences(nextPreferences);
   applyUserPreferences(cachedPreferences);
 
   try {
