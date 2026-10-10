@@ -228,7 +228,7 @@
 .main-content--library::after { z-index: -1; width: auto; height: auto; inset: 0; clip-path: polygon(0 0, 28% 0, 14% 100%, 0 100%); color: transparent; background-image: radial-gradient(color-mix(in srgb, var(--ink) 14%, transparent) 1.2px, transparent 1.2px); background-position: 10px 10px; background-size: 22px 22px; content: ""; pointer-events: none; transform: none; animation: none; }
 .main-content--music { position: relative; width: calc(100% - var(--sidebar-width)); max-width: none; overflow: hidden; background: linear-gradient(135deg, var(--page-bg), color-mix(in srgb, var(--page-bg) 78%, var(--purple-soft))); isolation: isolate; }
 .main-content--music .topbar, .main-content--music .settings-back, .main-content--music .music-library { position: relative; z-index: 2; }
-.section-transition { animation: section-content-enter .46s cubic-bezier(.22, 1, .36, 1) both; }
+.section-transition { animation: section-content-enter .46s cubic-bezier(.22, 1, .36, 1); }
 
 @keyframes section-content-enter {
   from { opacity: 0; transform: translateY(14px) scale(.992); }
