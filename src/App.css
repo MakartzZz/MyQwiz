@@ -7,6 +7,7 @@
 /* Sala de prompts */
 @import "./styles/prompt-studio.css";
 @import "./styles/gameplay.css";
+@import "./styles/quiz-entry-transition.css";
 @import "./styles/quiz-editor.css";
 @import "./styles/dialogs.css";
 @import "./styles/cat-game.css";

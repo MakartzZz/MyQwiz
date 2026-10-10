@@ -13,6 +13,8 @@ import {
   SoundSettings,
 } from "./components/SettingsPanels.jsx";
 import BlinkingCharacter from "./components/BlinkingCharacter.jsx";
+import QuizEntryTransition from "./components/QuizEntryTransition.jsx";
+import QwizLoader from "./components/QwizLoader.jsx";
 import SidebarMascot from "./components/SidebarMascot.jsx";
 import SupportCoffee from "./components/SupportCoffee.jsx";
 import { themes } from "./config/themes.js";
@@ -72,6 +74,7 @@ const QuickQuizLibrary = lazy(() => import("./components/QuickQuizLibrary.jsx"))
 const QuickQuizDrawModal = lazy(() => import("./components/QuickQuizDrawModal.jsx"));
 const QuizManageModal = lazy(() => import("./components/QuizManageModal.jsx"));
 const QuizEditWarningModal = lazy(() => import("./components/QuizEditWarningModal.jsx"));
+const QuizProgressNoticeModal = lazy(() => import("./components/QuizProgressNoticeModal.jsx"));
 const QuizPlayer = lazy(() => import("./components/QuizPlayer.jsx"));
 const MusicSelector = lazy(() => import("./components/MusicSelector.jsx"));
 const PersonalAlbumModal = lazy(() => import("./components/PersonalAlbumModal.jsx"));
@@ -157,6 +160,18 @@ const Icon = ({ name, size = 20 }) => {
       <>
         <path d="m6 6 12 12" />
         <path d="m18 6-12 12" />
+      </>
+    ),
+    collapse: (
+      <>
+        <path d="m15 18-6-6 6-6" />
+        <path d="M20 5v14" />
+      </>
+    ),
+    expand: (
+      <>
+        <path d="m9 18 6-6-6-6" />
+        <path d="M4 5v14" />
       </>
     ),
     trophy: (
@@ -286,6 +301,8 @@ const sectionTitles = {
 };
 
 const MUSIC_VOLUME_STORAGE_KEY = "myqwiz:music-volume";
+const SIDEBAR_COLLAPSED_STORAGE_KEY = "myqwiz:sidebar-collapsed";
+const QUIZ_PROGRESS_NOTICE_HIDDEN_STORAGE_KEY = "myqwiz:hide-progress-notice";
 const MUSIC_VOLUME_LEVELS = [0.07, 0.13, 0.2];
 const SCORE_QUESTION_TYPES = [
   { id: QUESTION_TYPES.MULTIPLE_CHOICE, label: "Selección" },
@@ -305,6 +322,10 @@ const readStoredMusicVolume = () => {
 function App() {
   const [activeSection, setActiveSection] = useState("Inicio");
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(
+    () => window.localStorage.getItem(SIDEBAR_COLLAPSED_STORAGE_KEY) === "true",
+  );
+  const [sidebarMotion, setSidebarMotion] = useState(null);
   const [isCreatorOpen, setIsCreatorOpen] = useState(false);
   const [editingQuizId, setEditingQuizId] = useState(null);
   const [playingQuizId, setPlayingQuizId] = useState(null);
@@ -324,6 +345,8 @@ function App() {
   const [activeGameMode, setActiveGameMode] = useState(null);
   const [activeGameRules, setActiveGameRules] = useState({});
   const [gameAttemptKey, setGameAttemptKey] = useState(0);
+  const [quizEntryTransitionKey, setQuizEntryTransitionKey] = useState(null);
+  const [isQuizProgressNoticeOpen, setIsQuizProgressNoticeOpen] = useState(false);
   const [savedGameSession, setSavedGameSession] = useState(() =>
     quizSessionStorage.get(),
   );
@@ -343,6 +366,8 @@ function App() {
   const quickQuizLibraryScrollRef = useRef(0);
   const shouldRestoreQuickQuizScrollRef = useRef(false);
   const previousSectionRef = useRef(activeSection);
+  const quizEntryActionRef = useRef(null);
+  const quizEntrySequenceRef = useRef(0);
   const [settingsView, setSettingsView] = useState("index");
   const [selectedAlbumId, setSelectedAlbumId] = useState(
     () =>
@@ -361,6 +386,7 @@ function App() {
   const quickQuizCatalogPromiseRef = useRef(null);
   const quickQuizLoaderRef = useRef(null);
   const quickQuizLoadSequenceRef = useRef(0);
+  const sidebarMotionTimeoutRef = useRef(null);
   const { theme, changeTheme } = useTheme();
   const shouldLoadPersonalMusic = (
     (activeSection === "Ajustes" && settingsView === "music")
@@ -410,7 +436,7 @@ function App() {
     activeSection === "Ajustes" && !["themes", "music"].includes(settingsView);
   const hidesSettingsHeading =
     activeSection === "Ajustes" &&
-    ["themes", "sound", "help", "accessibility"].includes(settingsView);
+    ["themes", "music", "sound", "help", "accessibility"].includes(settingsView);
   const isMusicScreen = activeSection === "Ajustes" && settingsView === "music";
   const isHomeScreen = activeSection === "Inicio";
   const isQuizScreen = activeSection === "Mis quizzes";
@@ -440,11 +466,35 @@ function App() {
   const resumableQuiz = savedGameSession
     ? (quizzes.find((quiz) => quiz.id === savedGameSession.quizId) ?? null)
     : null;
+  const isQuizInProgress = Boolean(
+    activeGameMode
+      && ((isQuizScreen && playingQuiz) || (isQuickQuizScreen && playingQuickQuiz)),
+  );
+  const sectionTransitionKey = activeSection === "Ajustes"
+    ? `${activeSection}-${settingsView}`
+    : activeSection;
 
   const changeUserPreferences = (changes) => {
     setUserPreferences((current) =>
       saveUserPreferences({ ...current, ...changes }),
     );
+  };
+
+  const toggleSidebar = () => {
+    setIsSidebarCollapsed((collapsed) => {
+      const nextValue = !collapsed;
+      window.clearTimeout(sidebarMotionTimeoutRef.current);
+      setSidebarMotion(nextValue ? "collapsing" : "expanding");
+      sidebarMotionTimeoutRef.current = window.setTimeout(
+        () => setSidebarMotion(null),
+        320,
+      );
+      window.localStorage.setItem(
+        SIDEBAR_COLLAPSED_STORAGE_KEY,
+        String(nextValue),
+      );
+      return nextValue;
+    });
   };
 
   useEffect(() => {
@@ -453,6 +503,11 @@ function App() {
       prepareSoundBuffers(SOUND_EFFECT_GROUPS.interface);
     }
   }, [userPreferences]);
+
+  useEffect(
+    () => () => window.clearTimeout(sidebarMotionTimeoutRef.current),
+    [],
+  );
 
   useEffect(() => {
     const hasQuickQuizHistory = Object.keys(quickQuizStats).length > 0;
@@ -1019,11 +1074,29 @@ function App() {
 
   const ignoreQuickQuizProgress = useCallback(() => {}, []);
 
+  const beginQuizEntryTransition = (action) => {
+    quizEntryActionRef.current = action;
+    quizEntrySequenceRef.current += 1;
+    setQuizEntryTransitionKey(quizEntrySequenceRef.current);
+  };
+
+  const revealQuizEntry = useCallback(() => {
+    const action = quizEntryActionRef.current;
+    quizEntryActionRef.current = null;
+    action?.();
+  }, []);
+
+  const finishQuizEntry = useCallback(() => {
+    setQuizEntryTransitionKey(null);
+  }, []);
+
   const startQuizGame = (_quiz, gameMode, rules) => {
     quizSessionStorage.clear();
     setSavedGameSession(null);
-    setActiveGameRules(rules);
-    setActiveGameMode(gameMode);
+    beginQuizEntryTransition(() => {
+      setActiveGameRules(rules);
+      setActiveGameMode(gameMode);
+    });
   };
 
   const exitQuizGame = () => {
@@ -1031,6 +1104,20 @@ function App() {
     setActiveGameRules({});
     setPlayingQuizId(null);
   };
+
+  const continueQuizLater = () => {
+    exitQuizGame();
+    if (window.localStorage.getItem(QUIZ_PROGRESS_NOTICE_HIDDEN_STORAGE_KEY) !== "true") {
+      setIsQuizProgressNoticeOpen(true);
+    }
+  };
+
+  const closeQuizProgressNotice = useCallback((dontShowAgain = false) => {
+    if (dontShowAgain) {
+      window.localStorage.setItem(QUIZ_PROGRESS_NOTICE_HIDDEN_STORAGE_KEY, "true");
+    }
+    setIsQuizProgressNoticeOpen(false);
+  }, []);
 
   const completeQuizGame = useCallback(
     ({ score }) => {
@@ -1049,19 +1136,23 @@ function App() {
   const resumeQuizGame = () => {
     if (!savedGameSession || !resumableQuiz) return;
     playConfirmSound();
-    setActiveSection("Mis quizzes");
-    setEditingQuizId(null);
-    setPlayingQuizId(resumableQuiz.id);
-    setActiveGameRules(savedGameSession.gameRules ?? {});
-    setActiveGameMode(savedGameSession.gameMode);
-    setGameAttemptKey((value) => value + 1);
-    setIsMenuOpen(false);
+    beginQuizEntryTransition(() => {
+      setActiveSection("Mis quizzes");
+      setEditingQuizId(null);
+      setPlayingQuizId(resumableQuiz.id);
+      setActiveGameRules(savedGameSession.gameRules ?? {});
+      setActiveGameMode(savedGameSession.gameMode);
+      setGameAttemptKey((value) => value + 1);
+      setIsMenuOpen(false);
+    });
   };
 
   const retryQuizGame = () => {
-    quizSessionStorage.clear();
-    setSavedGameSession(null);
-    setGameAttemptKey((value) => value + 1);
+    beginQuizEntryTransition(() => {
+      quizSessionStorage.clear();
+      setSavedGameSession(null);
+      setGameAttemptKey((value) => value + 1);
+    });
   };
 
   const saveQuizDraft = useCallback(
@@ -1250,13 +1341,24 @@ function App() {
   };
 
   return (
-    <div className="app-shell">
+    <div
+      className={`app-shell ${isSidebarCollapsed ? "is-sidebar-collapsed" : ""} ${sidebarMotion ? `is-sidebar-${sidebarMotion}` : ""}`}
+    >
+      {quizEntryTransitionKey !== null && (
+        <QuizEntryTransition
+          key={quizEntryTransitionKey}
+          onCovered={revealQuizEntry}
+          onComplete={finishQuizEntry}
+        />
+      )}
       <Toaster
         position="bottom-right"
         theme={theme === "sky" || theme === "pink" ? "dark" : "light"}
         options={{ duration: 4000, roundness: 16, fill: "var(--toast-bg)" }}
       />
-      <aside className={`sidebar ${isMenuOpen ? "is-open" : ""}`}>
+      <aside
+        className={`sidebar ${isSidebarCollapsed ? "is-collapsed" : ""} ${isMenuOpen ? "is-open" : ""}`}
+      >
         <div className="brand" aria-label="MyQwiz">
           <SidebarMascot
             rewardSignal={catRewardSignal}
@@ -1276,6 +1378,8 @@ function App() {
               className={`nav-item ${activeSection === item.label ? "is-active" : ""}`}
               key={item.label}
               type="button"
+              aria-label={item.label}
+              title={isSidebarCollapsed ? item.label : undefined}
               onClick={() => selectSection(item.label)}
             >
               <Icon name={item.icon} />
@@ -1285,11 +1389,13 @@ function App() {
         </nav>
 
         <div className="sidebar-widgets">
-          {resumableQuiz && (
+          {resumableQuiz && !isQuizInProgress && (
             <button
               className="sidebar-card sidebar-card--resume"
               type="button"
               data-button-sound="interface"
+              aria-label={`Continuar ${resumableQuiz.title}`}
+              title={isSidebarCollapsed ? `Continuar ${resumableQuiz.title}` : undefined}
               onClick={resumeQuizGame}
             >
               <span className="sidebar-card__top">
@@ -1359,6 +1465,11 @@ function App() {
                 aria-label={
                   isMusicPlaying ? "Pausar música" : "Reproducir música"
                 }
+                title={
+                  isSidebarCollapsed
+                    ? (isMusicPlaying ? "Pausar música" : "Reproducir música")
+                    : undefined
+                }
               >
                 {isMusicPlaying ? (
                   <svg
@@ -1426,12 +1537,25 @@ function App() {
         <button
           className="nav-item nav-item--settings"
           type="button"
+          aria-label="Ajustes"
+          title={isSidebarCollapsed ? "Ajustes" : undefined}
           onClick={() => selectSection("Ajustes")}
         >
           <Icon name="settings" />
           <span>Ajustes</span>
         </button>
       </aside>
+
+      <button
+        className="sidebar-toggle"
+        type="button"
+        aria-label={isSidebarCollapsed ? "Expandir barra lateral" : "Minimizar barra lateral"}
+        aria-expanded={!isSidebarCollapsed}
+        title={isSidebarCollapsed ? "Expandir barra lateral" : "Minimizar barra lateral"}
+        onClick={toggleSidebar}
+      >
+        <Icon name={isSidebarCollapsed ? "expand" : "collapse"} size={17} />
+      </button>
 
       {isMenuOpen && (
         <button
@@ -1444,7 +1568,8 @@ function App() {
       <main
         className={`main-content ${isThemeScreen ? "main-content--themes" : ""} ${isSettingsHome ? "main-content--settings" : ""} ${isMusicScreen ? "main-content--music" : ""} ${isHomeScreen || isQuizScreen || isQuickQuizScreen ? "main-content--workspace" : ""} ${isHomeScreen ? "main-content--home" : ""} ${isQuizScreen || isQuickQuizScreen ? "main-content--library" : ""}`}
       >
-        <Suspense fallback={<section className="feature-loading" role="status">Preparando esta sección…</section>}>
+        <Suspense fallback={<QwizLoader />}>
+        <div className="section-transition" key={sectionTransitionKey}>
         {!hidesSettingsHeading &&
           !isQuizActivityScreen &&
           !isQuickQuizActivityScreen && (
@@ -1689,9 +1814,11 @@ function App() {
                 theme={theme}
                 gameMode={activeGameMode}
                 gameRules={activeGameRules}
+                isEntryTransitionActive={quizEntryTransitionKey !== null}
                 automaticQuestionAdvance={userPreferences.automaticQuestionAdvance}
                 initialSession={savedGameSession}
                 onExit={exitQuizGame}
+                onContinueLater={continueQuizLater}
                 onComplete={completeQuizGame}
                 onCorrectAnswer={recordCatCorrectAnswer}
                 onProgress={saveQuizGameProgress}
@@ -1774,12 +1901,14 @@ function App() {
                 theme={theme}
                 gameMode={activeGameMode}
                 gameRules={activeGameRules}
+                isEntryTransitionActive={quizEntryTransitionKey !== null}
                 automaticQuestionAdvance={userPreferences.automaticQuestionAdvance}
                 onExit={exitQuickQuizGame}
                 onComplete={completeQuickQuizGame}
                 onCorrectAnswer={recordCatCorrectAnswer}
                 onProgress={ignoreQuickQuizProgress}
                 onRetry={retryQuizGame}
+                continueLaterLabel="Salir"
                 exitLabel="Volver a quizzes rápidos"
               />
             ) : (
@@ -2010,6 +2139,7 @@ function App() {
               </a>
             </section>
           ))}
+        </div>
         </Suspense>
       </main>
 
@@ -2033,6 +2163,12 @@ function App() {
             quiz={quizPendingEdit}
             onClose={() => setQuizPendingEdit(null)}
             onConfirm={confirmQuizEdit}
+          />
+        )}
+        {isQuizProgressNoticeOpen && (
+          <QuizProgressNoticeModal
+            isOpen
+            onClose={closeQuizProgressNotice}
           />
         )}
         {managedQuiz && (

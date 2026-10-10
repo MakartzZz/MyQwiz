@@ -48,6 +48,7 @@ export const createQuestion = (type = QUESTION_TYPES.MULTIPLE_CHOICE) => {
     case QUESTION_TYPES.FILL_BLANK:
       return {
         ...baseQuestion,
+        imageUrl: "",
         acceptedAnswers: [""],
         caseSensitive: false,
       };

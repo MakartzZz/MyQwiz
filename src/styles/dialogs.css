@@ -16,6 +16,13 @@
 .quiz-edit-warning-modal__content { display: grid; gap: 10px; margin-bottom: 19px; padding: 17px; border-left: 4px solid var(--coral); color: var(--muted); background: var(--page-bg); font-size: .8rem; line-height: 1.6; }
 .quiz-edit-warning-modal__content p { margin: 0; }
 .quiz-edit-warning-modal__content strong { color: var(--ink); }
+.quiz-progress-notice { display: grid; width: min(520px, 100%); grid-template-columns: 58px minmax(0, 1fr); align-items: start; gap: 18px; }
+.quiz-progress-notice__icon { display: grid; width: 58px; height: 58px; place-items: center; color: var(--on-primary); background: var(--coral); font: 850 1.45rem "Archivo", sans-serif; clip-path: polygon(8% 0, 100% 7%, 92% 100%, 0 93%); }
+.quiz-progress-notice__copy h2 { margin: 5px 0 10px; font: 750 1.35rem "Archivo", sans-serif; }
+.quiz-progress-notice__copy p { margin: 0; color: var(--muted); font-size: .78rem; line-height: 1.6; }
+.quiz-progress-notice__preference { display: inline-flex; width: fit-content; grid-column: 2; align-items: center; gap: 9px; color: var(--muted); font-size: .72rem; font-weight: 700; cursor: pointer; }
+.quiz-progress-notice__preference input { width: 18px; height: 18px; margin: 0; accent-color: var(--purple); cursor: pointer; }
+.quiz-progress-notice__confirm { min-width: 120px; grid-column: 2; justify-self: end; }
 .quiz-import-conflict__message { margin: 0; padding: 15px 17px; border-left: 4px solid var(--coral); color: var(--muted); background: var(--page-bg); font-size: .78rem; line-height: 1.6; }
 .quiz-import-modal { width: min(720px, 100%); }
 .quiz-import-modal__file { display: grid; padding: 15px; grid-template-columns: auto 1fr auto; align-items: center; gap: 14px; border: 1px solid var(--line); background: var(--page-bg); }

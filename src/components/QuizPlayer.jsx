@@ -1,10 +1,11 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { DEFAULT_GAME_RULES, GAME_MODES, QUESTION_TYPES } from "../domain/quizConstants.js";
 import { getRaceTimeForQuestion } from "../domain/gameModes.js";
 import { calculateScore, calculateShortAnswerSimilarity, evaluateQuestionAnswer, prepareQuizForPlay, shouldAutomaticallyAdvanceQuestion } from "../domain/quizGameplay.js";
 import { playBufferedSound, stopBufferedSound } from "../services/soundBuffer.js";
 import { canPlayGameplaySounds, getSoundScale, readUserPreferences } from "../services/userPreferences.js";
 import GameFeedbackReaction from "./GameFeedbackReaction.jsx";
+import QuestionImage from "./QuestionImage.jsx";
 import { QuizIcon } from "./QuizIcon.jsx";
 
 const modeLabels = {
@@ -133,10 +134,61 @@ const getCorrectAnswerText = (question) => {
   return "";
 };
 
-const QuizAnswerReview = ({ questions, answerHistory }) => (
-  <div className="quiz-result__answer-review" id="quiz-answer-review">
-    {questions.map((question, index) => {
-      const submitted = answerHistory[question.id] ?? { answer: createEmptyAnswer(question), isCorrect: false };
+const QuizAnswerReview = ({ questions, answerHistory }) => {
+  const [answerFilter, setAnswerFilter] = useState("all");
+  const pendingScrollPositionRef = useRef(null);
+  const reviewEntries = questions.map((question, index) => ({
+    question,
+    index,
+    submitted: answerHistory[question.id] ?? { answer: createEmptyAnswer(question), isCorrect: false },
+  }));
+  const incorrectCount = reviewEntries.filter(({ submitted }) => !submitted.isCorrect).length;
+  const visibleEntries = answerFilter === "incorrect"
+    ? reviewEntries.filter(({ submitted }) => !submitted.isCorrect)
+    : reviewEntries;
+
+  useLayoutEffect(() => {
+    const scrollPosition = pendingScrollPositionRef.current;
+    if (!scrollPosition) return undefined;
+
+    const restoreScroll = () => window.scrollTo(scrollPosition.left, scrollPosition.top);
+    restoreScroll();
+    const frameId = window.requestAnimationFrame(() => {
+      restoreScroll();
+      pendingScrollPositionRef.current = null;
+    });
+
+    return () => window.cancelAnimationFrame(frameId);
+  }, [answerFilter]);
+
+  const selectAnswerFilter = (filter) => {
+    if (filter === answerFilter) return;
+    pendingScrollPositionRef.current = { left: window.scrollX, top: window.scrollY };
+    setAnswerFilter(filter);
+  };
+
+  return (
+    <div className="quiz-result__answer-review" id="quiz-answer-review">
+      <div className="quiz-result__answer-filters" role="group" aria-label="Filtrar respuestas">
+        <button
+          className={answerFilter === "all" ? "is-active" : undefined}
+          type="button"
+          aria-pressed={answerFilter === "all"}
+          onClick={() => selectAnswerFilter("all")}
+        >
+          Todas <span>{questions.length}</span>
+        </button>
+        <button
+          className={answerFilter === "incorrect" ? "is-active" : undefined}
+          type="button"
+          aria-pressed={answerFilter === "incorrect"}
+          disabled={incorrectCount === 0}
+          onClick={() => selectAnswerFilter("incorrect")}
+        >
+          Solo incorrectas <span>{incorrectCount}</span>
+        </button>
+      </div>
+      {visibleEntries.map(({ question, index, submitted }) => {
       const isMatching = question.type === QUESTION_TYPES.MATCHING;
       const incorrectPairs = isMatching
         ? question.pairs.filter((pair) => submitted.answer?.[pair.id] !== pair.id)
@@ -149,6 +201,9 @@ const QuizAnswerReview = ({ questions, answerHistory }) => (
             <b>{questionTypeLabels[question.type]}</b>
             <i>{submitted.isCorrect ? "Correcta" : "Incorrecta"}</i>
           </header>
+          {question.type === QUESTION_TYPES.FILL_BLANK && question.imageUrl && (
+            <QuestionImage className="quiz-result__question-image" src={question.imageUrl} />
+          )}
           <h3>{question.prompt}</h3>
           <div className="quiz-result__submitted-answer">
             <strong>Tu respuesta</strong>
@@ -178,15 +233,16 @@ const QuizAnswerReview = ({ questions, answerHistory }) => (
           )}
         </article>
       );
-    })}
-  </div>
-);
+      })}
+    </div>
+  );
+};
 
-function QuizPlayer({ quiz, theme, gameMode, gameRules = {}, initialSession, onExit, onComplete, onProgress, onRetry, onCorrectAnswer, exitLabel = "Volver a la biblioteca", recordsScore = true, automaticQuestionAdvance = true }) {
+function QuizPlayer({ quiz, theme, gameMode, gameRules = {}, initialSession, onExit, onContinueLater = onExit, onComplete, onProgress, onRetry, onCorrectAnswer, exitLabel = "Volver a la biblioteca", continueLaterLabel = "Continuar luego", recordsScore = true, automaticQuestionAdvance = true, isEntryTransitionActive = false }) {
   const restoredSession = initialSession?.quizId === quiz.id && initialSession?.gameMode === gameMode
     ? initialSession
     : null;
-  const [questions] = useState(() => restoredSession?.questions ?? prepareQuizForPlay(quiz));
+  const [questions, setQuestions] = useState(() => restoredSession?.questions ?? prepareQuizForPlay(quiz));
   const [questionIndex, setQuestionIndex] = useState(restoredSession?.questionIndex ?? 0);
   const [answer, setAnswer] = useState(() => restoredSession?.answer ?? createEmptyAnswer(questions[restoredSession?.questionIndex ?? 0]));
   const [isChecked, setIsChecked] = useState(restoredSession?.isChecked ?? false);
@@ -234,6 +290,7 @@ function QuizPlayer({ quiz, theme, gameMode, gameRules = {}, initialSession, onE
   const [penalizedResultType, setPenalizedResultType] = useState(null);
   const [resultImpact, setResultImpact] = useState(false);
   const [showAnswerReview, setShowAnswerReview] = useState(false);
+  const [isPracticeRound, setIsPracticeRound] = useState(false);
   const completionSent = useRef(false);
   const previousBestScore = useRef(Number.isFinite(quiz.stats?.bestScore) ? quiz.stats.bestScore : null);
   const clockSoundRef = useRef(null);
@@ -248,12 +305,14 @@ function QuizPlayer({ quiz, theme, gameMode, gameRules = {}, initialSession, onE
   const matchingRightRefs = useRef([]);
   const submitButtonRef = useRef(null);
   const currentQuestion = questions[questionIndex];
+  const hasSupportImage = currentQuestion?.type === QUESTION_TYPES.FILL_BLANK && Boolean(currentQuestion.imageUrl);
   const score = calculateScore(correctAnswers, questions.length);
   const isNewBestScore = previousBestScore.current === null || score > previousBestScore.current;
   const isTiedBestScore = previousBestScore.current !== null && score === previousBestScore.current;
   const recordedBestScore = previousBestScore.current === null
     ? score
     : Math.max(previousBestScore.current, score);
+  const incorrectQuestionCount = questions.filter((question) => answerHistory[question.id]?.isCorrect === false).length;
   const resultBreakdown = useMemo(() => questionTypeOrder
     .map((type) => {
       const total = questions.filter((question) => question.type === type).length;
@@ -307,7 +366,7 @@ function QuizPlayer({ quiz, theme, gameMode, gameRules = {}, initialSession, onE
   }, []);
 
   useEffect(() => {
-    if (isFinished || isChecked) return undefined;
+    if (isEntryTransitionActive || isFinished || isChecked) return undefined;
     const frame = window.requestAnimationFrame(() => {
       if (currentQuestion.type === QUESTION_TYPES.MULTIPLE_CHOICE) {
         const selectedIndex = currentQuestion.options.findIndex((option) => option.id === answer);
@@ -321,7 +380,7 @@ function QuizPlayer({ quiz, theme, gameMode, gameRules = {}, initialSession, onE
       }
     });
     return () => window.cancelAnimationFrame(frame);
-  }, [currentQuestion.type, isChecked, isFinished, questionIndex]);
+  }, [currentQuestion.type, isChecked, isEntryTransitionActive, isFinished, questionIndex]);
 
   const applyAnswerResult = useCallback((result, withSound = true, reason = "answer", submittedAnswer = answer) => {
     const storedAnswer = currentQuestion.type === QUESTION_TYPES.MATCHING
@@ -336,7 +395,7 @@ function QuizPlayer({ quiz, theme, gameMode, gameRules = {}, initialSession, onE
     setFeedbackReaction(result ? "correct" : reason === "timeout" ? "timeout" : gameMode === GAME_MODES.LIVES ? "life" : "wrong");
     if (withSound) playGameSound(result ? gameSoundPaths.correct : gameSoundPaths.wrong, 0.58);
     if (result) {
-      onCorrectAnswer?.();
+      if (!isPracticeRound) onCorrectAnswer?.();
       setCorrectAnswers((value) => value + 1);
       setCorrectAnswersByType((value) => ({
         ...value,
@@ -358,7 +417,7 @@ function QuizPlayer({ quiz, theme, gameMode, gameRules = {}, initialSession, onE
         setTimeLeft((value) => Math.max(0, value - (gameRules.incorrectPenaltySeconds ?? DEFAULT_GAME_RULES.checkpoint.incorrectPenaltySeconds)));
       }
     }
-  }, [answer, currentQuestion.id, currentQuestion.type, gameMode, gameRules.correctBonusSeconds, gameRules.incorrectPenaltySeconds, lives, onCorrectAnswer]);
+  }, [answer, currentQuestion.id, currentQuestion.type, gameMode, gameRules.correctBonusSeconds, gameRules.incorrectPenaltySeconds, isPracticeRound, lives, onCorrectAnswer]);
 
   const checkAnswer = useCallback((forcedAnswer = answer, { reason = "answer" } = {}) => {
     if (isChecked || isFinished || isReviewingMatching) return;
@@ -392,7 +451,7 @@ function QuizPlayer({ quiz, theme, gameMode, gameRules = {}, initialSession, onE
   }, [answer, applyAnswerResult, currentQuestion, isChecked, isFinished, isReviewingMatching, queueSequenceStep]);
 
   useEffect(() => {
-    if (isFinished || isChecked || isReviewingMatching || ![GAME_MODES.CHECKPOINT, GAME_MODES.RACE].includes(gameMode)) return undefined;
+    if (isEntryTransitionActive || isFinished || isChecked || isReviewingMatching || ![GAME_MODES.CHECKPOINT, GAME_MODES.RACE].includes(gameMode)) return undefined;
     const timer = window.setInterval(() => {
       setTimeLeft((value) => {
         if (value <= 1) {
@@ -404,16 +463,16 @@ function QuizPlayer({ quiz, theme, gameMode, gameRules = {}, initialSession, onE
       });
     }, 1000);
     return () => window.clearInterval(timer);
-  }, [checkAnswer, currentQuestion, gameMode, isChecked, isFinished, isReviewingMatching]);
+  }, [checkAnswer, currentQuestion, gameMode, isChecked, isEntryTransitionActive, isFinished, isReviewingMatching]);
 
   useEffect(() => {
     const isTimedMode = [GAME_MODES.CHECKPOINT, GAME_MODES.RACE].includes(gameMode);
-    if (!isTimedMode || isChecked || isFinished || isReviewingMatching || timeLeft <= 0 || timeLeft > 3) return;
+    if (isEntryTransitionActive || !isTimedMode || isChecked || isFinished || isReviewingMatching || timeLeft <= 0 || timeLeft > 3) return;
     if (clockAlertQuestionRef.current === questionIndex) return;
     clockAlertQuestionRef.current = questionIndex;
     stopBufferedSound(clockSoundRef.current);
     clockSoundRef.current = playGameSound(gameSoundPaths.clock, 0.6);
-  }, [gameMode, isChecked, isFinished, isReviewingMatching, questionIndex, timeLeft]);
+  }, [gameMode, isChecked, isEntryTransitionActive, isFinished, isReviewingMatching, questionIndex, timeLeft]);
 
   useEffect(() => {
     if (!isChecked && !isFinished && !isReviewingMatching) return;
@@ -434,7 +493,7 @@ function QuizPlayer({ quiz, theme, gameMode, gameRules = {}, initialSession, onE
   }, [gameMode, isChecked, timeLeft]);
 
   useEffect(() => {
-    if (!isFinished || completionSent.current) return;
+    if (!isFinished || isPracticeRound || completionSent.current) return;
     completionSent.current = true;
     onComplete({
       correctAnswers,
@@ -443,7 +502,7 @@ function QuizPlayer({ quiz, theme, gameMode, gameRules = {}, initialSession, onE
       gameMode,
       correctAnswersByType,
     });
-  }, [correctAnswers, correctAnswersByType, gameMode, isFinished, onComplete, questions.length]);
+  }, [correctAnswers, correctAnswersByType, gameMode, isFinished, isPracticeRound, onComplete, questions.length]);
 
   useEffect(() => {
     if (!isFinished) return undefined;
@@ -557,7 +616,7 @@ function QuizPlayer({ quiz, theme, gameMode, gameRules = {}, initialSession, onE
   }, [isFinished, resultBreakdown]);
 
   useEffect(() => {
-    if (isFinished) return;
+    if (isFinished || isPracticeRound) return;
     onProgress({
       quizId: quiz.id,
       quizTitle: quiz.title,
@@ -576,7 +635,7 @@ function QuizPlayer({ quiz, theme, gameMode, gameRules = {}, initialSession, onE
       lives,
       timeLeft,
     });
-  }, [answer, answerHistory, correctAnswers, correctAnswersByType, gameMode, gameRules, isChecked, isCorrect, isFinished, lives, onProgress, questionIndex, questions, quiz.iconId, quiz.id, quiz.title, showReference, timeLeft]);
+  }, [answer, answerHistory, correctAnswers, correctAnswersByType, gameMode, gameRules, isChecked, isCorrect, isFinished, isPracticeRound, lives, onProgress, questionIndex, questions, quiz.iconId, quiz.id, quiz.title, showReference, timeLeft]);
 
   const canSubmit = currentQuestion.type === QUESTION_TYPES.MATCHING
     ? !isReviewingMatching && currentQuestion.leftItems.every((item) => answer[item.id])
@@ -668,11 +727,64 @@ function QuizPlayer({ quiz, theme, gameMode, gameRules = {}, initialSession, onE
     }
   };
 
+  const repeatIncorrectQuestions = () => {
+    const incorrectQuestions = questions.filter((question) => answerHistory[question.id]?.isCorrect === false);
+    if (!incorrectQuestions.length) return;
+
+    const practiceQuestions = prepareQuizForPlay({
+      ...quiz,
+      questions: incorrectQuestions,
+    });
+    const firstPracticeQuestion = practiceQuestions[0];
+
+    sequenceTimersRef.current.forEach((timer) => window.clearTimeout(timer));
+    sequenceTimersRef.current.clear();
+    resultSoundHandlesRef.current.forEach(stopBufferedSound);
+    resultSoundHandlesRef.current.clear();
+    stopBufferedSound(comboSoundRef.current);
+    comboSoundRef.current = null;
+    stopBufferedSound(clockSoundRef.current);
+    clockSoundRef.current = null;
+    clockAlertQuestionRef.current = null;
+    window.clearTimeout(lifePopTimerRef.current);
+
+    setIsPracticeRound(true);
+    setQuestions(practiceQuestions);
+    setQuestionIndex(0);
+    setAnswer(createEmptyAnswer(firstPracticeQuestion));
+    setAnswerHistory({});
+    setIsChecked(false);
+    setIsCorrect(false);
+    setFeedbackReaction(null);
+    setIsReviewingMatching(false);
+    setActiveMatchingItem(null);
+    setMatchingReview({});
+    setQuestionTransition("idle");
+    setAutomaticNextSeconds(null);
+    setShowReference(false);
+    setCorrectAnswers(0);
+    setCorrectAnswersByType({});
+    setLives(DEFAULT_GAME_RULES.lives.initialLives);
+    setLostLifeIndex(null);
+    setTimeLeft(gameMode === GAME_MODES.CHECKPOINT
+      ? gameRules.initialSeconds ?? DEFAULT_GAME_RULES.checkpoint.initialSeconds
+      : getRaceTimeForQuestion(firstPracticeQuestion, gameRules.secondsByQuestionType));
+    setShowAnswerReview(false);
+    setResultStage("counting");
+    setRevealedCorrectByType({});
+    setActiveResultType(null);
+    setPenalizedResultType(null);
+    setResultImpact(false);
+    setIsFinished(false);
+    window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+  };
+
   if (isFinished) {
     return (
-      <section className={`quiz-result is-${resultStage} ${resultImpact && isPerfectResult ? "is-perfect-impact" : ""}`} aria-labelledby="quiz-result-title">
+      <div className="quiz-result-layout">
+        <section className={`quiz-result is-${resultStage} ${resultImpact && isPerfectResult ? "is-perfect-impact" : ""}`} aria-labelledby="quiz-result-title">
         <div className="quiz-result__mark"><QuizIcon iconId={quiz.iconId} size={38} /></div>
-        <span className="eyebrow">{resultStage === "revealed" ? "Partida terminada" : "Preparando tu resultado"}</span>
+        <span className="eyebrow">{resultStage === "revealed" ? isPracticeRound ? "Práctica terminada" : "Partida terminada" : "Preparando tu resultado"}</span>
 
         {resultStage === "revealed" ? (
           <div className="quiz-result__reveal" aria-live="polite">
@@ -683,7 +795,7 @@ function QuizPlayer({ quiz, theme, gameMode, gameRules = {}, initialSession, onE
         ) : resultStage === "drumroll" ? (
           <div className="quiz-result__suspense">
             <span aria-hidden="true"><i /><i /><i /></span>
-            <h2 id="quiz-result-title">Tu nota está lista</h2>
+            <h2 id="quiz-result-title">{isPracticeRound ? "Tu práctica está lista" : "Tu nota está lista"}</h2>
           </div>
         ) : (
           <h2 className="quiz-result__sequence-title" id="quiz-result-title">Contemos tus aciertos</h2>
@@ -706,8 +818,12 @@ function QuizPlayer({ quiz, theme, gameMode, gameRules = {}, initialSession, onE
 
         {resultStage === "revealed" && resultImpact && (
           <div className="quiz-result__summary">
-            <p>Acertaste {correctAnswers} de {questions.length} preguntas en modo {modeLabels[gameMode]}.</p>
-            {recordsScore ? (
+            <p>{isPracticeRound
+              ? `Acertaste ${correctAnswers} de ${questions.length} preguntas en esta práctica.`
+              : `Acertaste ${correctAnswers} de ${questions.length} preguntas en modo ${modeLabels[gameMode]}.`}</p>
+            {isPracticeRound ? (
+              <div className="quiz-result__record">Práctica personal: este resultado no modifica tu nota, estadísticas ni recompensas.</div>
+            ) : recordsScore ? (
               <div className={`quiz-result__record ${isNewBestScore ? "is-new" : ""}`}>
                 {isNewBestScore
                   ? `Nueva mejor nota guardada: ${recordedBestScore}%`
@@ -729,19 +845,36 @@ function QuizPlayer({ quiz, theme, gameMode, gameRules = {}, initialSession, onE
               >
                 {showAnswerReview ? "Ocultar respuestas" : "Ver respuestas"}
               </button>
+              <button
+                type="button"
+                className="quiz-play-secondary quiz-result__practice"
+                disabled={incorrectQuestionCount === 0}
+                onClick={repeatIncorrectQuestions}
+              >
+                Repetir falladas ({incorrectQuestionCount})
+              </button>
               <button type="button" className="quiz-play-primary" onClick={onRetry}>Volver a intentar</button>
             </div>
-            {showAnswerReview && <QuizAnswerReview questions={questions} answerHistory={answerHistory} />}
           </div>
         )}
-      </section>
+        </section>
+        {showAnswerReview && (
+          <section className="quiz-result-review-panel" aria-labelledby="quiz-result-review-title">
+            <header className="quiz-result-review-panel__header">
+              <span className="eyebrow">Revisión</span>
+              <h2 id="quiz-result-review-title">Desglose de respuestas</h2>
+            </header>
+            <QuizAnswerReview questions={questions} answerHistory={answerHistory} />
+          </section>
+        )}
+      </div>
     );
   }
 
   return (
     <section className="quiz-play" aria-labelledby="quiz-play-question">
       <header className="quiz-play__topbar">
-        <button type="button" onClick={onExit}>← Salir</button>
+        <button type="button" onClick={onContinueLater}>← {continueLaterLabel}</button>
         <div>
           <strong>{quiz.title}</strong>
           <span>{modeLabels[gameMode]}</span>
@@ -774,11 +907,18 @@ function QuizPlayer({ quiz, theme, gameMode, gameRules = {}, initialSession, onE
         <strong>{questionIndex + 1} / {questions.length}</strong>
       </div>
 
-      <article className={`quiz-question ${questionTransition === "out" ? "is-swiping-out" : ""} ${questionTransition === "in" ? "is-swiping-in" : ""} ${isChecked && questionTransition === "idle" ? isCorrect ? "is-answer-correct" : "is-answer-wrong" : ""}`}>
+      <article className={`quiz-question ${hasSupportImage ? "has-support-image" : ""} ${questionTransition === "out" ? "is-swiping-out" : ""} ${questionTransition === "in" ? "is-swiping-in" : ""} ${isChecked && questionTransition === "idle" ? isCorrect ? "is-answer-correct" : "is-answer-wrong" : ""}`}>
         <div className="quiz-question__meta">
           <span>Pregunta {questionIndex + 1} de {questions.length}</span>
           <span>{questionTypeLabels[currentQuestion.type]}</span>
         </div>
+        {hasSupportImage && (
+          <QuestionImage
+            className="quiz-question__image"
+            src={currentQuestion.imageUrl}
+            loading="eager"
+          />
+        )}
         <h2 id="quiz-play-question">{currentQuestion.prompt}</h2>
 
         {currentQuestion.type === QUESTION_TYPES.MULTIPLE_CHOICE && (

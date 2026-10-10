@@ -1,15 +1,25 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
+import {
+  ArrowLeftRight,
+  ListChecks,
+  MessageSquareText,
+  TextCursorInput,
+  ToggleLeft,
+  X,
+} from "lucide-react";
 import { QUESTION_TYPES } from "../domain/quizConstants.js";
 import { cloneQuestion, createId, createQuestion, prepareQuizForReady } from "../domain/quizFactory.js";
+import { isSupportedQuestionImageUrl } from "../domain/questionImage.js";
 import { validateQuiz } from "../domain/quizValidation.js";
+import QuestionImage from "./QuestionImage.jsx";
 import SubjectSelect from "./SubjectSelect.jsx";
 
 const questionTypeOptions = [
-  { id: QUESTION_TYPES.MULTIPLE_CHOICE, label: "Selección múltiple", hint: "Una opción correcta" },
-  { id: QUESTION_TYPES.TRUE_FALSE, label: "Verdadero o falso", hint: "Elige el valor de la afirmación" },
-  { id: QUESTION_TYPES.FILL_BLANK, label: "Completar", hint: "Una o más respuestas aceptadas" },
-  { id: QUESTION_TYPES.MATCHING, label: "Asociar", hint: "Relaciona parejas" },
-  { id: QUESTION_TYPES.SHORT_ANSWER, label: "Respuesta breve", hint: "Compara una respuesta redactada" },
+  { id: QUESTION_TYPES.MULTIPLE_CHOICE, label: "Selección múltiple", hint: "Una opción correcta", icon: ListChecks },
+  { id: QUESTION_TYPES.TRUE_FALSE, label: "Verdadero o falso", hint: "Elige el valor de la afirmación", icon: ToggleLeft },
+  { id: QUESTION_TYPES.FILL_BLANK, label: "Completar", hint: "Una o más respuestas aceptadas", icon: TextCursorInput },
+  { id: QUESTION_TYPES.MATCHING, label: "Asociar", hint: "Relaciona parejas", icon: ArrowLeftRight },
+  { id: QUESTION_TYPES.SHORT_ANSWER, label: "Respuesta breve", hint: "Compara una respuesta redactada", icon: MessageSquareText },
 ];
 
 const QuestionFields = ({ question, onChange }) => {
@@ -85,35 +95,78 @@ const QuestionFields = ({ question, onChange }) => {
   }
 
   if (question.type === QUESTION_TYPES.FILL_BLANK) {
+    const imageUrl = question.imageUrl ?? "";
+    const hasImageUrl = Boolean(imageUrl.trim());
+    const hasValidImageUrl = isSupportedQuestionImageUrl(imageUrl);
+
     return (
-      <div className="question-editor__answers">
-        <span className="question-editor__label">Respuestas aceptadas</span>
-        {question.acceptedAnswers.map((answer, index) => (
-          <div className="answer-row" key={`${question.id}-answer-${index}`}>
-            <input
-              value={answer}
-              onChange={(event) => onChange({
-                acceptedAnswers: question.acceptedAnswers.map((item, answerIndex) => (
-                  answerIndex === index ? event.target.value : item
-                )),
-              })}
-              placeholder={`Respuesta ${index + 1}`}
-            />
-            <button
-              type="button"
-              className="editor-icon-button"
-              disabled={question.acceptedAnswers.length <= 1}
-              onClick={() => onChange({
-                acceptedAnswers: question.acceptedAnswers.filter((_, answerIndex) => answerIndex !== index),
-              })}
-              aria-label={`Eliminar respuesta ${index + 1}`}
-            >×</button>
+      <div className={`question-editor__answers question-fill-editor ${hasValidImageUrl ? "has-image" : ""}`}>
+        <div className="question-fill-editor__fields">
+          <div className="question-image-editor">
+            <label className="editor-field">
+              <span>Imagen de apoyo <small>opcional · URL pública</small></span>
+              <div className="question-image-editor__url-row">
+                <input
+                  type="url"
+                  inputMode="url"
+                  spellCheck="false"
+                  value={imageUrl}
+                  onChange={(event) => onChange({ imageUrl: event.target.value })}
+                  placeholder="https://ejemplo.com/imagen.jpg"
+                />
+                {hasImageUrl && (
+                  <button
+                    className="question-image-editor__clear"
+                    type="button"
+                    onClick={() => onChange({ imageUrl: "" })}
+                    aria-label="Quitar imagen"
+                    title="Quitar imagen"
+                  >
+                    <X aria-hidden="true" size={18} strokeWidth={2.5} />
+                  </button>
+                )}
+              </div>
+            </label>
+            {hasImageUrl && !hasValidImageUrl && (
+              <p className="question-image-editor__error" role="alert">
+                Usa un enlace completo que comience con http:// o https://.
+              </p>
+            )}
           </div>
-        ))}
-        <div className="question-editor__inline-actions">
-          <button className="editor-add-row" type="button" onClick={() => onChange({ acceptedAnswers: [...question.acceptedAnswers, ""] })}>+ Agregar respuesta</button>
-          <label className="editor-check"><input type="checkbox" checked={question.caseSensitive} onChange={(event) => onChange({ caseSensitive: event.target.checked })} /> Distinguir mayúsculas</label>
+          <span className="question-editor__label">Respuestas aceptadas</span>
+          {question.acceptedAnswers.map((answer, index) => (
+            <div className="answer-row" key={`${question.id}-answer-${index}`}>
+              <input
+                value={answer}
+                onChange={(event) => onChange({
+                  acceptedAnswers: question.acceptedAnswers.map((item, answerIndex) => (
+                    answerIndex === index ? event.target.value : item
+                  )),
+                })}
+                placeholder={`Respuesta ${index + 1}`}
+              />
+              <button
+                type="button"
+                className="editor-icon-button"
+                disabled={question.acceptedAnswers.length <= 1}
+                onClick={() => onChange({
+                  acceptedAnswers: question.acceptedAnswers.filter((_, answerIndex) => answerIndex !== index),
+                })}
+                aria-label={`Eliminar respuesta ${index + 1}`}
+              >×</button>
+            </div>
+          ))}
+          <div className="question-editor__inline-actions">
+            <button className="editor-add-row" type="button" onClick={() => onChange({ acceptedAnswers: [...question.acceptedAnswers, ""] })}>+ Agregar respuesta</button>
+            <label className="editor-check"><input type="checkbox" checked={question.caseSensitive} onChange={(event) => onChange({ caseSensitive: event.target.checked })} /> Distinguir mayúsculas</label>
+          </div>
         </div>
+        {hasValidImageUrl && (
+          <QuestionImage
+            className="question-image-editor__preview"
+            src={imageUrl}
+          />
+        )}
       </div>
     );
   }
@@ -166,11 +219,38 @@ const QuestionFields = ({ question, onChange }) => {
 function QuizEditor({ quiz, onBack, onSave, onValidationError }) {
   const [draft, setDraft] = useState(quiz);
   const [isSaved, setIsSaved] = useState(true);
+  const [activeQuestionType, setActiveQuestionType] = useState(
+    () => quiz.questions[0]?.type ?? QUESTION_TYPES.MULTIPLE_CHOICE,
+  );
+  const pendingScrollPositionRef = useRef(null);
 
   useEffect(() => {
     setDraft(quiz);
     setIsSaved(true);
   }, [quiz]);
+
+  useEffect(() => {
+    setActiveQuestionType(
+      quiz.questions[0]?.type ?? QUESTION_TYPES.MULTIPLE_CHOICE,
+    );
+  }, [quiz.id]);
+
+  useLayoutEffect(() => {
+    const scrollPosition = pendingScrollPositionRef.current;
+    if (!scrollPosition) return undefined;
+
+    const restoreScroll = () => {
+      window.scrollTo(scrollPosition.left, scrollPosition.top);
+    };
+
+    restoreScroll();
+    const frameId = window.requestAnimationFrame(() => {
+      restoreScroll();
+      pendingScrollPositionRef.current = null;
+    });
+
+    return () => window.cancelAnimationFrame(frameId);
+  }, [activeQuestionType]);
 
   useEffect(() => {
     if (isSaved || !draft.title.trim()) return undefined;
@@ -189,6 +269,20 @@ function QuizEditor({ quiz, onBack, onSave, onValidationError }) {
   const questionCountLabel = useMemo(() => (
     `${draft.questions.length} ${draft.questions.length === 1 ? "pregunta" : "preguntas"}`
   ), [draft.questions.length]);
+  const questionTypeCounts = useMemo(() => Object.fromEntries(
+    questionTypeOptions.map((type) => [
+      type.id,
+      draft.questions.filter((question) => question.type === type.id).length,
+    ]),
+  ), [draft.questions]);
+  const activeTypeQuestions = useMemo(
+    () => draft.questions.filter((question) => question.type === activeQuestionType),
+    [activeQuestionType, draft.questions],
+  );
+  const activeQuestionTypeOption = questionTypeOptions.find(
+    (type) => type.id === activeQuestionType,
+  ) ?? questionTypeOptions[0];
+  const ActiveQuestionTypeIcon = activeQuestionTypeOption.icon;
 
   const updateDraft = (changes) => {
     setDraft((current) => ({
@@ -207,16 +301,50 @@ function QuizEditor({ quiz, onBack, onSave, onValidationError }) {
     });
   };
 
+  const selectQuestionType = (type) => {
+    if (type === activeQuestionType) return;
+    pendingScrollPositionRef.current = {
+      left: window.scrollX,
+      top: window.scrollY,
+    };
+    setActiveQuestionType(type);
+  };
+
   const addQuestion = (type) => {
+    selectQuestionType(type);
     updateDraft({ questions: [createQuestion(type), ...draft.questions] });
   };
 
-  const moveQuestion = (index, direction) => {
-    const targetIndex = index + direction;
-    if (targetIndex < 0 || targetIndex >= draft.questions.length) return;
+  const moveQuestion = (questionId, direction) => {
+    const currentIndex = draft.questions.findIndex(
+      (question) => question.id === questionId,
+    );
+    if (currentIndex < 0) return;
+    const questionType = draft.questions[currentIndex].type;
+    const matchingIndices = draft.questions.reduce((indices, question, index) => (
+      question.type === questionType ? [...indices, index] : indices
+    ), []);
+    const currentTypeIndex = matchingIndices.indexOf(currentIndex);
+    const targetIndex = matchingIndices[currentTypeIndex + direction];
+    if (targetIndex === undefined) return;
     const questions = [...draft.questions];
-    [questions[index], questions[targetIndex]] = [questions[targetIndex], questions[index]];
+    [questions[currentIndex], questions[targetIndex]] = [questions[targetIndex], questions[currentIndex]];
     updateDraft({ questions });
+  };
+
+  const duplicateQuestion = (questionId) => {
+    const questionIndex = draft.questions.findIndex(
+      (question) => question.id === questionId,
+    );
+    if (questionIndex < 0) return;
+    const question = draft.questions[questionIndex];
+    updateDraft({
+      questions: [
+        ...draft.questions.slice(0, questionIndex + 1),
+        cloneQuestion(question),
+        ...draft.questions.slice(questionIndex + 1),
+      ],
+    });
   };
 
   const saveDraft = () => {
@@ -275,32 +403,73 @@ function QuizEditor({ quiz, onBack, onSave, onValidationError }) {
           <span className="eyebrow">Nueva pregunta</span>
           <strong>Elige el formato</strong>
         </div>
-        {questionTypeOptions.map((type) => (
-          <button type="button" key={type.id} onClick={() => addQuestion(type.id)}>
-            <strong>{type.label}</strong>
-            <small>{type.hint}</small>
-          </button>
-        ))}
+        {questionTypeOptions.map((type) => {
+          const TypeIcon = type.icon;
+          return (
+            <button type="button" key={type.id} onClick={() => addQuestion(type.id)}>
+              <span className="question-type-picker__icon" aria-hidden="true">
+                <TypeIcon size={20} strokeWidth={1.9} />
+              </span>
+              <span className="question-type-picker__copy">
+                <strong>{type.label}</strong>
+                <small>{type.hint}</small>
+              </span>
+            </button>
+          );
+        })}
       </div>
 
-      {!draft.questions.length ? (
+      <div className="question-type-tabs" role="tablist" aria-label="Preguntas por tipo">
+        {questionTypeOptions.map((type) => {
+          const TypeIcon = type.icon;
+          const isActive = activeQuestionType === type.id;
+          return (
+            <button
+              id={`question-type-tab-${type.id}`}
+              type="button"
+              role="tab"
+              aria-selected={isActive}
+              aria-controls="question-type-panel"
+              className={isActive ? "is-active" : ""}
+              key={type.id}
+              onClick={() => selectQuestionType(type.id)}
+            >
+              <TypeIcon size={18} strokeWidth={1.9} aria-hidden="true" />
+              <span>{type.label}</span>
+              <strong>{questionTypeCounts[type.id]}</strong>
+            </button>
+          );
+        })}
+      </div>
+
+      <div
+        id="question-type-panel"
+        className="question-type-panel"
+        role="tabpanel"
+        aria-labelledby={`question-type-tab-${activeQuestionType}`}
+      >
+      {!activeTypeQuestions.length ? (
         <div className="quiz-editor__empty">
-          <span>?</span>
-          <strong>Tu quiz todavía no tiene preguntas</strong>
-          <p>Elige uno de los formatos de arriba para comenzar.</p>
+          <span><ActiveQuestionTypeIcon size={23} aria-hidden="true" /></span>
+          <strong>
+            {draft.questions.length
+              ? `Todavía no hay preguntas de ${activeQuestionTypeOption.label.toLowerCase()}`
+              : "Tu quiz todavía no tiene preguntas"}
+          </strong>
+          <p>Agrega una de este formato usando el selector de arriba.</p>
         </div>
       ) : (
         <div className="question-editor-list">
-          {draft.questions.map((question, index) => {
+          {activeTypeQuestions.map((question, index) => {
             const type = questionTypeOptions.find((item) => item.id === question.type);
             return (
               <article className="question-editor" key={question.id}>
                 <div className="question-editor__top">
                   <div><span>Pregunta {index + 1}</span><strong>{type?.label}</strong></div>
                   <div className="question-editor__controls">
-                    <button type="button" disabled={index === 0} onClick={() => moveQuestion(index, -1)} aria-label="Subir pregunta">↑</button>
-                    <button type="button" disabled={index === draft.questions.length - 1} onClick={() => moveQuestion(index, 1)} aria-label="Bajar pregunta">↓</button>
-                    <button type="button" onClick={() => updateDraft({ questions: [...draft.questions.slice(0, index + 1), cloneQuestion(question), ...draft.questions.slice(index + 1)] })}>Duplicar</button>
+                    <button type="button" disabled={index === 0} onClick={() => moveQuestion(question.id, -1)} aria-label="Subir pregunta dentro de este tipo">↑</button>
+                    <button type="button" disabled={index === activeTypeQuestions.length - 1} onClick={() => moveQuestion(question.id, 1)} aria-label="Bajar pregunta dentro de este tipo">↓</button>
+                    <button type="button" onClick={() => duplicateQuestion(question.id)}>Duplicar</button>
                     <button type="button" className="is-danger" onClick={() => updateDraft({ questions: draft.questions.filter((item) => item.id !== question.id) })}>Eliminar</button>
                   </div>
                 </div>
@@ -321,6 +490,7 @@ function QuizEditor({ quiz, onBack, onSave, onValidationError }) {
           })}
         </div>
       )}
+      </div>
     </section>
   );
 }

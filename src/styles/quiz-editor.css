@@ -46,10 +46,20 @@
 .question-type-picker { display: grid; padding: 16px; grid-template-columns: 170px repeat(5, minmax(0, 1fr)); gap: 10px; border: 2px solid var(--line); background: var(--surface); box-shadow: 4px 4px 0 var(--card-shadow); }
 .question-type-picker > div { display: grid; align-content: center; gap: 5px; padding: 0 8px; }
 .question-type-picker > div > strong { font-size: .92rem; }
-.question-type-picker > button { display: grid; min-height: 74px; padding: 12px; align-content: center; gap: 5px; border: 1px solid var(--line); border-radius: 7px; color: var(--ink); background: var(--page-bg); text-align: left; transition: transform .18s ease, background .18s ease; }
+.question-type-picker > button { display: grid; min-height: 78px; padding: 11px; grid-template-columns: 36px minmax(0, 1fr); align-content: center; align-items: center; gap: 10px; border: 1px solid var(--line); border-radius: 7px; color: var(--ink); background: var(--page-bg); text-align: left; transition: transform .18s ease, background .18s ease; }
 .question-type-picker > button:hover { background: var(--purple-soft); transform: translateY(-2px); }
+.question-type-picker__icon { display: grid; width: 36px; height: 36px; place-items: center; color: var(--purple-dark); background: var(--purple-soft); clip-path: polygon(7% 0, 100% 7%, 93% 100%, 0 93%); transition: color .18s ease, background .18s ease, transform .18s ease; }
+.question-type-picker > button:hover .question-type-picker__icon { color: var(--on-primary); background: var(--purple); transform: rotate(-3deg); }
+.question-type-picker__copy { display: grid; min-width: 0; gap: 4px; }
 .question-type-picker > button strong { font-size: .75rem; }
 .question-type-picker > button small { color: var(--muted); font-size: .61rem; line-height: 1.35; }
+.question-type-tabs { display: flex; margin-bottom: -22px; padding: 4px 4px 0; justify-content: safe center; gap: 6px; overflow-x: auto; scrollbar-width: thin; }
+.question-type-tabs > button { position: relative; display: grid; min-width: max-content; min-height: 47px; padding: 0 12px; grid-template-columns: auto auto auto; align-items: center; gap: 8px; border: 1px solid var(--line); border-bottom: 0; border-radius: 9px 9px 0 0; color: var(--muted); background: color-mix(in srgb, var(--surface) 72%, var(--page-bg)); font-size: .68rem; font-weight: 750; transition: color .18s ease, background .18s ease, transform .18s ease; }
+.question-type-tabs > button:hover { color: var(--ink); background: var(--purple-soft); transform: translateY(-2px); }
+.question-type-tabs > button.is-active { z-index: 2; color: var(--purple-dark); background: var(--surface); box-shadow: inset 0 3px 0 var(--purple); }
+.question-type-tabs > button strong { display: grid; min-width: 22px; height: 22px; padding: 0 5px; place-items: center; border-radius: 999px; color: var(--tip-muted); background: var(--tip-from); font-size: .58rem; }
+.question-type-tabs > button.is-active strong { color: var(--on-primary); background: var(--purple); }
+.question-type-panel { display: grid; padding-top: 20px; border-top: 1px solid var(--line); overflow-anchor: none; }
 .quiz-editor__empty { display: grid; min-height: 230px; padding: 30px; place-content: center; justify-items: center; border: 2px dashed var(--empty-line); color: var(--ink); background: var(--empty-bg); text-align: center; }
 .quiz-editor__empty > span { display: grid; width: 50px; height: 50px; margin-bottom: 13px; place-items: center; color: var(--on-primary); background: var(--purple); font-size: 1.5rem; font-weight: 850; transform: rotate(-4deg); }
 .quiz-editor__empty p { margin: 7px 0 0; color: var(--muted); font-size: .75rem; }
@@ -68,6 +78,19 @@
 .question-editor__controls .is-danger { color: #b6453e; }
 .question-editor__answers { display: grid; gap: 10px; }
 .question-editor__label { color: var(--ink); font-size: .74rem; font-weight: 750; }
+.question-fill-editor.has-image { grid-template-columns: minmax(300px, 1fr) minmax(240px, .72fr); align-items: start; gap: clamp(18px, 3vw, 34px); }
+.question-fill-editor__fields { display: grid; min-width: 0; gap: 10px; }
+.question-image-editor { display: grid; margin-bottom: 5px; gap: 9px; }
+.question-image-editor__url-row { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: stretch; gap: 8px; }
+.question-image-editor__clear { display: grid; width: 43px; padding: 0; place-items: center; border: 1px solid var(--line); border-radius: 7px; color: var(--muted); background: var(--page-bg); cursor: pointer; transition: border-color .2s ease, color .2s ease, background-color .2s ease; }
+.question-image-editor__clear:hover { border-color: #c6554d; color: #c6554d; background: color-mix(in srgb, #c6554d 8%, var(--page-bg)); }
+.question-image-editor__clear:focus-visible { outline: none; border-color: var(--purple); box-shadow: 0 0 0 3px color-mix(in srgb, var(--purple) 24%, transparent); }
+.question-image-editor__error { margin: 0; color: #c6554d; font-size: .67rem; font-weight: 700; }
+.question-image-editor__preview { width: fit-content; max-width: 100%; height: auto; max-height: 260px; justify-self: center; }
+.question-image { display: grid; margin: 0; overflow: hidden; place-items: center; border: 1px solid var(--line); background: color-mix(in srgb, var(--page-bg) 88%, var(--surface)); }
+.question-image img { display: block; width: 100%; height: 100%; object-fit: contain; }
+.question-image-editor__preview img { width: auto; height: auto; max-width: 100%; max-height: 260px; object-fit: contain; }
+.question-image.is-error { min-height: 96px; padding: 18px; border-style: dashed; color: var(--muted); font-size: .68rem; font-weight: 700; text-align: center; }
 .true-false-editor { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 .true-false-editor button { display: flex; min-height: 52px; padding: 10px 13px; align-items: center; gap: 10px; border: 2px solid var(--line); color: var(--muted); background: var(--page-bg); font-size: .74rem; font-weight: 800; text-align: left; transition: color .16s ease, border-color .16s ease, background .16s ease, transform .16s ease; }
 .true-false-editor button:hover { color: var(--ink); transform: translateY(-1px); }

@@ -75,6 +75,7 @@ const comparableQuestion = (question) => {
   if (question.acceptedAnswers) {
     comparable.acceptedAnswers = [...question.acceptedAnswers];
     comparable.caseSensitive = question.caseSensitive;
+    comparable.imageUrl = question.imageUrl ?? "";
   }
   if (question.referenceAnswer !== undefined) {
     comparable.referenceAnswer = question.referenceAnswer;

@@ -41,6 +41,7 @@ test("every supported question type receives its required initial structure", ()
   assert.equal(trueFalse.correctAnswer, true);
   assert.equal(matching.pairs.length, 2);
   assert.deepEqual(fillBlank.acceptedAnswers, [""]);
+  assert.equal(fillBlank.imageUrl, "");
   assert.equal(shortAnswer.similarityThreshold, 0.7);
   assert.equal("allowSelfAssessment" in shortAnswer, false);
 });
@@ -92,6 +93,22 @@ test("validation reports malformed imported answers without throwing", () => {
 
   assert.doesNotThrow(() => validateQuiz(quiz, { requirePlayable: true }));
   assert.equal(validateQuiz(quiz, { requirePlayable: true }).valid, false);
+});
+
+test("fill blank questions accept optional public image URLs and reject unsafe protocols", () => {
+  const quiz = createQuiz({ title: "Anatomía visual" });
+  const question = createQuestion(QUESTION_TYPES.FILL_BLANK);
+  question.prompt = "El órgano señalado es _____.";
+  question.acceptedAnswers = ["corazón"];
+  question.imageUrl = "https://example.com/anatomia/corazon.jpg";
+  quiz.questions.push(question);
+
+  assert.equal(validateQuiz(quiz, { requirePlayable: true }).valid, true);
+
+  question.imageUrl = "javascript:alert('no')";
+  const invalidResult = validateQuiz(quiz, { requirePlayable: true });
+  assert.equal(invalidResult.valid, false);
+  assert.equal(invalidResult.errors.some((error) => error.code === "invalid_image_url"), true);
 });
 
 test("checkpoint mode accepts quick-answer question types", () => {
@@ -214,11 +231,13 @@ test("exporting and importing preserves every question type and the quiz icon", 
     createQuestion(QUESTION_TYPES.MATCHING),
     createQuestion(QUESTION_TYPES.SHORT_ANSWER),
   );
+  quiz.questions[2].imageUrl = "https://example.com/imagen-medica.jpg";
 
   const imported = parseQuizImport(serializeQuiz(quiz));
 
   assert.equal(imported.iconId, QUIZ_ICONS.MEDICINE);
   assert.equal(imported.questions[1].correctAnswer, true);
+  assert.equal(imported.questions[2].imageUrl, "https://example.com/imagen-medica.jpg");
   assert.deepEqual(imported.questions.map((question) => question.type), [
     QUESTION_TYPES.MULTIPLE_CHOICE,
     QUESTION_TYPES.TRUE_FALSE,
@@ -408,6 +427,10 @@ test("prompt generator includes the requested distribution and MyQwiz schema", (
   assert.match(prompt, /"iconId": "science"/);
   assert.match(prompt, /Universidad/);
   assert.match(prompt, /planetas y órbitas/);
+  assert.match(prompt, /volumen de información similares/);
+  assert.match(prompt, /respuesta correcta no debe destacar/);
+  assert.match(prompt, /"zero-day"/);
+  assert.match(prompt, /inequívocamente incorrectas/);
   assert.doesNotMatch(prompt, /Estructura para Asociar/);
 });
 

@@ -119,6 +119,8 @@ REQUISITOS DE CONTENIDO
 - Evita preguntas repetidas.
 - Incluye una explicación útil en cada pregunta.
 - En selección múltiple incluye al menos 2 opciones y exactamente una correcta.
+- En cada pregunta de selección múltiple, redacta todas las opciones con una extensión, nivel de detalle, estructura gramatical, especificidad y volumen de información similares. La respuesta correcta no debe destacar por ser más larga, precisa, técnica o desarrollada que los distractores. Si la opción correcta necesita una explicación amplia, desarrolla los distractores con una profundidad comparable; si se trata de conceptos simples, mantén todas las opciones breves sin añadir texto de relleno.
+- Crea distractores plausibles que exijan reconocer el concepto correcto y no puedan descartarse por su forma. Cuando la respuesta sea un término corto, puedes usar confusiones cercanas mediante inversión, orden, prefijos, sufijos o variantes parecidas; por ejemplo, frente a "zero-day", opciones como "day-zero" o "cero-day". Deben ser inequívocamente incorrectas en el contexto: no uses sinónimos, traducciones válidas, respuestas parcialmente correctas ni términos ambiguos.
 - En verdadero o falso usa un booleano real en "correctAnswer": true o false, nunca texto.
 - En asociar incluye al menos 2 parejas.
 - Usa identificadores de texto únicos para el quiz, cada pregunta, opción y pareja.

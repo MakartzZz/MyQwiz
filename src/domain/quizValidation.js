@@ -1,4 +1,5 @@
 import { QUESTION_TYPES, QUIZ_ICONS, QUIZ_SCHEMA_VERSION } from "./quizConstants.js";
+import { isSupportedQuestionImageUrl } from "./questionImage.js";
 
 const supportedQuestionTypes = new Set(Object.values(QUESTION_TYPES));
 const supportedQuizIcons = new Set(Object.values(QUIZ_ICONS));
@@ -55,6 +56,12 @@ const validateQuestion = (question, index, errors, requirePlayable) => {
   }
 
   if (question.type === QUESTION_TYPES.FILL_BLANK) {
+    if (question.imageUrl !== undefined && typeof question.imageUrl !== "string") {
+      addError(errors, `${path}.imageUrl`, "El enlace de la imagen no es válido.", "invalid_image_url");
+    } else if (question.imageUrl?.trim() && !isSupportedQuestionImageUrl(question.imageUrl)) {
+      addError(errors, `${path}.imageUrl`, "Usa un enlace completo que comience con http:// o https://.", "invalid_image_url");
+    }
+
     if (!Array.isArray(question.acceptedAnswers) || question.acceptedAnswers.some((answer) => typeof answer !== "string")) {
       addError(errors, `${path}.acceptedAnswers`, "La estructura de las respuestas aceptadas no es válida.", "invalid_accepted_answers");
     } else if (requirePlayable && !question.acceptedAnswers.some((answer) => answer.trim())) {
