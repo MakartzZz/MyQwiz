@@ -10,8 +10,14 @@
   .game-setup__launch { grid-column: 1 / -1; padding: 18px 0 0; grid-template-columns: 1fr auto; align-items: center; border-top: 1px solid var(--line); border-left: 0; }
   .game-mode-config, .game-mode-config--race { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .game-mode-config__heading { grid-column: 1 / -1; }
-  .theme-gallery { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .theme-gallery--seasonal { grid-template-columns: repeat(auto-fit, minmax(230px, 288px)); }
+  .theme-gallery,
+  .theme-gallery--seasonal {
+    width: 100%;
+    max-width: 594px;
+    margin-inline: auto;
+    grid-template-columns: repeat(2, minmax(0, 288px));
+    justify-content: center;
+  }
   .music-album-grid { grid-template-columns: repeat(3, minmax(0, 205px)); }
   .settings-options { grid-template-rows: 245px 104px; }
   .question-type-picker { grid-template-columns: repeat(2, minmax(0, 1fr)); }
@@ -152,9 +158,41 @@
   .quiz-progress-notice__preference, .quiz-progress-notice__confirm { grid-column: 1; }
   .quiz-progress-notice__confirm { width: 100%; }
   .theme-studio { padding: 14px 0 36px; }
-  .theme-gallery { grid-template-columns: 1fr; }
-  .theme-gallery--seasonal { grid-template-columns: minmax(0, 320px); }
-  .seasonal-theme-heading { margin-top: 42px; }
+  .theme-mobile-tabs {
+    position: relative;
+    z-index: 3;
+    display: grid;
+    width: min(100%, 320px);
+    min-height: 45px;
+    margin: 0 auto 25px;
+    padding: 4px;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 4px;
+    background: color-mix(in srgb, var(--surface) 88%, transparent);
+    box-shadow: 4px 4px 0 var(--card-shadow);
+    clip-path: polygon(2% 0, 100% 5%, 98% 100%, 0 95%);
+  }
+  .theme-mobile-tabs button {
+    min-width: 0;
+    padding: 0 10px;
+    border: 0;
+    color: var(--muted);
+    background: transparent;
+    font-size: .7rem;
+    font-weight: 850;
+  }
+  .theme-mobile-tabs button.is-active {
+    color: var(--on-primary);
+    background: var(--purple);
+    clip-path: polygon(4% 0, 100% 8%, 96% 100%, 0 92%);
+  }
+  .theme-mobile-panel.is-mobile-hidden { display: none; }
+  .theme-gallery,
+  .theme-gallery--seasonal {
+    max-width: 320px;
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .seasonal-theme-heading { margin-top: 0; }
   .music-album-grid { width: 100%; padding: 3px 4px 24px; grid-auto-columns: unset; grid-auto-flow: row; grid-template-columns: repeat(2, minmax(0, 1fr)); justify-content: center; overflow-x: hidden; overflow-y: visible; scroll-snap-type: none; }
   .music-album-grid::-webkit-scrollbar { width: 0; height: 0; }
   .music-album-grid { scrollbar-width: none; }

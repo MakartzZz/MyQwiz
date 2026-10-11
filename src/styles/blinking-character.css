@@ -120,6 +120,23 @@
   mask-image: radial-gradient(ellipse 36% 18% at 45% 39%, #000 88%, transparent 100%);
 }
 
+/* En las tarjetas angostas de tablet, un borde suave deja asomar parte del
+   ojo abierto. Cada personaje permanente cubre por completo su propia zona. */
+.blinking-character[data-character-theme="sky"] .blinking-character__frame--blink {
+  -webkit-mask-image: radial-gradient(ellipse 32% 16% at 38% 39%, #000 92%, transparent 100%);
+  mask-image: radial-gradient(ellipse 32% 16% at 38% 39%, #000 92%, transparent 100%);
+}
+
+.blinking-character[data-character-theme="midnight"] .blinking-character__frame--blink {
+  -webkit-mask-image: radial-gradient(ellipse 19% 14% at 36% 39%, #000 92%, transparent 100%);
+  mask-image: radial-gradient(ellipse 19% 14% at 36% 39%, #000 92%, transparent 100%);
+}
+
+.blinking-character[data-character-theme="pink"] .blinking-character__frame--blink {
+  -webkit-mask-image: radial-gradient(ellipse 30% 16% at 40% 41%, #000 92%, transparent 100%);
+  mask-image: radial-gradient(ellipse 30% 16% at 40% 41%, #000 92%, transparent 100%);
+}
+
 /* B.O.O. tiene ojos grandes y separados. El recorte amplio reemplaza por
    completo sus contornos abiertos durante el parpadeo. */
 .blinking-character[data-character-theme="halloween"] .blinking-character__frame--blink {

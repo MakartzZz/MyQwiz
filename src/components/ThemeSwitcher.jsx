@@ -122,6 +122,9 @@ function ThemeCard({ theme, index, activeTheme, currentDate, spinningTheme, onSe
 
 function ThemeSwitcher({ activeTheme, currentDate = new Date(), onChange }) {
   const [spinningTheme, setSpinningTheme] = useState(null);
+  const [mobileThemeTab, setMobileThemeTab] = useState(() => (
+    seasonalThemes.some((theme) => theme.id === activeTheme) ? "seasonal" : "normal"
+  ));
   const seasonalSummary = getSeasonalThemeSummary(seasonalThemes, currentDate);
 
   const selectTheme = (themeId, event) => {
@@ -154,11 +157,37 @@ function ThemeSwitcher({ activeTheme, currentDate = new Date(), onChange }) {
           <p>Cada personaje transforma los colores y el ambiente de MyQwiz.</p>
         </div>
 
-        <div className="theme-gallery">
+        <div className="theme-mobile-tabs" role="tablist" aria-label="Tipos de temas">
+          <button
+            className={mobileThemeTab === "normal" ? "is-active" : ""}
+            type="button"
+            role="tab"
+            aria-controls="normal-theme-gallery"
+            aria-selected={mobileThemeTab === "normal"}
+            onClick={() => setMobileThemeTab("normal")}
+          >
+            Normales
+          </button>
+          <button
+            className={mobileThemeTab === "seasonal" ? "is-active" : ""}
+            type="button"
+            role="tab"
+            aria-controls="seasonal-theme-gallery"
+            aria-selected={mobileThemeTab === "seasonal"}
+            onClick={() => setMobileThemeTab("seasonal")}
+          >
+            De temporada
+          </button>
+        </div>
+
+        <div
+          className={`theme-gallery theme-mobile-panel ${mobileThemeTab !== "normal" ? "is-mobile-hidden" : ""}`}
+          id="normal-theme-gallery"
+        >
           {permanentThemes.map(renderThemeCard)}
         </div>
 
-        <div className="seasonal-theme-heading">
+        <div className={`seasonal-theme-heading theme-mobile-panel ${mobileThemeTab !== "seasonal" ? "is-mobile-hidden" : ""}`}>
           <span className="eyebrow">Tema de temporada</span>
           {seasonalSummary?.state === "active" ? (
             <>
@@ -179,7 +208,10 @@ function ThemeSwitcher({ activeTheme, currentDate = new Date(), onChange }) {
           )}
         </div>
 
-        <div className="theme-gallery theme-gallery--seasonal">
+        <div
+          className={`theme-gallery theme-gallery--seasonal theme-mobile-panel ${mobileThemeTab !== "seasonal" ? "is-mobile-hidden" : ""}`}
+          id="seasonal-theme-gallery"
+        >
           {seasonalThemes.map((theme, index) => renderThemeCard(theme, permanentThemes.length + index))}
         </div>
       </section>
