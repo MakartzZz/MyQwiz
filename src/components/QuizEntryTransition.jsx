@@ -14,7 +14,7 @@ export default function QuizEntryTransition({ onCovered, onComplete }) {
   useEffect(() => {
     const reduceMotion = readUserPreferences().reduceMotion;
     let meowHandle = null;
-    const coveredTimer = window.setTimeout(() => onCoveredRef.current?.(), reduceMotion ? 90 : 760);
+    const coveredTimer = window.setTimeout(() => onCoveredRef.current?.(), reduceMotion ? 90 : 920);
     const meowTimer = window.setTimeout(() => {
       if (!canPlayCatRewardSounds()) return;
       meowHandle = playBufferedSound("/sounds/cat-reward.mp3", {

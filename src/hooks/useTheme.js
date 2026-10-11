@@ -32,9 +32,19 @@ export function useTheme() {
   const [theme, setTheme] = useState(readStoredTheme);
   const [calendarDate, setCalendarDate] = useState(() => new Date());
   const changeSoundRef = useRef(null);
+  const viewTransitionRef = useRef(null);
 
   useEffect(() => {
-    return () => stopBufferedSound(changeSoundRef.current);
+    return () => {
+      stopBufferedSound(changeSoundRef.current);
+      viewTransitionRef.current?.skipTransition();
+      viewTransitionRef.current = null;
+    };
+  }, []);
+
+  const cancelThemeTransition = useCallback(() => {
+    viewTransitionRef.current?.skipTransition();
+    viewTransitionRef.current = null;
   }, []);
 
   useEffect(() => {
@@ -96,12 +106,22 @@ export function useTheme() {
       Math.max(transitionY, window.innerHeight - transitionY),
     );
 
+    cancelThemeTransition();
     const transition = document.startViewTransition(() => {
       flushSync(() => {
         applyTheme(nextTheme);
         setTheme(nextTheme);
       });
     });
+    viewTransitionRef.current = transition;
+
+    transition.finished
+      .finally(() => {
+        if (viewTransitionRef.current === transition) {
+          viewTransitionRef.current = null;
+        }
+      })
+      .catch(() => {});
 
     transition.ready
       .then(() => {
@@ -122,7 +142,7 @@ export function useTheme() {
       .catch(() => {
         // The theme is already applied even if the optional animation is interrupted.
       });
-  }, [calendarDate, theme]);
+  }, [calendarDate, cancelThemeTransition, theme]);
 
-  return { theme, changeTheme, calendarDate };
+  return { theme, changeTheme, cancelThemeTransition, calendarDate };
 }

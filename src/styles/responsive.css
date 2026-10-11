@@ -129,9 +129,41 @@
   .main-content { padding: 18px 16px 40px; }
   .topbar { align-items: flex-start; }
   .topbar h1 { font-size: 1.13rem; }
-  .hero-card { min-height: 375px; border-radius: 24px; }
-  .hero-card__content { padding: 34px 27px; }
-  .hero-card p { font-size: .82rem; }
+  .hero-card {
+    min-height: 360px;
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto 110px;
+    overflow: hidden;
+    border-radius: 24px;
+  }
+  .hero-card__content { padding: 22px 20px 4px; }
+  .hero-kicker { gap: 5px; font-size: .56rem; }
+  .hero-card h2 {
+    max-width: 250px;
+    margin: 8px 0 8px;
+    font-size: clamp(1.75rem, 9vw, 2.2rem);
+    line-height: .94;
+  }
+  .hero-card p { max-width: 440px; margin-bottom: 14px; font-size: .7rem; line-height: 1.45; }
+  .hero-card__actions { flex-wrap: nowrap; gap: 7px; }
+  .hero-card .primary-button,
+  .hero-card__quick-button { min-height: 40px; padding-inline: 12px; gap: 6px; font-size: .68rem; white-space: nowrap; }
+  .hero-card__actions svg { width: 17px; height: 17px; }
+  .hero-visual {
+    z-index: 1;
+    display: block;
+    min-height: 110px;
+    align-self: end;
+    overflow: visible;
+  }
+  .hero-card .hero-character {
+    width: auto;
+    max-width: 118%;
+    height: calc(100% + 65px);
+    right: 4%;
+    bottom: 0;
+  }
+  .hero-card .hero-character--friendship { height: calc(100% + 46px); right: 1%; }
   .quick-grid { grid-template-columns: 1fr; }
   .action-card:last-child { grid-column: auto; }
   .secondary-button { width: 100%; }

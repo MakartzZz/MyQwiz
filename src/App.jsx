@@ -410,7 +410,7 @@ function App() {
   const quickQuizLoaderRef = useRef(null);
   const quickQuizLoadSequenceRef = useRef(0);
   const sidebarMotionTimeoutRef = useRef(null);
-  const { theme, changeTheme, calendarDate } = useTheme();
+  const { theme, changeTheme, cancelThemeTransition, calendarDate } = useTheme();
   const shouldLoadPersonalMusic = (
     (activeSection === "Ajustes" && settingsView === "music")
     || selectedAlbumId.startsWith("personal-album-")
@@ -486,7 +486,7 @@ function App() {
         new Date(second.stats.lastPlayedAt ?? 0) -
           new Date(first.stats.lastPlayedAt ?? 0),
     )
-    .slice(0, 5), [quickQuizzesWithStats]);
+    .slice(0, scoreCardCapacity), [quickQuizzesWithStats, scoreCardCapacity]);
   const resumableQuiz = savedGameSession
     ? (quizzes.find((quiz) => quiz.id === savedGameSession.quizId) ?? null)
     : null;
@@ -1100,6 +1100,7 @@ function App() {
   const ignoreQuickQuizProgress = useCallback(() => {}, []);
 
   const beginQuizEntryTransition = (action) => {
+    cancelThemeTransition();
     quizEntryActionRef.current = action;
     quizEntrySequenceRef.current += 1;
     setQuizEntryTransitionKey(quizEntrySequenceRef.current);
@@ -1676,13 +1677,22 @@ function App() {
                   Convierte tus apuntes en quizzes dinámicos, descubre qué
                   necesitas reforzar y aprende a tu ritmo.
                 </p>
-                <button
-                  className="primary-button"
-                  type="button"
-                  onClick={beginQuizCreation}
-                >
-                  <Icon name="plus" /> Crear un quiz
-                </button>
+                <div className="hero-card__actions">
+                  <button
+                    className="primary-button"
+                    type="button"
+                    onClick={beginQuizCreation}
+                  >
+                    <Icon name="plus" /> Crear un quiz
+                  </button>
+                  <button
+                    className="hero-card__quick-button"
+                    type="button"
+                    onClick={() => selectSection("Quizzes rápidos")}
+                  >
+                    <Icon name="quick" /> Quiz rápido
+                  </button>
+                </div>
               </div>
               <div className="hero-visual" aria-hidden="true">
                 <BlinkingCharacter
@@ -1767,10 +1777,10 @@ function App() {
 
               <div className="scoreboard">
                 <div
-                  className="scoreboard__list scoreboard__list--fixed-five"
+                  className="scoreboard__list"
                   style={{
                     "--score-card-count": Math.max(
-                      5,
+                      scoreCardCapacity,
                       1,
                     ),
                   }}
@@ -1809,7 +1819,7 @@ function App() {
                         </article>
                       );
                     })}
-                  {Array.from({ length: Math.max(0, 5 - visibleScoredQuickQuizzes.length) }, (_, index) => (
+                  {Array.from({ length: Math.max(0, scoreCardCapacity - visibleScoredQuickQuizzes.length) }, (_, index) => (
                     <ScoreCardPlaceholder key={`quick-placeholder-${index}`} />
                   ))}
                 </div>
