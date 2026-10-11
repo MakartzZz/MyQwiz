@@ -1,5 +1,7 @@
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
+import { flushSync } from "react-dom";
 import { DEFAULT_THEME, isValidTheme, SEASONAL_THEME_LOCKING_ENABLED, themes, THEME_STORAGE_KEY } from "../config/themes.js";
+import { getThemeAudioCue } from "../config/themeAudio.js";
 import { playBufferedSound, stopBufferedSound } from "../services/soundBuffer.js";
 import { canPlayInterfaceSounds, getSoundScale, readUserPreferences } from "../services/userPreferences.js";
 import { getThemeSeasonStatus } from "../utils/themeSeason.js";
@@ -71,8 +73,11 @@ export function useTheme() {
     }
 
     if (canPlayInterfaceSounds()) {
+      const soundCue = getThemeAudioCue(nextTheme, "selection");
       stopBufferedSound(changeSoundRef.current);
-      changeSoundRef.current = playBufferedSound("/sounds/theme-change.mp3", { volume: 0.35 * getSoundScale() });
+      changeSoundRef.current = playBufferedSound(soundCue.path, {
+        volume: Math.min(1, soundCue.volume * getSoundScale()),
+      });
     }
 
     const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches || readUserPreferences().reduceMotion;
@@ -92,8 +97,10 @@ export function useTheme() {
     );
 
     const transition = document.startViewTransition(() => {
-      applyTheme(nextTheme);
-      setTheme(nextTheme);
+      flushSync(() => {
+        applyTheme(nextTheme);
+        setTheme(nextTheme);
+      });
     });
 
     transition.ready

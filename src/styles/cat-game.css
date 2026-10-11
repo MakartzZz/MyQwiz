@@ -1,13 +1,9 @@
 .cat-game-backdrop { z-index: 80; }
-.cat-game { --cat-body: #526b46; position: relative; width: min(720px, 100%); padding: 30px; overflow: hidden; border: 2px solid var(--line); color: var(--ink); background: var(--surface); box-shadow: 11px 11px 0 var(--card-shadow); clip-path: polygon(1.5% 0, 100% 2.5%, 98.5% 100%, 0 97.5%); animation: modal-enter .24s cubic-bezier(.2, .8, .2, 1); }
+.cat-game { --cat-body: var(--qwiz-body, #526b46); --cat-eyes: var(--qwiz-eyes, #fffdf8); position: relative; width: min(720px, 100%); padding: 30px; overflow: hidden; border: 2px solid var(--line); color: var(--ink); background: var(--surface); box-shadow: 11px 11px 0 var(--card-shadow); clip-path: polygon(1.5% 0, 100% 2.5%, 98.5% 100%, 0 97.5%); animation: modal-enter .24s cubic-bezier(.2, .8, .2, 1); }
 :root[data-theme="sky"] .cat-game { --cat-body: #2388bb; }
 :root[data-theme="midnight"] .cat-game { --cat-body: #d98e3d; }
 :root[data-theme="pink"] .cat-game { --cat-body: #d62970; }
-:root[data-theme="halloween"] .cat-game { --cat-body: #9b5de5; }
-:root[data-theme="christmas"] .cat-game { --cat-body: #c93643; }
-:root[data-theme="newyear"] .cat-game { --cat-body: #e13c88; }
-:root[data-theme="valentine"] .cat-game { --cat-body: #c9234f; }
-:root[data-theme="easter"] .cat-game { --cat-body: #71c7e8; }
+:root[data-theme="independence"] .cat-game { --cat-body: #df2d43; }
 .cat-game::before { position: absolute; width: 260px; height: 260px; right: -120px; top: -125px; border: 34px solid color-mix(in srgb, var(--purple) 18%, transparent); border-radius: 50%; content: ""; }
 .cat-game__close { position: absolute; z-index: 4; display: grid; width: 39px; height: 39px; right: 22px; top: 22px; place-items: center; color: var(--on-primary); background: var(--purple); clip-path: polygon(7% 0, 100% 7%, 93% 100%, 0 93%); }
 .cat-game__heading { position: relative; z-index: 1; max-width: 520px; }
@@ -22,7 +18,7 @@
 .cat-game__cat.is-happy > svg { animation: cat-game-happy 2.064s cubic-bezier(.2, .8, .2, 1); }
 .cat-game__cat > svg { position: relative; z-index: 1; display: block; width: 100%; overflow: visible; }
 .cat-game__body { fill: var(--cat-body); }
-.cat-game__eyes { fill: #fffdf8; transform-box: fill-box; transform-origin: center; transition: transform 70ms linear; will-change: transform; }
+.cat-game__eyes { fill: var(--cat-eyes); transform-box: fill-box; transform-origin: center; transition: transform 70ms linear; will-change: transform; }
 .cat-game__cat.is-being-petted .cat-game__eyes,
 .cat-game__cat.is-happy .cat-game__eyes { animation: cat-game-happy-eyes .44s ease-in-out infinite alternate; }
 .cat-game__moving-mouth { transition: transform 95ms ease-out; will-change: transform; }

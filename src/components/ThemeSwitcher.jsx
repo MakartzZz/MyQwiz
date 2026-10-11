@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { memo, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
   BookOpen,
   CalendarDays,
@@ -23,7 +23,8 @@ const responsiveRibbonIcons = Array.from({ length: 3 }, (_, cycle) =>
   ribbonIcons.map((RibbonIcon, index) => ({ RibbonIcon, cycle, index })),
 ).flat();
 
-const ThemeRibbons = () => (
+const ThemeRibbons = memo(function ThemeRibbons() {
+  return (
   <div className="theme-ribbons" aria-hidden="true">
     <div className="theme-backdrop-copy">
       <span>ELIGE</span>
@@ -51,7 +52,8 @@ const ThemeRibbons = () => (
       </div>
     ))}
   </div>
-);
+  );
+});
 
 const dayCountLabel = (days) => `${days} ${days === 1 ? "día" : "días"}`;
 
@@ -63,7 +65,7 @@ const formatSeasonRange = (startDate, endDate) => {
   return `${startDate.getDate()} ${monthLabels[startDate.getMonth()]} — ${endDate.getDate()} ${monthLabels[endDate.getMonth()]}`;
 };
 
-function ThemeCard({ theme, index, activeTheme, currentDate, spinningTheme, onSelect, onSpinEnd }) {
+const ThemeCard = memo(function ThemeCard({ theme, index, isActive, currentDate, isSpinning, onSelect, onSpinEnd }) {
   const seasonStatus = getThemeSeasonStatus(theme, currentDate);
   const isLocked = SEASONAL_THEME_LOCKING_ENABLED && !seasonStatus.isAvailable;
   const seasonDateLabel = theme.season?.dateLabel
@@ -71,13 +73,13 @@ function ThemeCard({ theme, index, activeTheme, currentDate, spinningTheme, onSe
 
   return (
     <button
-      className={`theme-card ${activeTheme === theme.id ? "is-active" : ""} ${spinningTheme === theme.id ? "is-spinning" : ""} ${isLocked ? "is-locked" : ""}`}
+      className={`theme-card ${isActive ? "is-active" : ""} ${isSpinning ? "is-spinning" : ""} ${isLocked ? "is-locked" : ""}`}
       data-theme-card={theme.id}
       type="button"
       disabled={isLocked}
-      data-button-sound={activeTheme === theme.id || isLocked ? undefined : "interface"}
+      data-button-sound={isActive || isLocked ? undefined : "interface"}
       aria-label={isLocked ? `${theme.label}, disponible del ${seasonDateLabel}` : `Usar tema ${theme.label}`}
-      aria-pressed={activeTheme === theme.id}
+      aria-pressed={isActive}
       title={isLocked ? `Disponible del ${seasonDateLabel}` : theme.label}
       onClick={(event) => onSelect(theme.id, event)}
       onAnimationEnd={onSpinEnd}
@@ -118,45 +120,49 @@ function ThemeCard({ theme, index, activeTheme, currentDate, spinningTheme, onSe
       )}
     </button>
   );
-}
+});
 
 function ThemeSwitcher({ activeTheme, currentDate = new Date(), onChange }) {
   const [spinningTheme, setSpinningTheme] = useState(null);
   const [mobileThemeTab, setMobileThemeTab] = useState(() => (
     seasonalThemes.some((theme) => theme.id === activeTheme) ? "seasonal" : "normal"
   ));
-  const seasonalSummary = getSeasonalThemeSummary(seasonalThemes, currentDate);
+  const onChangeRef = useRef(onChange);
+  const seasonalSummary = useMemo(
+    () => getSeasonalThemeSummary(seasonalThemes, currentDate),
+    [currentDate],
+  );
 
-  const selectTheme = (themeId, event) => {
+  useEffect(() => {
+    onChangeRef.current = onChange;
+  }, [onChange]);
+
+  const selectTheme = useCallback((themeId, event) => {
     setSpinningTheme(themeId);
-    onChange(themeId, event.currentTarget);
-  };
+    onChangeRef.current(themeId, event.currentTarget);
+  }, []);
+
+  const finishThemeSpin = useCallback((event) => {
+    if (event.animationName === "theme-card-spin") setSpinningTheme(null);
+  }, []);
 
   const renderThemeCard = (theme, index) => (
     <ThemeCard
-      activeTheme={activeTheme}
       currentDate={currentDate}
       index={index}
+      isActive={activeTheme === theme.id}
+      isSpinning={spinningTheme === theme.id}
       key={theme.id}
       onSelect={selectTheme}
-      onSpinEnd={(event) => {
-        if (event.animationName === "theme-card-spin") setSpinningTheme(null);
-      }}
-      spinningTheme={spinningTheme}
+      onSpinEnd={finishThemeSpin}
       theme={theme}
     />
   );
 
   return (
     <>
-      <ThemeRibbons key={activeTheme} />
+      <ThemeRibbons />
       <section className="theme-studio" aria-labelledby="theme-studio-title">
-        <div className="theme-studio__heading">
-          <span className="eyebrow">Apariencia</span>
-          <h2 id="theme-studio-title">Elige tu mundo</h2>
-          <p>Cada personaje transforma los colores y el ambiente de MyQwiz.</p>
-        </div>
-
         <div className="theme-mobile-tabs" role="tablist" aria-label="Tipos de temas">
           <button
             className={mobileThemeTab === "normal" ? "is-active" : ""}
@@ -178,6 +184,12 @@ function ThemeSwitcher({ activeTheme, currentDate = new Date(), onChange }) {
           >
             De temporada
           </button>
+        </div>
+
+        <div className={`theme-studio__heading theme-mobile-panel ${mobileThemeTab !== "normal" ? "is-mobile-hidden" : ""}`}>
+          <span className="eyebrow">Temas permanentes</span>
+          <h2 id="theme-studio-title">Elige tu estilo</h2>
+          <p>Estos temas están disponibles durante todo el año.</p>
         </div>
 
         <div

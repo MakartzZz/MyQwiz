@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { memo, useEffect, useState } from "react";
 import { readUserPreferences } from "../services/userPreferences.js";
 
 const FIRST_BLINK_MIN_DELAY = 1800;
@@ -72,4 +72,4 @@ function BlinkingCharacter({ src, blinkSrc, theme, className = "", loading = "ea
   );
 }
 
-export default BlinkingCharacter;
+export default memo(BlinkingCharacter);

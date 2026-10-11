@@ -2,7 +2,6 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { DEFAULT_GAME_RULES, GAME_MODES, QUESTION_TYPES } from "../domain/quizConstants.js";
 import { getGameModeOptionsForQuiz } from "../domain/gameModes.js";
 import { playBufferedSound, stopBufferedSound } from "../services/soundBuffer.js";
-import { playConfirmSound } from "../services/uiSounds.js";
 import { canPlayGameplaySounds, getSoundScale, readUserPreferences } from "../services/userPreferences.js";
 import { QuizIcon, quizIconOptions } from "./QuizIcon.jsx";
 
@@ -98,7 +97,6 @@ function GameModeSelector({ quiz, onBack, onStart, backLabel = "Volver a la bibl
       : selectedMode === GAME_MODES.RACE
         ? { secondsByQuestionType: raceTimes }
         : {};
-    playConfirmSound();
     onStart(quiz, selectedMode, rules);
   };
 

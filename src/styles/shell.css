@@ -28,22 +28,18 @@
 
 .brand { display: flex; min-height: 52px; align-items: center; gap: 8px; padding: 0 5px; }
 .brand__wordmark { display: block; width: 108px; height: auto; flex: 0 0 auto; }
-.sidebar-mascot { --mascot-body: #526b46; display: block; width: 54px; height: 48px; padding: 0; flex: 0 0 auto; outline-offset: 4px; touch-action: manipulation; background: transparent; filter: drop-shadow(0 7px 7px color-mix(in srgb, var(--hero-shadow) 72%, transparent)); }
+.sidebar-mascot { --mascot-body: var(--qwiz-body, #526b46); --mascot-eyes: var(--qwiz-eyes, #fffdf8); display: block; width: 54px; height: 48px; padding: 0; flex: 0 0 auto; outline-offset: 4px; touch-action: manipulation; background: transparent; filter: drop-shadow(0 7px 7px color-mix(in srgb, var(--hero-shadow) 72%, transparent)); }
 .sidebar-mascot:focus-visible { outline: 2px solid var(--purple); }
 .sidebar-mascot svg { display: block; width: 100%; height: 100%; overflow: visible; }
 .sidebar-mascot.is-rewarding svg { animation: sidebar-mascot-reward .9s cubic-bezier(.2, .8, .2, 1); }
 .sidebar-mascot__body { fill: var(--mascot-body); transition: fill .32s ease; }
 .sidebar-mascot__eye { transform-box: fill-box; transform-origin: center; }
 .sidebar-mascot__eye.is-blinking { animation: sidebar-mascot-blink 170ms ease-in-out; }
-.sidebar-mascot__moving-eyes { fill: #fffdf8; transform: translate(var(--eye-x, 0), var(--eye-y, 0)); transition: transform 70ms linear; will-change: transform; }
+.sidebar-mascot__moving-eyes { fill: var(--mascot-eyes); transform: translate(var(--eye-x, 0), var(--eye-y, 0)); transition: transform 70ms linear; will-change: transform; }
 :root[data-theme="sky"] .sidebar-mascot { --mascot-body: #2388bb; }
 :root[data-theme="midnight"] .sidebar-mascot { --mascot-body: #d98e3d; }
 :root[data-theme="pink"] .sidebar-mascot { --mascot-body: #d62970; }
-:root[data-theme="halloween"] .sidebar-mascot { --mascot-body: #9b5de5; }
-:root[data-theme="christmas"] .sidebar-mascot { --mascot-body: #c93643; }
-:root[data-theme="newyear"] .sidebar-mascot { --mascot-body: #e13c88; }
-:root[data-theme="valentine"] .sidebar-mascot { --mascot-body: #e8b34f; }
-:root[data-theme="easter"] .sidebar-mascot { --mascot-body: #f2cf62; }
+:root[data-theme="independence"] .sidebar-mascot { --mascot-body: #df2d43; }
 @keyframes sidebar-mascot-blink { 0%, 100% { transform: scaleY(1); } 45%, 60% { transform: scaleY(.08); } }
 @keyframes sidebar-mascot-reward { 0%, 100% { transform: translateY(0) rotate(0) scale(1); } 22% { transform: translateY(4px) rotate(-4deg) scaleX(1.08) scaleY(.92); } 48% { transform: translateY(-9px) rotate(4deg) scaleX(.95) scaleY(1.08); } 70% { transform: translateY(-2px) rotate(-2deg) scale(1.03); } }
 .main-nav { display: grid; gap: 8px; margin-top: 58px; }
@@ -111,6 +107,9 @@
 :root[data-theme="newyear"] .support-coffee { --support-outline: #e13c88; --support-steam: #f4c96b; }
 :root[data-theme="valentine"] .support-coffee { --support-outline: #c9234f; --support-steam: #f2c45e; }
 :root[data-theme="easter"] .support-coffee { --support-outline: #71c7e8; --support-steam: #f2cf62; }
+:root[data-theme="summer"] .support-coffee { --support-outline: #ff6b4a; --support-steam: #ffc84a; }
+:root[data-theme="friendship"] .support-coffee { --support-outline: #16aeb5; --support-steam: #b9ee45; }
+:root[data-theme="independence"] .support-coffee { --support-outline: #df2d43; --support-steam: #fffdf7; }
 
 @keyframes support-coffee-steam {
   0% { opacity: 0; transform: translate(0, 5px) scaleX(.72) rotate(-5deg); }
@@ -191,22 +190,18 @@
 .app-shell.is-sidebar-expanding .main-content { animation: sidebar-main-expand .3s cubic-bezier(.22, 1, .36, 1); will-change: transform; }
 .feature-loading { display: grid; min-height: min(52vh, 440px); place-items: center; color: var(--muted); font-weight: 800; letter-spacing: .02em; }
 .main-content > .feature-loading--qwiz { position: fixed; z-index: 2; inset: 0 0 0 var(--sidebar-width); min-height: 0; color: inherit; pointer-events: none; }
-.qwiz-loader { --qwiz-loader-body: #526b46; display: grid; width: min(300px, calc(100vw - 40px)); justify-items: center; gap: 10px; }
+.qwiz-loader { --qwiz-loader-body: var(--qwiz-body, #526b46); --qwiz-loader-eyes: var(--qwiz-eyes, #fffdf8); display: grid; width: min(300px, calc(100vw - 40px)); justify-items: center; gap: 10px; }
 .qwiz-loader__stage { position: relative; display: grid; width: 92px; height: 104px; place-items: end center; }
 .qwiz-loader__mascot { position: absolute; z-index: 1; width: 78px; height: 69px; left: 7px; top: 8px; transform-origin: 50% 92%; animation: qwiz-loader-balance 1.15s ease-in-out infinite alternate; }
 .qwiz-loader__mascot svg { display: block; width: 100%; height: 100%; overflow: visible; filter: drop-shadow(0 8px 7px color-mix(in srgb, var(--hero-shadow) 58%, transparent)); }
 .qwiz-loader__mascot path { fill: var(--qwiz-loader-body); }
-.qwiz-loader__mascot g { fill: #fffdf8; transform-box: fill-box; transform-origin: center; animation: qwiz-loader-blink 3.2s ease-in-out infinite; }
+.qwiz-loader__mascot g { fill: var(--qwiz-loader-eyes); transform-box: fill-box; transform-origin: center; animation: qwiz-loader-blink 3.2s ease-in-out infinite; }
 .qwiz-loader__shadow { width: 58px; height: 9px; margin-bottom: 12px; border-radius: 50%; background: color-mix(in srgb, var(--ink) 18%, transparent); animation: qwiz-loader-shadow 1.15s ease-in-out infinite alternate; }
 .qwiz-loader__message { min-height: 1.4em; margin: 0; color: var(--muted); font-size: .78rem; font-weight: 800; text-align: center; animation: qwiz-loader-message-in .38s ease both; }
 :root[data-theme="sky"] .qwiz-loader { --qwiz-loader-body: #2388bb; }
 :root[data-theme="midnight"] .qwiz-loader { --qwiz-loader-body: #d98e3d; }
 :root[data-theme="pink"] .qwiz-loader { --qwiz-loader-body: #d62970; }
-:root[data-theme="halloween"] .qwiz-loader { --qwiz-loader-body: #9b5de5; }
-:root[data-theme="christmas"] .qwiz-loader { --qwiz-loader-body: #c93643; }
-:root[data-theme="newyear"] .qwiz-loader { --qwiz-loader-body: #e13c88; }
-:root[data-theme="valentine"] .qwiz-loader { --qwiz-loader-body: #c9234f; }
-:root[data-theme="easter"] .qwiz-loader { --qwiz-loader-body: #71c7e8; }
+:root[data-theme="independence"] .qwiz-loader { --qwiz-loader-body: #df2d43; }
 
 @keyframes qwiz-loader-balance {
   from { transform: translate3d(-5px, 2px, 0) rotate(-7deg); }

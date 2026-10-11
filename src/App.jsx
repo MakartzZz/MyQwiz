@@ -10,6 +10,9 @@ import myQwizWordmarkChristmas from "./assets/branding/myqwiz-wordmark-christmas
 import myQwizWordmarkNewYear from "./assets/branding/myqwiz-wordmark-newyear.webp";
 import myQwizWordmarkValentine from "./assets/branding/myqwiz-wordmark-valentine.webp";
 import myQwizWordmarkEaster from "./assets/branding/myqwiz-wordmark-easter.webp";
+import myQwizWordmarkSummer from "./assets/branding/myqwiz-wordmark-summer.webp";
+import myQwizWordmarkFriendship from "./assets/branding/myqwiz-wordmark-friendship.webp";
+import myQwizWordmarkIndependence from "./assets/branding/myqwiz-wordmark-independence.webp";
 import AlbumCover from "./components/PersonalAlbumCover.jsx";
 import QuestionTypeSummary from "./components/QuestionTypeSummary.jsx";
 import { QuizIcon } from "./components/QuizIcon.jsx";
@@ -23,6 +26,7 @@ import QuizEntryTransition from "./components/QuizEntryTransition.jsx";
 import QwizLoader from "./components/QwizLoader.jsx";
 import SidebarMascot from "./components/SidebarMascot.jsx";
 import SupportCoffee from "./components/SupportCoffee.jsx";
+import { getThemeAudioCue } from "./config/themeAudio.js";
 import { themes } from "./config/themes.js";
 import {
   DEFAULT_MUSIC_ALBUM,
@@ -55,7 +59,6 @@ import { quickQuizProgress } from "./services/quickQuizProgress.js";
 import {
   playButtonPressSound,
   playButtonHoverSound,
-  playConfirmSound,
   playSupportHoverSound,
   playTypingSound,
 } from "./services/uiSounds.js";
@@ -99,6 +102,9 @@ const wordmarkByTheme = {
   newyear: myQwizWordmarkNewYear,
   valentine: myQwizWordmarkValentine,
   easter: myQwizWordmarkEaster,
+  summer: myQwizWordmarkSummer,
+  friendship: myQwizWordmarkFriendship,
+  independence: myQwizWordmarkIndependence,
 };
 
 const Icon = ({ name, size = 20 }) => {
@@ -398,6 +404,7 @@ function App() {
   const [editingPersonalAlbum, setEditingPersonalAlbum] = useState(null);
   const musicAudioRef = useRef(null);
   const musicChangeSoundRef = useRef(null);
+  const quizStartSoundRef = useRef(null);
   const musicChangeSequenceRef = useRef(0);
   const quickQuizCatalogPromiseRef = useRef(null);
   const quickQuizLoaderRef = useRef(null);
@@ -593,6 +600,7 @@ function App() {
       window.removeEventListener("keydown", unlockAudio, { capture: true });
       musicChangeSequenceRef.current += 1;
       stopBufferedSound(musicChangeSoundRef.current);
+      stopBufferedSound(quizStartSoundRef.current);
     };
   }, []);
 
@@ -1097,6 +1105,15 @@ function App() {
     setQuizEntryTransitionKey(quizEntrySequenceRef.current);
   };
 
+  const playQuizStartSound = () => {
+    if (!canPlayInterfaceSounds()) return;
+    const soundCue = getThemeAudioCue(theme, "quizStart");
+    stopBufferedSound(quizStartSoundRef.current);
+    quizStartSoundRef.current = playBufferedSound(soundCue.path, {
+      volume: Math.min(1, soundCue.volume * getSoundScale()),
+    });
+  };
+
   const revealQuizEntry = useCallback(() => {
     const action = quizEntryActionRef.current;
     quizEntryActionRef.current = null;
@@ -1110,6 +1127,7 @@ function App() {
   const startQuizGame = (_quiz, gameMode, rules) => {
     quizSessionStorage.clear();
     setSavedGameSession(null);
+    playQuizStartSound();
     beginQuizEntryTransition(() => {
       setActiveGameRules(rules);
       setActiveGameMode(gameMode);
@@ -1152,7 +1170,7 @@ function App() {
 
   const resumeQuizGame = () => {
     if (!savedGameSession || !resumableQuiz) return;
-    playConfirmSound();
+    playQuizStartSound();
     beginQuizEntryTransition(() => {
       setActiveSection("Mis quizzes");
       setEditingQuizId(null);

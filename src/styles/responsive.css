@@ -85,6 +85,46 @@
   .quiz-library-result-count { grid-column: 1 / -1; width: max-content; }
 }
 
+@media (max-width: 600px), (min-width: 601px) and (max-width: 900px) and (orientation: portrait) {
+  .theme-mobile-tabs {
+    position: relative;
+    z-index: 3;
+    display: grid;
+    width: min(100%, 320px);
+    min-height: 45px;
+    margin: 0 auto 25px;
+    padding: 4px;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 4px;
+    background: color-mix(in srgb, var(--surface) 88%, transparent);
+    box-shadow: 4px 4px 0 var(--card-shadow);
+    clip-path: polygon(2% 0, 100% 5%, 98% 100%, 0 95%);
+  }
+  .theme-mobile-tabs button {
+    min-width: 0;
+    padding: 0 10px;
+    border: 0;
+    color: var(--muted);
+    background: transparent;
+    font-size: .7rem;
+    font-weight: 850;
+  }
+  .theme-mobile-tabs button.is-active {
+    color: var(--on-primary);
+    background: var(--purple);
+    clip-path: polygon(4% 0, 100% 8%, 96% 100%, 0 92%);
+  }
+  .theme-mobile-panel.is-mobile-hidden { display: none; }
+  .theme-studio__heading,
+  .seasonal-theme-heading {
+    padding-top: 27px;
+    padding-bottom: 0;
+    border-top: 1px solid color-mix(in srgb, var(--line) 78%, transparent);
+    border-bottom: 0;
+  }
+  .seasonal-theme-heading { margin-top: 0; }
+}
+
 @media (max-width: 600px) {
   .main-content { padding: 18px 16px 40px; }
   .topbar { align-items: flex-start; }
@@ -158,41 +198,16 @@
   .quiz-progress-notice__preference, .quiz-progress-notice__confirm { grid-column: 1; }
   .quiz-progress-notice__confirm { width: 100%; }
   .theme-studio { padding: 14px 0 36px; }
-  .theme-mobile-tabs {
-    position: relative;
-    z-index: 3;
-    display: grid;
-    width: min(100%, 320px);
-    min-height: 45px;
-    margin: 0 auto 25px;
-    padding: 4px;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 4px;
-    background: color-mix(in srgb, var(--surface) 88%, transparent);
-    box-shadow: 4px 4px 0 var(--card-shadow);
-    clip-path: polygon(2% 0, 100% 5%, 98% 100%, 0 95%);
-  }
-  .theme-mobile-tabs button {
-    min-width: 0;
-    padding: 0 10px;
-    border: 0;
-    color: var(--muted);
-    background: transparent;
-    font-size: .7rem;
-    font-weight: 850;
-  }
-  .theme-mobile-tabs button.is-active {
-    color: var(--on-primary);
-    background: var(--purple);
-    clip-path: polygon(4% 0, 100% 8%, 96% 100%, 0 92%);
-  }
-  .theme-mobile-panel.is-mobile-hidden { display: none; }
   .theme-gallery,
   .theme-gallery--seasonal {
     max-width: 320px;
     grid-template-columns: minmax(0, 1fr);
   }
-  .seasonal-theme-heading { margin-top: 0; }
+  .theme-card[data-theme-card] > .theme-card__character {
+    width: 102%;
+    height: 96%;
+    left: -1%;
+  }
   .music-album-grid { width: 100%; padding: 3px 4px 24px; grid-auto-columns: unset; grid-auto-flow: row; grid-template-columns: repeat(2, minmax(0, 1fr)); justify-content: center; overflow-x: hidden; overflow-y: visible; scroll-snap-type: none; }
   .music-album-grid::-webkit-scrollbar { width: 0; height: 0; }
   .music-album-grid { scrollbar-width: none; }

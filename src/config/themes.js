@@ -34,6 +34,18 @@ import easterCharacter from "../assets/characters/easter-theme-card-v1.webp";
 import easterCharacterBlink from "../assets/characters/easter-theme-card-blink.webp";
 import easterCharacterPreview from "../assets/characters/easter-theme-card-v1-preview.webp";
 import easterCharacterBlinkPreview from "../assets/characters/easter-theme-card-blink-preview.webp";
+import summerCharacter from "../assets/characters/summer-theme-card-v1.webp";
+import summerCharacterBlink from "../assets/characters/summer-theme-card-blink.webp";
+import summerCharacterPreview from "../assets/characters/summer-theme-card-v1-preview.webp";
+import summerCharacterBlinkPreview from "../assets/characters/summer-theme-card-blink-preview.webp";
+import friendshipCharacter from "../assets/characters/friendship-theme-card-v1.webp";
+import friendshipCharacterBlink from "../assets/characters/friendship-theme-card-blink.webp";
+import friendshipCharacterPreview from "../assets/characters/friendship-theme-card-v1-preview.webp";
+import friendshipCharacterBlinkPreview from "../assets/characters/friendship-theme-card-blink-preview.webp";
+import independenceCharacter from "../assets/characters/independence-theme-card-v1.webp";
+import independenceCharacterBlink from "../assets/characters/independence-theme-card-blink.webp";
+import independenceCharacterPreview from "../assets/characters/independence-theme-card-v1-preview.webp";
+import independenceCharacterBlinkPreview from "../assets/characters/independence-theme-card-blink-preview.webp";
 
 export const THEME_STORAGE_KEY = "myqwiz-theme";
 export const SEASONAL_THEME_LOCKING_ENABLED = false;
@@ -116,6 +128,48 @@ export const themes = [
     blinkCharacter: easterCharacterBlink,
     previewCharacter: easterCharacterPreview,
     previewBlinkCharacter: easterCharacterBlinkPreview,
+  },
+  {
+    id: "summer",
+    label: "S.U.R.F.",
+    season: {
+      start: { month: 6, day: 24 },
+      end: { month: 7, day: 10 },
+      dateLabel: "24 JUN — 10 JUL",
+    },
+    description: "Turquesa laguna, coral y amarillo sol",
+    character: summerCharacter,
+    blinkCharacter: summerCharacterBlink,
+    previewCharacter: summerCharacterPreview,
+    previewBlinkCharacter: summerCharacterBlinkPreview,
+  },
+  {
+    id: "friendship",
+    label: "B.F.F.",
+    season: {
+      start: { month: 7, day: 24 },
+      end: { month: 8, day: 2 },
+      dateLabel: "24 JUL — 2 AGO",
+    },
+    description: "Violeta, turquesa, lima y naranja",
+    character: friendshipCharacter,
+    blinkCharacter: friendshipCharacterBlink,
+    previewCharacter: friendshipCharacterPreview,
+    previewBlinkCharacter: friendshipCharacterBlinkPreview,
+  },
+  {
+    id: "independence",
+    label: "T.I.C.O.",
+    season: {
+      start: { month: 9, day: 7 },
+      end: { month: 9, day: 16 },
+      dateLabel: "7 SEP — 16 SEP",
+    },
+    description: "Azul, blanco, rojo y cuero cálido",
+    character: independenceCharacter,
+    blinkCharacter: independenceCharacterBlink,
+    previewCharacter: independenceCharacterPreview,
+    previewBlinkCharacter: independenceCharacterBlinkPreview,
   },
   {
     id: "halloween",

@@ -222,6 +222,9 @@
 :root[data-theme="newyear"] .quiz-result { --perfect-card: #f4c96b; --perfect-card-strong: #bd8f35; --perfect-card-ink: #171a3d; --perfect-shine: rgba(255, 244, 207, .55); }
 :root[data-theme="valentine"] .quiz-result { --perfect-card: #f2c45e; --perfect-card-strong: #d99e35; --perfect-card-ink: #4a1720; --perfect-shine: rgba(255, 248, 226, .62); }
 :root[data-theme="easter"] .quiz-result { --perfect-card: #f2cf62; --perfect-card-strong: #d4a92f; --perfect-card-ink: #3d3d5b; --perfect-shine: rgba(255, 250, 225, .64); }
+:root[data-theme="summer"] .quiz-result { --perfect-card: #ffc84a; --perfect-card-strong: #e49a23; --perfect-card-ink: #153f45; --perfect-shine: rgba(255, 248, 208, .62); }
+:root[data-theme="friendship"] .quiz-result { --perfect-card: #b9ee45; --perfect-card-strong: #73b739; --perfect-card-ink: #30234f; --perfect-shine: rgba(250, 255, 220, .64); }
+:root[data-theme="independence"] .quiz-result { --perfect-card: #df2d43; --perfect-card-strong: #a9162c; --perfect-card-ink: #fffdf7; --perfect-shine: rgba(255, 231, 233, .58); }
 .quiz-result.is-perfect-impact { color: var(--perfect-card-ink); border-color: color-mix(in srgb, var(--perfect-card) 72%, var(--line)); background: linear-gradient(135deg, var(--perfect-card), var(--perfect-card-strong)); box-shadow: 11px 12px 0 color-mix(in srgb, var(--perfect-card-strong) 68%, var(--card-shadow)); animation: result-perfect-impact .72s cubic-bezier(.18, .9, .25, 1.2); }
 .quiz-result.is-perfect-impact::before { position: absolute; z-index: 0; width: 76px; height: 190%; left: -220px; top: -45%; background: linear-gradient(90deg, transparent, var(--perfect-shine), transparent); content: ""; opacity: 0; pointer-events: none; transform: rotate(18deg); animation: perfect-result-shine 2.8s ease-in-out .22s infinite; }
 .quiz-result.is-perfect-impact > * { position: relative; z-index: 1; }

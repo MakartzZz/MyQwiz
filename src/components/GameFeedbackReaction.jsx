@@ -9,6 +9,9 @@ import thumbChristmas from "../assets/game-feedback/thumb-christmas.webp";
 import thumbNewYear from "../assets/game-feedback/thumb-newyear.webp";
 import thumbValentine from "../assets/game-feedback/thumb-valentine.webp";
 import thumbEaster from "../assets/game-feedback/thumb-easter.webp";
+import thumbSummer from "../assets/game-feedback/thumb-summer.webp";
+import thumbFriendship from "../assets/game-feedback/thumb-friendship.webp";
+import thumbIndependence from "../assets/game-feedback/thumb-independence.webp";
 
 const reactionLabels = {
   correct: "Respuesta correcta",
@@ -27,6 +30,9 @@ const themeThumbs = {
   newyear: thumbNewYear,
   valentine: thumbValentine,
   easter: thumbEaster,
+  summer: thumbSummer,
+  friendship: thumbFriendship,
+  independence: thumbIndependence,
 };
 
 function ReactionArtwork({ type, theme }) {

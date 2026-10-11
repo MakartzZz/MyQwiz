@@ -4,11 +4,11 @@
 .quiz-entry-transition__wave::after { position: absolute; border-radius: 50%; content: ""; opacity: .3; }
 .quiz-entry-transition__wave::before { width: 34vmax; height: 34vmax; right: 7vw; top: 8vh; background: color-mix(in srgb, var(--hero-to) 76%, transparent); }
 .quiz-entry-transition__wave::after { width: 27vmax; height: 27vmax; left: 13vw; bottom: 9vh; background: color-mix(in srgb, var(--hero-from) 68%, transparent); }
-.quiz-entry-transition__content { position: absolute; z-index: 2; inset: 0; display: grid; align-content: center; justify-items: center; color: var(--primary-button-bg); opacity: 0; animation: quiz-entry-content 2.15s ease both; }
+.quiz-entry-transition__content { position: absolute; z-index: 2; inset: 0; display: grid; align-content: center; justify-items: center; color: var(--qwiz-body, var(--primary-button-bg)); opacity: 0; animation: quiz-entry-content 2.15s ease both; }
 .quiz-entry-transition__mascot { width: clamp(96px, 15vw, 150px); filter: drop-shadow(0 14px 0 color-mix(in srgb, var(--hero-from) 48%, transparent)); animation: quiz-entry-mascot 1.05s cubic-bezier(.2, .9, .3, 1.28) .62s both; }
 .quiz-entry-transition__mascot svg { display: block; width: 100%; overflow: visible; }
-.quiz-entry-transition__mascot path { fill: var(--primary-button-bg); }
-.quiz-entry-transition__eyes { fill: var(--primary-button-ink); transform-box: fill-box; transform-origin: center; animation: quiz-entry-blink 1.25s ease-in-out .72s both; }
+.quiz-entry-transition__mascot path { fill: var(--qwiz-body, var(--primary-button-bg)); }
+.quiz-entry-transition__eyes { fill: var(--qwiz-eyes, var(--primary-button-ink)); transform-box: fill-box; transform-origin: center; animation: quiz-entry-blink 1.25s ease-in-out .72s both; }
 @keyframes quiz-entry-wave {
   0% { transform: translateX(-120%) rotate(-2deg); }
   36%, 64% { transform: translateX(0) rotate(0); }

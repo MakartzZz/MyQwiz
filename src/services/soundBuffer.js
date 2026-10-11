@@ -1,3 +1,5 @@
+import { THEME_AUDIO_PATHS } from "../config/themeAudio.js";
+
 export const SOUND_EFFECT_PATHS = Object.freeze([
   "/sounds/button-hover.mp3",
   "/sounds/button-press.mp3",
@@ -25,6 +27,7 @@ export const SOUND_EFFECT_PATHS = Object.freeze([
   "/sounds/results/combo-lose.mp3",
   "/sounds/results/drumroll.mp3",
   "/sounds/results/reveal.mp3",
+  ...THEME_AUDIO_PATHS,
 ]);
 
 export const SOUND_EFFECT_GROUPS = Object.freeze({
@@ -38,6 +41,7 @@ export const SOUND_EFFECT_GROUPS = Object.freeze({
     "/sounds/theme-change.mp3",
     "/sounds/support-bell.mp3",
     "/sounds/typing.wav",
+    ...THEME_AUDIO_PATHS,
   ]),
   gameplay: Object.freeze([
     "/sounds/game-modes/checkpoint.mp3",

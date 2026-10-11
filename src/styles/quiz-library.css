@@ -37,6 +37,9 @@
 :root[data-theme="newyear"] .quiz-status.is-ready { color: #171a3d; }
 :root[data-theme="valentine"] .quiz-status.is-ready { color: #4a1720; }
 :root[data-theme="easter"] .quiz-status.is-ready { color: #3d3d5b; }
+:root[data-theme="summer"] .quiz-status.is-ready { color: #153f45; }
+:root[data-theme="friendship"] .quiz-status.is-ready { color: #30234f; }
+:root[data-theme="independence"] .quiz-status.is-ready { color: #fffdf7; }
 .quiz-best-score { display: inline-flex; padding: 6px 9px; align-items: baseline; gap: 6px; color: var(--on-primary); background: var(--purple); clip-path: polygon(5% 0, 100% 7%, 95% 100%, 0 93%); }
 .quiz-best-score small { font-size: .52rem; font-weight: 750; letter-spacing: .05em; text-transform: uppercase; }
 .quiz-best-score strong { font-size: .74rem; font-weight: 850; }

@@ -18,6 +18,9 @@
 .hero-character--newyear { height: calc(100% + 70px); right: -2%; }
 .hero-character--valentine { height: calc(100% + 70px); right: -2%; }
 .hero-character--easter { height: calc(100% + 72px); right: -2%; }
+.hero-character--summer { height: calc(100% + 70px); right: -2%; }
+.hero-character--friendship { height: calc(100% + 58px); right: -5%; }
+.hero-character--independence { height: calc(100% + 70px); right: -2%; }
 .mascot-card { position: relative; z-index: 1; display: grid; width: 210px; min-height: 220px; padding: 28px; place-items: center; border: 2px solid var(--hero-panel-ink); border-radius: 30px; color: var(--hero-panel-ink); background: var(--hero-panel-bg); box-shadow: 7px 7px 0 var(--hero-from); transform: rotate(3deg); }
 .mascot-card__sparkle { position: absolute; top: 18px; right: 20px; color: #ffd78a; font-size: 1.3rem; }
 .mascot-face { position: relative; width: 100px; height: 100px; border-radius: 38% 42% 45% 40%; background: #ffcf5a; box-shadow: inset -8px -10px 0 rgba(239, 156, 56, .22), 0 12px 25px rgba(67, 43, 148, .18); transform: rotate(-5deg); }
@@ -107,6 +110,9 @@
 :root[data-theme="newyear"] .scoreboard { --score-card-bg: #171b42; --score-card-border: #555b89; --score-card-ink: #fff7e8; --score-card-muted: #c8c8df; --score-card-control: #e13c88; --score-card-control-ink: #fff8ea; --perfect-card: #f4c96b; --perfect-card-strong: #bd8f35; --perfect-card-ink: #171a3d; --perfect-shine: rgba(255, 244, 207, .55); }
 :root[data-theme="valentine"] .scoreboard { --score-card-bg: #fff8ea; --score-card-border: #d8b58f; --score-card-ink: #4a1720; --score-card-muted: #8e6563; --score-card-control: #c9234f; --score-card-control-ink: #fff8ee; --perfect-card: #f2c45e; --perfect-card-strong: #d99e35; --perfect-card-ink: #4a1720; --perfect-shine: rgba(255, 248, 226, .62); }
 :root[data-theme="easter"] .scoreboard { --score-card-bg: #fffaf0; --score-card-border: #c9bce4; --score-card-ink: #35405d; --score-card-muted: #727691; --score-card-control: #8d72d4; --score-card-control-ink: #fffaf0; --perfect-card: #f2cf62; --perfect-card-strong: #d4a92f; --perfect-card-ink: #3d3d5b; --perfect-shine: rgba(255, 250, 225, .64); }
+:root[data-theme="summer"] .scoreboard { --score-card-bg: #fffaf0; --score-card-border: #91cfc6; --score-card-ink: #153f45; --score-card-muted: #5c7b7d; --score-card-control: #0f9fa2; --score-card-control-ink: #fffaf0; --perfect-card: #ffc84a; --perfect-card-strong: #e49a23; --perfect-card-ink: #153f45; --perfect-shine: rgba(255, 248, 208, .62); }
+:root[data-theme="friendship"] .scoreboard { --score-card-bg: #fffaf2; --score-card-border: #c6afe7; --score-card-ink: #30234f; --score-card-muted: #74678c; --score-card-control: #7d45d2; --score-card-control-ink: #fffaf2; --perfect-card: #b9ee45; --perfect-card-strong: #73b739; --perfect-card-ink: #30234f; --perfect-shine: rgba(250, 255, 220, .64); }
+:root[data-theme="independence"] .scoreboard { --score-card-bg: #fffdf7; --score-card-border: #a9bfd8; --score-card-ink: #183454; --score-card-muted: #68788c; --score-card-control: #1769c2; --score-card-control-ink: #fffdf7; --perfect-card: #df2d43; --perfect-card-strong: #a9162c; --perfect-card-ink: #fffdf7; --perfect-shine: rgba(255, 231, 233, .58); }
 :root[data-theme="violet"] .score-card.is-placeholder { border-color: color-mix(in srgb, #f4f1e9 28%, transparent); background: color-mix(in srgb, #f4f1e9 9%, transparent); }
 :root[data-theme="violet"] .score-card__placeholder-mark { color: color-mix(in srgb, #f4f1e9 36%, transparent); }
 :root[data-theme="violet"] .score-card__placeholder-copy strong { color: #f4f1e9; opacity: .38; }
