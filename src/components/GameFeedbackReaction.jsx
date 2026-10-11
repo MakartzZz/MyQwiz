@@ -4,6 +4,11 @@ import thumbMidnight from "../assets/game-feedback/thumb-midnight.webp";
 import thumbPink from "../assets/game-feedback/thumb-pink.webp";
 import thumbSky from "../assets/game-feedback/thumb-sky.webp";
 import thumbViolet from "../assets/game-feedback/thumb-violet.webp";
+import thumbHalloween from "../assets/game-feedback/thumb-halloween.webp";
+import thumbChristmas from "../assets/game-feedback/thumb-christmas.webp";
+import thumbNewYear from "../assets/game-feedback/thumb-newyear.webp";
+import thumbValentine from "../assets/game-feedback/thumb-valentine.webp";
+import thumbEaster from "../assets/game-feedback/thumb-easter.webp";
 
 const reactionLabels = {
   correct: "Respuesta correcta",
@@ -17,6 +22,11 @@ const themeThumbs = {
   sky: thumbSky,
   midnight: thumbMidnight,
   pink: thumbPink,
+  halloween: thumbHalloween,
+  christmas: thumbChristmas,
+  newyear: thumbNewYear,
+  valentine: thumbValentine,
+  easter: thumbEaster,
 };
 
 function ReactionArtwork({ type, theme }) {

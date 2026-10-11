@@ -1,4 +1,5 @@
 import { useMemo, useState } from "react";
+import QuestionTypeSummary from "./QuestionTypeSummary.jsx";
 import { QuizIcon } from "./QuizIcon.jsx";
 import SubjectSelect from "./SubjectSelect.jsx";
 
@@ -14,52 +15,61 @@ function CardActionIcon({ name }) {
     export: <><path d="M12 3v12" /><path d="m7 8 5-5 5 5" /><path d="M5 13v6h14v-6" /></>,
     rename: <><path d="M4 20h4l10-10-4-4L4 16v4Z" /><path d="m12.5 7.5 4 4" /></>,
     duplicate: <><rect x="8" y="8" width="11" height="11" rx="1" /><path d="M16 8V5H5v11h3" /></>,
+    merge: <><path d="M4 6h4c5 0 4 12 9 12h3" /><path d="m17 15 3 3-3 3" /><path d="M4 18h4c2.2 0 3.2-2.3 4.1-5" /><path d="M16 6h4" /><path d="m17 3 3 3-3 3" /></>,
     delete: <><path d="M4 7h16" /><path d="M9 7V4h6v3" /><path d="m6 7 1 13h10l1-13" /><path d="M10 11v5M14 11v5" /></>,
   };
 
   return (
-    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
       {paths[name]}
     </svg>
   );
 }
 
-function QuizCard({ quiz, onOpen, onPlay, onRename, onDuplicate, onDelete, onExport }) {
+function QuizCard({ quiz, canMerge, onOpen, onPlay, onRename, onDuplicate, onMerge, onDelete, onExport }) {
   const isReady = quiz.status === "ready";
   const bestScore = Number.isFinite(quiz.stats?.bestScore) ? quiz.stats.bestScore : null;
 
+  const actionButton = (label, icon, onClick, className = "") => (
+    <button className={className} type="button" onClick={onClick} aria-label={label} title={label}>
+      <CardActionIcon name={icon} />
+    </button>
+  );
+
   return (
     <article className="quiz-library-card">
-      <div className="quiz-library-card__top">
-        <span className={`quiz-status ${quiz.status === "ready" ? "is-ready" : ""}`}>{quiz.status === "ready" ? "Listo" : "Borrador"}</span>
-        <span className={`quiz-best-score ${bestScore === null ? "is-empty" : ""}`}>
-          <small>Mejor nota</small>
-          <strong>{bestScore === null ? "—" : `${bestScore}%`}</strong>
-        </span>
-      </div>
-      <div className="quiz-library-card__identity">
-        <span className="quiz-library-card__icon"><QuizIcon iconId={quiz.iconId} size={27} /></span>
-        <div>
-          <h3>{quiz.title}</h3>
-          <p>{quiz.description || "Sin descripción todavía."}</p>
+      <div className="quiz-library-card__info">
+        <div className="quiz-library-card__top">
+          <span className={`quiz-status ${isReady ? "is-ready" : ""}`}>{isReady ? "Listo" : "Borrador"}</span>
+          <span className={`quiz-best-score ${bestScore === null ? "is-empty" : ""}`}>
+            <small>Mejor nota</small>
+            <strong>{bestScore === null ? "—" : `${bestScore}%`}</strong>
+          </span>
         </div>
-      </div>
-      <div className="quiz-library-card__footer">
-        <span>{quiz.questions.length} preguntas</span>
-        <button type="button" onClick={() => isReady ? onPlay(quiz) : onOpen(quiz)}>
-          <CardActionIcon name={isReady ? "play" : "continue"} />
-          {isReady ? "Jugar" : "Continuar"}
-        </button>
-      </div>
-      <div className="quiz-library-card__actions">
-        <button type="button" onClick={() => onExport(quiz)}><CardActionIcon name="export" />Exportar</button>
-        {isReady ? (
-          <button type="button" onClick={() => onOpen(quiz)}><CardActionIcon name="rename" />Editar</button>
-        ) : (
-          <button type="button" onClick={() => onRename(quiz)}><CardActionIcon name="rename" />Renombrar</button>
-        )}
-        <button type="button" onClick={() => onDuplicate(quiz)}><CardActionIcon name="duplicate" />Duplicar</button>
-        <button type="button" className="is-danger" onClick={() => onDelete(quiz)}><CardActionIcon name="delete" />Eliminar</button>
+
+        <div className="quiz-library-card__identity">
+          <span className="quiz-library-card__icon"><QuizIcon iconId={quiz.iconId} size={27} /></span>
+          <div>
+            <h3>{quiz.title}</h3>
+            <p>{quiz.description || "Sin descripción todavía."}</p>
+          </div>
+        </div>
+
+        <QuestionTypeSummary quiz={quiz} className="quiz-library-card__types" emptyLabel="Sin preguntas todavía" />
+
+        <div className="quiz-library-card__controls">
+          <span>{quiz.questions.length} {quiz.questions.length === 1 ? "pregunta" : "preguntas"}</span>
+          <div className="quiz-library-card__actions">
+            {actionButton("Exportar quiz", "export", () => onExport(quiz))}
+            {actionButton(isReady ? "Editar quiz" : "Renombrar quiz", "rename", () => isReady ? onOpen(quiz) : onRename(quiz))}
+            {actionButton("Duplicar quiz", "duplicate", () => onDuplicate(quiz))}
+            <button type="button" onClick={() => onMerge(quiz)} aria-label="Fusionar quiz" title="Fusionar quiz" disabled={!canMerge}>
+              <CardActionIcon name="merge" />
+            </button>
+            {actionButton("Eliminar quiz", "delete", () => onDelete(quiz), "is-danger")}
+            {actionButton(isReady ? "Jugar quiz" : "Continuar edición", isReady ? "play" : "continue", () => isReady ? onPlay(quiz) : onOpen(quiz), `is-primary ${isReady ? "is-play" : ""}`)}
+          </div>
+        </div>
       </div>
     </article>
   );
@@ -84,7 +94,7 @@ function QuizGroup({ title, description, quizzes, ...actions }) {
   );
 }
 
-function QuizLibrary({ quizzes, onOpen, onPlay, onRename, onDuplicate, onDelete, onExport }) {
+function QuizLibrary({ quizzes, onOpen, onPlay, onRename, onDuplicate, onMerge, onDelete, onExport }) {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedIcon, setSelectedIcon] = useState("all");
 
@@ -109,7 +119,7 @@ function QuizLibrary({ quizzes, onOpen, onPlay, onRename, onDuplicate, onDelete,
 
   const readyQuizzes = filteredQuizzes.filter((quiz) => quiz.status === "ready");
   const draftQuizzes = filteredQuizzes.filter((quiz) => quiz.status !== "ready");
-  const actions = { onOpen, onPlay, onRename, onDuplicate, onDelete, onExport };
+  const actions = { canMerge: quizzes.length > 1, onOpen, onPlay, onRename, onDuplicate, onMerge, onDelete, onExport };
   const clearFilters = () => {
     setSearchQuery("");
     setSelectedIcon("all");

@@ -3,6 +3,11 @@
 :root[data-theme="sky"] .cat-game { --cat-body: #2388bb; }
 :root[data-theme="midnight"] .cat-game { --cat-body: #d98e3d; }
 :root[data-theme="pink"] .cat-game { --cat-body: #d62970; }
+:root[data-theme="halloween"] .cat-game { --cat-body: #9b5de5; }
+:root[data-theme="christmas"] .cat-game { --cat-body: #c93643; }
+:root[data-theme="newyear"] .cat-game { --cat-body: #e13c88; }
+:root[data-theme="valentine"] .cat-game { --cat-body: #c9234f; }
+:root[data-theme="easter"] .cat-game { --cat-body: #71c7e8; }
 .cat-game::before { position: absolute; width: 260px; height: 260px; right: -120px; top: -125px; border: 34px solid color-mix(in srgb, var(--purple) 18%, transparent); border-radius: 50%; content: ""; }
 .cat-game__close { position: absolute; z-index: 4; display: grid; width: 39px; height: 39px; right: 22px; top: 22px; place-items: center; color: var(--on-primary); background: var(--purple); clip-path: polygon(7% 0, 100% 7%, 93% 100%, 0 93%); }
 .cat-game__heading { position: relative; z-index: 1; max-width: 520px; }

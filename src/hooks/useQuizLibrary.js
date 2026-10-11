@@ -1,5 +1,5 @@
 import { useCallback, useState } from "react";
-import { createQuiz, duplicateQuiz } from "../domain/quizFactory.js";
+import { createQuiz, duplicateQuiz, mergeQuizzes } from "../domain/quizFactory.js";
 import { validateQuiz } from "../domain/quizValidation.js";
 import { quizStorage } from "../services/quizStorage.js";
 
@@ -25,6 +25,12 @@ export function useQuizLibrary() {
     return duplicate;
   }, []);
 
+  const mergeDrafts = useCallback((primaryQuiz, secondaryQuiz) => {
+    const merged = quizStorage.save(mergeQuizzes(primaryQuiz, secondaryQuiz));
+    setQuizzes(quizStorage.getAll());
+    return merged;
+  }, []);
+
   const deleteDraft = useCallback((quizId) => {
     const removed = quizStorage.remove(quizId);
     if (removed) setQuizzes(quizStorage.getAll());
@@ -48,5 +54,5 @@ export function useQuizLibrary() {
     return savedQuiz;
   }, []);
 
-  return { quizzes, createDraft, saveDraft, duplicateDraft, deleteDraft, importDraft, recordAttempt };
+  return { quizzes, createDraft, saveDraft, duplicateDraft, mergeDrafts, deleteDraft, importDraft, recordAttempt };
 }

@@ -39,6 +39,11 @@
 :root[data-theme="sky"] .sidebar-mascot { --mascot-body: #2388bb; }
 :root[data-theme="midnight"] .sidebar-mascot { --mascot-body: #d98e3d; }
 :root[data-theme="pink"] .sidebar-mascot { --mascot-body: #d62970; }
+:root[data-theme="halloween"] .sidebar-mascot { --mascot-body: #9b5de5; }
+:root[data-theme="christmas"] .sidebar-mascot { --mascot-body: #c93643; }
+:root[data-theme="newyear"] .sidebar-mascot { --mascot-body: #e13c88; }
+:root[data-theme="valentine"] .sidebar-mascot { --mascot-body: #e8b34f; }
+:root[data-theme="easter"] .sidebar-mascot { --mascot-body: #f2cf62; }
 @keyframes sidebar-mascot-blink { 0%, 100% { transform: scaleY(1); } 45%, 60% { transform: scaleY(.08); } }
 @keyframes sidebar-mascot-reward { 0%, 100% { transform: translateY(0) rotate(0) scale(1); } 22% { transform: translateY(4px) rotate(-4deg) scaleX(1.08) scaleY(.92); } 48% { transform: translateY(-9px) rotate(4deg) scaleX(.95) scaleY(1.08); } 70% { transform: translateY(-2px) rotate(-2deg) scale(1.03); } }
 .main-nav { display: grid; gap: 8px; margin-top: 58px; }
@@ -101,6 +106,11 @@
 :root[data-theme="midnight"] .support-coffee { --support-outline: #d98e3d; }
 :root[data-theme="pink"] .support-coffee { --support-outline: #d62970; }
 :root[data-theme="violet"] .support-coffee { --support-outline: #263122; --support-steam: #d8ddd4; }
+:root[data-theme="halloween"] .support-coffee { --support-outline: #ff7a1a; --support-steam: #caa5ff; }
+:root[data-theme="christmas"] .support-coffee { --support-outline: #c93643; --support-steam: #e4b85a; }
+:root[data-theme="newyear"] .support-coffee { --support-outline: #e13c88; --support-steam: #f4c96b; }
+:root[data-theme="valentine"] .support-coffee { --support-outline: #c9234f; --support-steam: #f2c45e; }
+:root[data-theme="easter"] .support-coffee { --support-outline: #71c7e8; --support-steam: #f2cf62; }
 
 @keyframes support-coffee-steam {
   0% { opacity: 0; transform: translate(0, 5px) scaleX(.72) rotate(-5deg); }
@@ -192,6 +202,11 @@
 :root[data-theme="sky"] .qwiz-loader { --qwiz-loader-body: #2388bb; }
 :root[data-theme="midnight"] .qwiz-loader { --qwiz-loader-body: #d98e3d; }
 :root[data-theme="pink"] .qwiz-loader { --qwiz-loader-body: #d62970; }
+:root[data-theme="halloween"] .qwiz-loader { --qwiz-loader-body: #9b5de5; }
+:root[data-theme="christmas"] .qwiz-loader { --qwiz-loader-body: #c93643; }
+:root[data-theme="newyear"] .qwiz-loader { --qwiz-loader-body: #e13c88; }
+:root[data-theme="valentine"] .qwiz-loader { --qwiz-loader-body: #c9234f; }
+:root[data-theme="easter"] .qwiz-loader { --qwiz-loader-body: #71c7e8; }
 
 @keyframes qwiz-loader-balance {
   from { transform: translate3d(-5px, 2px, 0) rotate(-7deg); }

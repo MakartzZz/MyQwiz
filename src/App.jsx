@@ -1,11 +1,17 @@
 import { lazy, Suspense, useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { Play, SwatchBook } from "lucide-react";
+import { CircleDashed, Play, SwatchBook } from "lucide-react";
 import { Toaster } from "sileo";
 import myQwizWordmarkMidnight from "./assets/branding/myqwiz-wordmark-midnight.webp";
 import myQwizWordmarkPink from "./assets/branding/myqwiz-wordmark-pink.webp";
 import myQwizWordmarkSky from "./assets/branding/myqwiz-wordmark-sky.webp";
 import myQwizWordmarkViolet from "./assets/branding/myqwiz-wordmark-violet.webp";
+import myQwizWordmarkHalloween from "./assets/branding/myqwiz-wordmark-halloween.webp";
+import myQwizWordmarkChristmas from "./assets/branding/myqwiz-wordmark-christmas.webp";
+import myQwizWordmarkNewYear from "./assets/branding/myqwiz-wordmark-newyear.webp";
+import myQwizWordmarkValentine from "./assets/branding/myqwiz-wordmark-valentine.webp";
+import myQwizWordmarkEaster from "./assets/branding/myqwiz-wordmark-easter.webp";
 import AlbumCover from "./components/PersonalAlbumCover.jsx";
+import QuestionTypeSummary from "./components/QuestionTypeSummary.jsx";
 import { QuizIcon } from "./components/QuizIcon.jsx";
 import {
   AccessibilitySettings,
@@ -23,7 +29,6 @@ import {
   MUSIC_ALBUM_STORAGE_KEY,
   musicAlbums,
 } from "./config/musicAlbums.js";
-import { QUESTION_TYPES } from "./domain/quizConstants.js";
 import { useQuizLibrary } from "./hooks/useQuizLibrary.js";
 import { usePersonalMusicAlbums } from "./hooks/usePersonalMusicAlbums.js";
 import { useTheme } from "./hooks/useTheme.js";
@@ -56,6 +61,7 @@ import {
 } from "./services/uiSounds.js";
 import {
   areQuizzesEquivalent,
+  copyQuizText,
   downloadQuizFile,
   MAX_QUIZ_FILE_SIZE,
   normalizeQuizTitle,
@@ -73,6 +79,7 @@ const QuizLibrary = lazy(() => import("./components/QuizLibrary.jsx"));
 const QuickQuizLibrary = lazy(() => import("./components/QuickQuizLibrary.jsx"));
 const QuickQuizDrawModal = lazy(() => import("./components/QuickQuizDrawModal.jsx"));
 const QuizManageModal = lazy(() => import("./components/QuizManageModal.jsx"));
+const QuizMergeModal = lazy(() => import("./components/QuizMergeModal.jsx"));
 const QuizEditWarningModal = lazy(() => import("./components/QuizEditWarningModal.jsx"));
 const QuizProgressNoticeModal = lazy(() => import("./components/QuizProgressNoticeModal.jsx"));
 const QuizPlayer = lazy(() => import("./components/QuizPlayer.jsx"));
@@ -87,6 +94,11 @@ const wordmarkByTheme = {
   sky: myQwizWordmarkSky,
   midnight: myQwizWordmarkMidnight,
   pink: myQwizWordmarkPink,
+  halloween: myQwizWordmarkHalloween,
+  christmas: myQwizWordmarkChristmas,
+  newyear: myQwizWordmarkNewYear,
+  valentine: myQwizWordmarkValentine,
+  easter: myQwizWordmarkEaster,
 };
 
 const Icon = ({ name, size = 20 }) => {
@@ -285,6 +297,17 @@ const AutoScrollTitle = ({ children }) => {
   );
 };
 
+const ScoreCardPlaceholder = () => (
+  <article className="score-card is-placeholder" aria-label="Espacio disponible">
+    <div className="score-card__placeholder-mark" aria-hidden="true">
+      <CircleDashed size={32} strokeWidth={1.6} />
+    </div>
+    <div className="score-card__placeholder-copy">
+      <strong>Disponible</strong>
+    </div>
+  </article>
+);
+
 const navigation = [
   { label: "Inicio", icon: "home" },
   { label: "Mis quizzes", icon: "library" },
@@ -304,14 +327,6 @@ const MUSIC_VOLUME_STORAGE_KEY = "myqwiz:music-volume";
 const SIDEBAR_COLLAPSED_STORAGE_KEY = "myqwiz:sidebar-collapsed";
 const QUIZ_PROGRESS_NOTICE_HIDDEN_STORAGE_KEY = "myqwiz:hide-progress-notice";
 const MUSIC_VOLUME_LEVELS = [0.07, 0.13, 0.2];
-const SCORE_QUESTION_TYPES = [
-  { id: QUESTION_TYPES.MULTIPLE_CHOICE, label: "Selección" },
-  { id: QUESTION_TYPES.TRUE_FALSE, label: "V/F" },
-  { id: QUESTION_TYPES.FILL_BLANK, label: "Completar" },
-  { id: QUESTION_TYPES.MATCHING, label: "Asociar" },
-  { id: QUESTION_TYPES.SHORT_ANSWER, label: "Breve" },
-];
-
 const readStoredMusicVolume = () => {
   const storedVolume = Number(
     window.localStorage.getItem(MUSIC_VOLUME_STORAGE_KEY),
@@ -351,6 +366,7 @@ function App() {
     quizSessionStorage.get(),
   );
   const [managedQuiz, setManagedQuiz] = useState(null);
+  const [mergingQuiz, setMergingQuiz] = useState(null);
   const [manageMode, setManageMode] = useState("rename");
   const [quizPendingEdit, setQuizPendingEdit] = useState(null);
   const [importConflict, setImportConflict] = useState(null);
@@ -387,7 +403,7 @@ function App() {
   const quickQuizLoaderRef = useRef(null);
   const quickQuizLoadSequenceRef = useRef(0);
   const sidebarMotionTimeoutRef = useRef(null);
-  const { theme, changeTheme } = useTheme();
+  const { theme, changeTheme, calendarDate } = useTheme();
   const shouldLoadPersonalMusic = (
     (activeSection === "Ajustes" && settingsView === "music")
     || selectedAlbumId.startsWith("personal-album-")
@@ -410,6 +426,7 @@ function App() {
     createDraft,
     saveDraft,
     duplicateDraft,
+    mergeDrafts,
     deleteDraft,
     importDraft,
     recordAttempt,
@@ -1224,6 +1241,22 @@ function App() {
     }
   };
 
+  const mergeQuizDrafts = (primaryQuiz, secondaryQuiz) => {
+    try {
+      const mergedQuiz = mergeDrafts(primaryQuiz, secondaryQuiz);
+      setMergingQuiz(null);
+      systemNotifications.success(
+        "Quizzes fusionados",
+        `“${mergedQuiz.title}” ya está en tu biblioteca. Los originales siguen intactos.`,
+      );
+    } catch (error) {
+      systemNotifications.error(
+        "No se pudieron fusionar",
+        error.message || "Inténtalo nuevamente.",
+      );
+    }
+  };
+
   const showQuizValidationError = (errors) => {
     const firstError =
       errors[0]?.message ?? "Completa las preguntas antes de continuar.";
@@ -1328,6 +1361,23 @@ function App() {
       systemNotifications.error(
         "No se pudo exportar",
         "El navegador no permitió crear el archivo.",
+      );
+    }
+  };
+
+  const copyQuizExportText = async () => {
+    if (!exportingQuiz) return;
+    try {
+      await copyQuizText(exportingQuiz);
+      systemNotifications.success(
+        "Texto copiado",
+        `“${exportingQuiz.title}” está listo para pegarse o compartirse.`,
+      );
+      setExportingQuiz(null);
+    } catch {
+      systemNotifications.error(
+        "No se pudo copiar",
+        "El navegador no permitió acceder al portapapeles.",
       );
     }
   };
@@ -1636,26 +1686,17 @@ function App() {
 
               <div className="scoreboard">
                 <div
-                  className={`scoreboard__list ${visibleScoredQuizzes.length ? "" : "is-empty"}`}
+                  className="scoreboard__list"
                   ref={scoreboardRef}
                   style={{
                     "--score-card-count": Math.max(
-                      visibleScoredQuizzes.length,
+                      scoreCardCapacity,
                       1,
                     ),
                   }}
                 >
-                  {visibleScoredQuizzes.length ? (
-                    visibleScoredQuizzes.map((quiz, index) => {
+                  {visibleScoredQuizzes.map((quiz, index) => {
                       const isPerfect = quiz.stats.bestScore === 100;
-                      const questionTypeCounts = SCORE_QUESTION_TYPES.map(
-                        (type) => ({
-                          ...type,
-                          count: quiz.questionTypeCounts?.[type.id] ?? quiz.questions.filter(
-                            (question) => question.type === type.id,
-                          ).length,
-                        }),
-                      ).filter((type) => type.count > 0);
 
                       return (
                         <article
@@ -1672,17 +1713,7 @@ function App() {
                             <AutoScrollTitle>{quiz.title}</AutoScrollTitle>
                             <span>{quiz.questionCount ?? quiz.questions.length} preguntas</span>
                           </div>
-                          <div
-                            className="score-card__types"
-                            aria-label="Preguntas por tipo"
-                          >
-                            {questionTypeCounts.map((type) => (
-                              <span key={type.id}>
-                                <i>{type.label}</i>
-                                <b>{type.count}</b>
-                              </span>
-                            ))}
-                          </div>
+                          <QuestionTypeSummary quiz={quiz} className="score-card__types" iconSize={16} />
                           <div className="score-card__score">
                             <strong>{quiz.stats.bestScore}%</strong>
                             <span>Mejor nota</span>
@@ -1697,18 +1728,10 @@ function App() {
                           </button>
                         </article>
                       );
-                    })
-                  ) : (
-                    <div className="scoreboard__empty">
-                      <Icon name="trophy" size={22} />
-                      <div>
-                        <strong>Aún no hay resultados</strong>
-                        <span>
-                          Completa un quiz y tu mejor nota aparecerá aquí.
-                        </span>
-                      </div>
-                    </div>
-                  )}
+                    })}
+                  {Array.from({ length: Math.max(0, scoreCardCapacity - visibleScoredQuizzes.length) }, (_, index) => (
+                    <ScoreCardPlaceholder key={`personal-placeholder-${index}`} />
+                  ))}
                 </div>
               </div>
             </section>
@@ -1726,25 +1749,16 @@ function App() {
 
               <div className="scoreboard">
                 <div
-                  className={`scoreboard__list scoreboard__list--fixed-five ${visibleScoredQuickQuizzes.length ? "" : "is-empty"}`}
+                  className="scoreboard__list scoreboard__list--fixed-five"
                   style={{
                     "--score-card-count": Math.max(
-                      visibleScoredQuickQuizzes.length,
+                      5,
                       1,
                     ),
                   }}
                 >
-                  {visibleScoredQuickQuizzes.length ? (
-                    visibleScoredQuickQuizzes.map((quiz, index) => {
+                  {visibleScoredQuickQuizzes.map((quiz, index) => {
                       const isPerfect = quiz.stats.bestScore === 100;
-                      const questionTypeCounts = SCORE_QUESTION_TYPES.map(
-                        (type) => ({
-                          ...type,
-                          count: quiz.questionTypeCounts?.[type.id] ?? quiz.questions?.filter(
-                            (question) => question.type === type.id,
-                          ).length ?? 0,
-                        }),
-                      ).filter((type) => type.count > 0);
 
                       return (
                         <article
@@ -1761,17 +1775,7 @@ function App() {
                             <AutoScrollTitle>{quiz.title}</AutoScrollTitle>
                             <span>{quiz.questionCount ?? quiz.questions?.length ?? 0} preguntas</span>
                           </div>
-                          <div
-                            className="score-card__types"
-                            aria-label="Preguntas por tipo"
-                          >
-                            {questionTypeCounts.map((type) => (
-                              <span key={type.id}>
-                                <i>{type.label}</i>
-                                <b>{type.count}</b>
-                              </span>
-                            ))}
-                          </div>
+                          <QuestionTypeSummary quiz={quiz} className="score-card__types" iconSize={16} />
                           <div className="score-card__score">
                             <strong>{quiz.stats.bestScore}%</strong>
                             <span>Mejor nota</span>
@@ -1786,19 +1790,10 @@ function App() {
                           </button>
                         </article>
                       );
-                    })
-                  ) : (
-                    <div className="scoreboard__empty">
-                      <Icon name="quick" size={22} />
-                      <div>
-                        <strong>Aún no hay resultados rápidos</strong>
-                        <span>
-                          Completa un quiz rápido y tus cinco mejores notas
-                          aparecerán aquí.
-                        </span>
-                      </div>
-                    </div>
-                  )}
+                    })}
+                  {Array.from({ length: Math.max(0, 5 - visibleScoredQuickQuizzes.length) }, (_, index) => (
+                    <ScoreCardPlaceholder key={`quick-placeholder-${index}`} />
+                  ))}
                 </div>
               </div>
             </section>
@@ -1881,6 +1876,7 @@ function App() {
                   onPlay={openQuizGame}
                   onRename={(quiz) => openManageQuiz(quiz, "rename")}
                   onDuplicate={duplicateQuizDraft}
+                  onMerge={setMergingQuiz}
                   onDelete={(quiz) => openManageQuiz(quiz, "delete")}
                   onExport={setExportingQuiz}
                 />
@@ -1954,7 +1950,7 @@ function App() {
               >
                 <Icon name="back" size={18} /> Volver a Ajustes
               </button>
-              <ThemeSwitcher activeTheme={theme} onChange={changeTheme} />
+              <ThemeSwitcher activeTheme={theme} currentDate={calendarDate} onChange={changeTheme} />
             </div>
           ) : settingsView === "music" ? (
             <div className="settings-detail">
@@ -2179,6 +2175,14 @@ function App() {
             onConfirm={confirmManageQuiz}
           />
         )}
+        {mergingQuiz && (
+          <QuizMergeModal
+            quiz={mergingQuiz}
+            quizzes={quizzes}
+            onClose={() => setMergingQuiz(null)}
+            onConfirm={mergeQuizDrafts}
+          />
+        )}
         {isImportModalOpen && (
           <QuizImportModal
             isOpen
@@ -2199,6 +2203,7 @@ function App() {
             quiz={exportingQuiz}
             onClose={() => setExportingQuiz(null)}
             onExport={exportQuizFile}
+            onCopy={copyQuizExportText}
             onDrive={openGoogleDrive}
           />
         )}

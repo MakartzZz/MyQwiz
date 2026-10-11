@@ -103,6 +103,8 @@ test("the lightweight quick quiz catalog stays synchronized with question files"
     const countedQuestions = Object.values(quiz.questionTypeCounts)
       .reduce((total, count) => total + count, 0);
     assert.equal(countedQuestions, quiz.questionCount, quiz.id);
+    assert.equal("undefined" in quiz.questionTypeCounts, false, quiz.id);
+    assert.ok(quiz.questionTypeCounts[QUESTION_TYPES.MULTIPLE_CHOICE] > 0, quiz.id);
     assert.ok(quiz.questionCount >= 5 && quiz.questionCount <= 10, quiz.id);
   });
 });

@@ -20,6 +20,29 @@ export const createQuizExport = (quiz) => ({
 
 export const serializeQuiz = (quiz) => JSON.stringify(createQuizExport(quiz), null, 2);
 
+export const copyQuizText = async (quiz) => {
+  const content = serializeQuiz(quiz);
+
+  if (globalThis.navigator?.clipboard?.writeText) {
+    await globalThis.navigator.clipboard.writeText(content);
+    return;
+  }
+
+  const field = document.createElement("textarea");
+  field.value = content;
+  field.setAttribute("readonly", "");
+  field.style.position = "fixed";
+  field.style.opacity = "0";
+  document.body.appendChild(field);
+
+  try {
+    field.select();
+    if (!document.execCommand("copy")) throw new Error("No se pudo copiar el texto.");
+  } finally {
+    field.remove();
+  }
+};
+
 export const parseQuizImport = (fileContent) => {
   let parsed;
 

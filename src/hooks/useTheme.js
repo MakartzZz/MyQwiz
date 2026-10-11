@@ -1,12 +1,21 @@
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
-import { DEFAULT_THEME, isValidTheme, THEME_STORAGE_KEY } from "../config/themes.js";
+import { DEFAULT_THEME, isValidTheme, SEASONAL_THEME_LOCKING_ENABLED, themes, THEME_STORAGE_KEY } from "../config/themes.js";
 import { playBufferedSound, stopBufferedSound } from "../services/soundBuffer.js";
 import { canPlayInterfaceSounds, getSoundScale, readUserPreferences } from "../services/userPreferences.js";
+import { getThemeSeasonStatus } from "../utils/themeSeason.js";
+
+const isThemeAvailable = (themeId, referenceDate = new Date()) => {
+  const theme = themes.find((item) => item.id === themeId);
+  return Boolean(theme && (
+    !SEASONAL_THEME_LOCKING_ENABLED
+    || getThemeSeasonStatus(theme, referenceDate).isAvailable
+  ));
+};
 
 const readStoredTheme = () => {
   try {
     const storedTheme = window.localStorage.getItem(THEME_STORAGE_KEY);
-    return isValidTheme(storedTheme) ? storedTheme : DEFAULT_THEME;
+    return isValidTheme(storedTheme) && isThemeAvailable(storedTheme) ? storedTheme : DEFAULT_THEME;
   } catch {
     return DEFAULT_THEME;
   }
@@ -19,11 +28,32 @@ const applyTheme = (theme) => {
 
 export function useTheme() {
   const [theme, setTheme] = useState(readStoredTheme);
+  const [calendarDate, setCalendarDate] = useState(() => new Date());
   const changeSoundRef = useRef(null);
 
   useEffect(() => {
     return () => stopBufferedSound(changeSoundRef.current);
   }, []);
+
+  useEffect(() => {
+    let dayChangeTimer;
+
+    const scheduleNextDay = () => {
+      const now = new Date();
+      const nextDay = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1, 0, 0, 1);
+      dayChangeTimer = window.setTimeout(() => {
+        setCalendarDate(new Date());
+        scheduleNextDay();
+      }, nextDay.getTime() - now.getTime());
+    };
+
+    scheduleNextDay();
+    return () => window.clearTimeout(dayChangeTimer);
+  }, []);
+
+  useEffect(() => {
+    if (!isThemeAvailable(theme, calendarDate)) setTheme(DEFAULT_THEME);
+  }, [calendarDate, theme]);
 
   useLayoutEffect(() => {
     applyTheme(theme);
@@ -36,7 +66,7 @@ export function useTheme() {
   }, [theme]);
 
   const changeTheme = useCallback((nextTheme, origin) => {
-    if (!isValidTheme(nextTheme) || nextTheme === theme) {
+    if (!isValidTheme(nextTheme) || !isThemeAvailable(nextTheme, calendarDate) || nextTheme === theme) {
       return;
     }
 
@@ -85,7 +115,7 @@ export function useTheme() {
       .catch(() => {
         // The theme is already applied even if the optional animation is interrupted.
       });
-  }, [theme]);
+  }, [calendarDate, theme]);
 
-  return { theme, changeTheme };
+  return { theme, changeTheme, calendarDate };
 }

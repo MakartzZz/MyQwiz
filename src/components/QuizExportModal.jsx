@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
+import { Copy } from "lucide-react";
 import { useModalOpenSound } from "../hooks/useModalOpenSound.js";
 
-function QuizExportModal({ quiz, onClose, onExport, onDrive }) {
+function QuizExportModal({ quiz, onClose, onExport, onCopy, onDrive }) {
   const [filename, setFilename] = useState(quiz?.title ?? "");
   useModalOpenSound(Boolean(quiz));
 
@@ -31,19 +32,36 @@ function QuizExportModal({ quiz, onClose, onExport, onDrive }) {
         <div className="quiz-modal__header">
           <div>
             <span className="eyebrow">Compartir quiz</span>
-            <h2 id="quiz-export-title">Exporta tu archivo</h2>
+            <h2 id="quiz-export-title">¿Cómo quieres compartirlo?</h2>
           </div>
           <button className="modal-close" type="button" onClick={onClose} aria-label="Cerrar">×</button>
         </div>
 
         <form onSubmit={submit}>
           <label className="form-field">
-            <span>Nombre del archivo</span>
+            <span>Nombre del archivo <small>solo se usa al descargar</small></span>
             <div className="export-filename-field">
               <input value={filename} onChange={(event) => setFilename(event.target.value)} autoFocus />
               <span>.myqwiz.json</span>
             </div>
           </label>
+
+          <div className="quiz-export-modal__choices">
+            <button type="button" onClick={onCopy}>
+              <span aria-hidden="true"><Copy size={19} /></span>
+              <span>
+                <strong>Copiar texto</strong>
+                <small>Copia el JSON completo para pegarlo o compartirlo.</small>
+              </span>
+            </button>
+            <button type="submit" disabled={!filename.trim()}>
+              <span aria-hidden="true">↓</span>
+              <span>
+                <strong>Descargar archivo</strong>
+                <small>Guarda el quiz como archivo .myqwiz.json.</small>
+              </span>
+            </button>
+          </div>
 
           <div className="quiz-export-modal__drive">
             <div>
@@ -55,7 +73,6 @@ function QuizExportModal({ quiz, onClose, onExport, onDrive }) {
 
           <div className="quiz-modal__actions">
             <button className="modal-cancel" type="button" onClick={onClose}>Cancelar</button>
-            <button className="secondary-button" type="submit" disabled={!filename.trim()}>Descargar archivo</button>
           </div>
         </form>
       </section>

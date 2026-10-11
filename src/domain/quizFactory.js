@@ -147,3 +147,24 @@ export const duplicateQuiz = (sourceQuiz) => {
     questions: sourceQuiz.questions.map(cloneQuestion),
   };
 };
+
+export const mergeQuizzes = (primaryQuiz, secondaryQuiz) => {
+  const mergedQuiz = createQuiz({
+    title: `${primaryQuiz.title} + ${secondaryQuiz.title}`,
+    description: [primaryQuiz.description, secondaryQuiz.description]
+      .map((description) => description?.trim())
+      .filter(Boolean)
+      .join(" · "),
+    iconId: primaryQuiz.iconId,
+  });
+
+  return {
+    ...mergedQuiz,
+    status: primaryQuiz.status === "ready" && secondaryQuiz.status === "ready"
+      ? "ready"
+      : "draft",
+    preferences: { ...primaryQuiz.preferences },
+    settings: { ...primaryQuiz.settings },
+    questions: [...primaryQuiz.questions, ...secondaryQuiz.questions].map(cloneQuestion),
+  };
+};

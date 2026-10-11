@@ -217,6 +217,11 @@
 :root[data-theme="sky"] .quiz-result { --perfect-card: #35a9d8; --perfect-card-strong: #1679a7; --perfect-card-ink: #ffffff; --perfect-shine: rgba(218, 246, 255, .52); }
 :root[data-theme="midnight"] .quiz-result { --perfect-card: #e3a44c; --perfect-card-strong: #a9612c; --perfect-card-ink: #17191a; --perfect-shine: rgba(255, 231, 183, .5); }
 :root[data-theme="pink"] .quiz-result { --perfect-card: #ed5b91; --perfect-card-strong: #bb1f5e; --perfect-card-ink: #fff8f5; --perfect-shine: rgba(255, 222, 235, .5); }
+:root[data-theme="halloween"] .quiz-result { --perfect-card: #ff7a1a; --perfect-card-strong: #b93f08; --perfect-card-ink: #24102e; --perfect-shine: rgba(255, 225, 148, .48); }
+:root[data-theme="christmas"] .quiz-result { --perfect-card: #e4b85a; --perfect-card-strong: #a9772d; --perfect-card-ink: #173626; --perfect-shine: rgba(255, 240, 189, .5); }
+:root[data-theme="newyear"] .quiz-result { --perfect-card: #f4c96b; --perfect-card-strong: #bd8f35; --perfect-card-ink: #171a3d; --perfect-shine: rgba(255, 244, 207, .55); }
+:root[data-theme="valentine"] .quiz-result { --perfect-card: #f2c45e; --perfect-card-strong: #d99e35; --perfect-card-ink: #4a1720; --perfect-shine: rgba(255, 248, 226, .62); }
+:root[data-theme="easter"] .quiz-result { --perfect-card: #f2cf62; --perfect-card-strong: #d4a92f; --perfect-card-ink: #3d3d5b; --perfect-shine: rgba(255, 250, 225, .64); }
 .quiz-result.is-perfect-impact { color: var(--perfect-card-ink); border-color: color-mix(in srgb, var(--perfect-card) 72%, var(--line)); background: linear-gradient(135deg, var(--perfect-card), var(--perfect-card-strong)); box-shadow: 11px 12px 0 color-mix(in srgb, var(--perfect-card-strong) 68%, var(--card-shadow)); animation: result-perfect-impact .72s cubic-bezier(.18, .9, .25, 1.2); }
 .quiz-result.is-perfect-impact::before { position: absolute; z-index: 0; width: 76px; height: 190%; left: -220px; top: -45%; background: linear-gradient(90deg, transparent, var(--perfect-shine), transparent); content: ""; opacity: 0; pointer-events: none; transform: rotate(18deg); animation: perfect-result-shine 2.8s ease-in-out .22s infinite; }
 .quiz-result.is-perfect-impact > * { position: relative; z-index: 1; }

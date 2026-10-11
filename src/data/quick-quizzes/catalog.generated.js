@@ -9,7 +9,7 @@ export const quickQuizCatalog = Object.freeze([
     "category": "anatomy",
     "questionCount": 5,
     "questionTypeCounts": {
-      "undefined": 5
+      "multiple-choice": 5
     },
     "stats": {
       "attempts": 0,
@@ -26,7 +26,7 @@ export const quickQuizCatalog = Object.freeze([
     "category": "anatomy",
     "questionCount": 6,
     "questionTypeCounts": {
-      "undefined": 6
+      "multiple-choice": 6
     },
     "stats": {
       "attempts": 0,
@@ -43,7 +43,7 @@ export const quickQuizCatalog = Object.freeze([
     "category": "anatomy",
     "questionCount": 7,
     "questionTypeCounts": {
-      "undefined": 7
+      "multiple-choice": 7
     },
     "stats": {
       "attempts": 0,
@@ -60,7 +60,7 @@ export const quickQuizCatalog = Object.freeze([
     "category": "anatomy",
     "questionCount": 8,
     "questionTypeCounts": {
-      "undefined": 7,
+      "multiple-choice": 7,
       "true-false": 1
     },
     "stats": {
@@ -78,7 +78,7 @@ export const quickQuizCatalog = Object.freeze([
     "category": "anatomy",
     "questionCount": 9,
     "questionTypeCounts": {
-      "undefined": 7,
+      "multiple-choice": 7,
       "true-false": 2
     },
     "stats": {
@@ -96,7 +96,7 @@ export const quickQuizCatalog = Object.freeze([
     "category": "art",
     "questionCount": 5,
     "questionTypeCounts": {
-      "undefined": 5
+      "multiple-choice": 5
     },
     "stats": {
       "attempts": 0,
@@ -113,7 +113,7 @@ export const quickQuizCatalog = Object.freeze([
     "category": "art",
     "questionCount": 6,
     "questionTypeCounts": {
-      "undefined": 6
+      "multiple-choice": 6
     },
     "stats": {
       "attempts": 0,
@@ -130,7 +130,7 @@ export const quickQuizCatalog = Object.freeze([
     "category": "art",
     "questionCount": 7,
     "questionTypeCounts": {
-      "undefined": 7
+      "multiple-choice": 7
     },
     "stats": {
       "attempts": 0,
@@ -147,7 +147,7 @@ export const quickQuizCatalog = Object.freeze([
     "category": "art",
     "questionCount": 8,
     "questionTypeCounts": {
-      "undefined": 7,
+      "multiple-choice": 7,
       "true-false": 1
     },
     "stats": {
@@ -165,7 +165,7 @@ export const quickQuizCatalog = Object.freeze([
     "category": "art",
     "questionCount": 9,
     "questionTypeCounts": {
-      "undefined": 7,
+      "multiple-choice": 7,
       "true-false": 2
     },
     "stats": {
@@ -183,7 +183,7 @@ export const quickQuizCatalog = Object.freeze([
     "category": "biology",
     "questionCount": 5,
     "questionTypeCounts": {
-      "undefined": 5
+      "multiple-choice": 5
     },
     "stats": {
       "attempts": 0,
@@ -200,7 +200,7 @@ export const quickQuizCatalog = Object.freeze([
     "category": "biology",
     "questionCount": 6,
     "questionTypeCounts": {
-      "undefined": 6
+      "multiple-choice": 6
     },
     "stats": {
       "attempts": 0,
@@ -217,7 +217,7 @@ export const quickQuizCatalog = Object.freeze([
     "category": "biology",
     "questionCount": 7,
     "questionTypeCounts": {
-      "undefined": 7
+      "multiple-choice": 7
     },
     "stats": {
       "attempts": 0,
@@ -234,7 +234,7 @@ export const quickQuizCatalog = Object.freeze([
     "category": "biology",
     "questionCount": 8,
     "questionTypeCounts": {
-      "undefined": 7,
+      "multiple-choice": 7,
       "true-false": 1
     },
     "stats": {
@@ -252,7 +252,7 @@ export const quickQuizCatalog = Object.freeze([
     "category": "biology",
     "questionCount": 9,
     "questionTypeCounts": {
-      "undefined": 7,
+      "multiple-choice": 7,
       "true-false": 2
     },
     "stats": {
@@ -270,7 +270,7 @@ export const quickQuizCatalog = Object.freeze([
     "category": "chemistry",
     "questionCount": 5,
     "questionTypeCounts": {
-      "undefined": 5
+      "multiple-choice": 5
     },
     "stats": {
       "attempts": 0,
@@ -287,7 +287,7 @@ export const quickQuizCatalog = Object.freeze([
     "category": "chemistry",
     "questionCount": 6,
     "questionTypeCounts": {
-      "undefined": 6
+      "multiple-choice": 6
     },
     "stats": {
       "attempts": 0,
@@ -304,7 +304,7 @@ export const quickQuizCatalog = Object.freeze([
     "category": "chemistry",
     "questionCount": 7,
     "questionTypeCounts": {
-      "undefined": 7
+      "multiple-choice": 7
     },
     "stats": {
       "attempts": 0,
@@ -321,7 +321,7 @@ export const quickQuizCatalog = Object.freeze([
     "category": "chemistry",
     "questionCount": 8,
     "questionTypeCounts": {
-      "undefined": 7,
+      "multiple-choice": 7,
       "true-false": 1
     },
     "stats": {
@@ -339,7 +339,7 @@ export const quickQuizCatalog = Object.freeze([
     "category": "chemistry",
     "questionCount": 9,
     "questionTypeCounts": {
-      "undefined": 7,
+      "multiple-choice": 7,
       "true-false": 2
     },
     "stats": {
@@ -357,7 +357,7 @@ export const quickQuizCatalog = Object.freeze([
     "category": "cinema",
     "questionCount": 5,
     "questionTypeCounts": {
-      "undefined": 5
+      "multiple-choice": 5
     },
     "stats": {
       "attempts": 0,
@@ -374,7 +374,7 @@ export const quickQuizCatalog = Object.freeze([
     "category": "cinema",
     "questionCount": 6,
     "questionTypeCounts": {
-      "undefined": 6
+      "multiple-choice": 6
     },
     "stats": {
       "attempts": 0,
@@ -391,7 +391,7 @@ export const quickQuizCatalog = Object.freeze([
     "category": "cinema",
     "questionCount": 7,
     "questionTypeCounts": {
-      "undefined": 7
+      "multiple-choice": 7
     },
     "stats": {
       "attempts": 0,
@@ -408,7 +408,7 @@ export const quickQuizCatalog = Object.freeze([
     "category": "cinema",
     "questionCount": 8,
     "questionTypeCounts": {
-      "undefined": 7,
+      "multiple-choice": 7,
       "true-false": 1
     },
     "stats": {
@@ -426,7 +426,7 @@ export const quickQuizCatalog = Object.freeze([
     "category": "cinema",
     "questionCount": 9,
     "questionTypeCounts": {
-      "undefined": 7,
+      "multiple-choice": 7,
       "true-false": 2
     },
     "stats": {
@@ -444,7 +444,7 @@ export const quickQuizCatalog = Object.freeze([
     "category": "general",
     "questionCount": 5,
     "questionTypeCounts": {
-      "undefined": 5
+      "multiple-choice": 5
     },
     "stats": {
       "attempts": 0,
@@ -461,7 +461,7 @@ export const quickQuizCatalog = Object.freeze([
     "category": "general",
     "questionCount": 6,
     "questionTypeCounts": {
-      "undefined": 6
+      "multiple-choice": 6
     },
     "stats": {
       "attempts": 0,
@@ -478,7 +478,7 @@ export const quickQuizCatalog = Object.freeze([
     "category": "general",
     "questionCount": 7,
     "questionTypeCounts": {
-      "undefined": 7
+      "multiple-choice": 7
     },
     "stats": {
       "attempts": 0,
@@ -495,7 +495,7 @@ export const quickQuizCatalog = Object.freeze([
     "category": "general",
     "questionCount": 8,
     "questionTypeCounts": {
-      "undefined": 8
+      "multiple-choice": 8
     },
     "stats": {
       "attempts": 0,
@@ -512,7 +512,7 @@ export const quickQuizCatalog = Object.freeze([
     "category": "general",
     "questionCount": 9,
     "questionTypeCounts": {
-      "undefined": 9
+      "multiple-choice": 9
     },
     "stats": {
       "attempts": 0,
@@ -529,7 +529,7 @@ export const quickQuizCatalog = Object.freeze([
     "category": "geography",
     "questionCount": 5,
     "questionTypeCounts": {
-      "undefined": 5
+      "multiple-choice": 5
     },
     "stats": {
       "attempts": 0,
@@ -546,7 +546,7 @@ export const quickQuizCatalog = Object.freeze([
     "category": "geography",
     "questionCount": 6,
     "questionTypeCounts": {
-      "undefined": 6
+      "multiple-choice": 6
     },
     "stats": {
       "attempts": 0,
@@ -563,7 +563,7 @@ export const quickQuizCatalog = Object.freeze([
     "category": "geography",
     "questionCount": 7,
     "questionTypeCounts": {
-      "undefined": 7
+      "multiple-choice": 7
     },
     "stats": {
       "attempts": 0,
@@ -580,7 +580,7 @@ export const quickQuizCatalog = Object.freeze([
     "category": "geography",
     "questionCount": 8,
     "questionTypeCounts": {
-      "undefined": 7,
+      "multiple-choice": 7,
       "true-false": 1
     },
     "stats": {
@@ -598,7 +598,7 @@ export const quickQuizCatalog = Object.freeze([
     "category": "geography",
     "questionCount": 9,
     "questionTypeCounts": {
-      "undefined": 7,
+      "multiple-choice": 7,
       "true-false": 2
     },
     "stats": {
@@ -616,7 +616,7 @@ export const quickQuizCatalog = Object.freeze([
     "category": "history",
     "questionCount": 5,
     "questionTypeCounts": {
-      "undefined": 5
+      "multiple-choice": 5
     },
     "stats": {
       "attempts": 0,
@@ -633,7 +633,7 @@ export const quickQuizCatalog = Object.freeze([
     "category": "history",
     "questionCount": 6,
     "questionTypeCounts": {
-      "undefined": 6
+      "multiple-choice": 6
     },
     "stats": {
       "attempts": 0,
@@ -650,7 +650,7 @@ export const quickQuizCatalog = Object.freeze([
     "category": "history",
     "questionCount": 7,
     "questionTypeCounts": {
-      "undefined": 7
+      "multiple-choice": 7
     },
     "stats": {
       "attempts": 0,
@@ -667,7 +667,7 @@ export const quickQuizCatalog = Object.freeze([
     "category": "history",
     "questionCount": 8,
     "questionTypeCounts": {
-      "undefined": 7,
+      "multiple-choice": 7,
       "true-false": 1
     },
     "stats": {
@@ -685,7 +685,7 @@ export const quickQuizCatalog = Object.freeze([
     "category": "history",
     "questionCount": 9,
     "questionTypeCounts": {
-      "undefined": 7,
+      "multiple-choice": 7,
       "true-false": 2
     },
     "stats": {
@@ -703,7 +703,7 @@ export const quickQuizCatalog = Object.freeze([
     "category": "languages",
     "questionCount": 5,
     "questionTypeCounts": {
-      "undefined": 5
+      "multiple-choice": 5
     },
     "stats": {
       "attempts": 0,
@@ -720,7 +720,7 @@ export const quickQuizCatalog = Object.freeze([
     "category": "languages",
     "questionCount": 6,
     "questionTypeCounts": {
-      "undefined": 6
+      "multiple-choice": 6
     },
     "stats": {
       "attempts": 0,
@@ -737,7 +737,7 @@ export const quickQuizCatalog = Object.freeze([
     "category": "languages",
     "questionCount": 7,
     "questionTypeCounts": {
-      "undefined": 7
+      "multiple-choice": 7
     },
     "stats": {
       "attempts": 0,
@@ -754,7 +754,7 @@ export const quickQuizCatalog = Object.freeze([
     "category": "languages",
     "questionCount": 8,
     "questionTypeCounts": {
-      "undefined": 7,
+      "multiple-choice": 7,
       "true-false": 1
     },
     "stats": {
@@ -772,7 +772,7 @@ export const quickQuizCatalog = Object.freeze([
     "category": "languages",
     "questionCount": 9,
     "questionTypeCounts": {
-      "undefined": 7,
+      "multiple-choice": 7,
       "true-false": 2
     },
     "stats": {
@@ -790,7 +790,7 @@ export const quickQuizCatalog = Object.freeze([
     "category": "mathematics",
     "questionCount": 5,
     "questionTypeCounts": {
-      "undefined": 5
+      "multiple-choice": 5
     },
     "stats": {
       "attempts": 0,
@@ -807,7 +807,7 @@ export const quickQuizCatalog = Object.freeze([
     "category": "mathematics",
     "questionCount": 6,
     "questionTypeCounts": {
-      "undefined": 6
+      "multiple-choice": 6
     },
     "stats": {
       "attempts": 0,
@@ -824,7 +824,7 @@ export const quickQuizCatalog = Object.freeze([
     "category": "mathematics",
     "questionCount": 7,
     "questionTypeCounts": {
-      "undefined": 7
+      "multiple-choice": 7
     },
     "stats": {
       "attempts": 0,
@@ -841,7 +841,7 @@ export const quickQuizCatalog = Object.freeze([
     "category": "mathematics",
     "questionCount": 8,
     "questionTypeCounts": {
-      "undefined": 7,
+      "multiple-choice": 7,
       "true-false": 1
     },
     "stats": {
@@ -859,7 +859,7 @@ export const quickQuizCatalog = Object.freeze([
     "category": "mathematics",
     "questionCount": 9,
     "questionTypeCounts": {
-      "undefined": 7,
+      "multiple-choice": 7,
       "true-false": 2
     },
     "stats": {
@@ -877,7 +877,7 @@ export const quickQuizCatalog = Object.freeze([
     "category": "medicine",
     "questionCount": 5,
     "questionTypeCounts": {
-      "undefined": 5
+      "multiple-choice": 5
     },
     "stats": {
       "attempts": 0,
@@ -894,7 +894,7 @@ export const quickQuizCatalog = Object.freeze([
     "category": "medicine",
     "questionCount": 6,
     "questionTypeCounts": {
-      "undefined": 6
+      "multiple-choice": 6
     },
     "stats": {
       "attempts": 0,
@@ -911,7 +911,7 @@ export const quickQuizCatalog = Object.freeze([
     "category": "medicine",
     "questionCount": 7,
     "questionTypeCounts": {
-      "undefined": 7
+      "multiple-choice": 7
     },
     "stats": {
       "attempts": 0,
@@ -928,7 +928,7 @@ export const quickQuizCatalog = Object.freeze([
     "category": "medicine",
     "questionCount": 8,
     "questionTypeCounts": {
-      "undefined": 7,
+      "multiple-choice": 7,
       "true-false": 1
     },
     "stats": {
@@ -946,7 +946,7 @@ export const quickQuizCatalog = Object.freeze([
     "category": "medicine",
     "questionCount": 9,
     "questionTypeCounts": {
-      "undefined": 7,
+      "multiple-choice": 7,
       "true-false": 2
     },
     "stats": {
@@ -964,7 +964,7 @@ export const quickQuizCatalog = Object.freeze([
     "category": "music",
     "questionCount": 5,
     "questionTypeCounts": {
-      "undefined": 5
+      "multiple-choice": 5
     },
     "stats": {
       "attempts": 0,
@@ -981,7 +981,7 @@ export const quickQuizCatalog = Object.freeze([
     "category": "music",
     "questionCount": 6,
     "questionTypeCounts": {
-      "undefined": 6
+      "multiple-choice": 6
     },
     "stats": {
       "attempts": 0,
@@ -998,7 +998,7 @@ export const quickQuizCatalog = Object.freeze([
     "category": "music",
     "questionCount": 7,
     "questionTypeCounts": {
-      "undefined": 7
+      "multiple-choice": 7
     },
     "stats": {
       "attempts": 0,
@@ -1015,7 +1015,7 @@ export const quickQuizCatalog = Object.freeze([
     "category": "music",
     "questionCount": 8,
     "questionTypeCounts": {
-      "undefined": 7,
+      "multiple-choice": 7,
       "true-false": 1
     },
     "stats": {
@@ -1033,7 +1033,7 @@ export const quickQuizCatalog = Object.freeze([
     "category": "music",
     "questionCount": 9,
     "questionTypeCounts": {
-      "undefined": 7,
+      "multiple-choice": 7,
       "true-false": 2
     },
     "stats": {
@@ -1051,7 +1051,7 @@ export const quickQuizCatalog = Object.freeze([
     "category": "physics",
     "questionCount": 5,
     "questionTypeCounts": {
-      "undefined": 5
+      "multiple-choice": 5
     },
     "stats": {
       "attempts": 0,
@@ -1068,7 +1068,7 @@ export const quickQuizCatalog = Object.freeze([
     "category": "physics",
     "questionCount": 6,
     "questionTypeCounts": {
-      "undefined": 6
+      "multiple-choice": 6
     },
     "stats": {
       "attempts": 0,
@@ -1085,7 +1085,7 @@ export const quickQuizCatalog = Object.freeze([
     "category": "physics",
     "questionCount": 7,
     "questionTypeCounts": {
-      "undefined": 7
+      "multiple-choice": 7
     },
     "stats": {
       "attempts": 0,
@@ -1102,7 +1102,7 @@ export const quickQuizCatalog = Object.freeze([
     "category": "physics",
     "questionCount": 8,
     "questionTypeCounts": {
-      "undefined": 7,
+      "multiple-choice": 7,
       "true-false": 1
     },
     "stats": {
@@ -1120,7 +1120,7 @@ export const quickQuizCatalog = Object.freeze([
     "category": "physics",
     "questionCount": 9,
     "questionTypeCounts": {
-      "undefined": 7,
+      "multiple-choice": 7,
       "true-false": 2
     },
     "stats": {
@@ -1138,7 +1138,7 @@ export const quickQuizCatalog = Object.freeze([
     "category": "science",
     "questionCount": 5,
     "questionTypeCounts": {
-      "undefined": 5
+      "multiple-choice": 5
     },
     "stats": {
       "attempts": 0,
@@ -1155,7 +1155,7 @@ export const quickQuizCatalog = Object.freeze([
     "category": "science",
     "questionCount": 6,
     "questionTypeCounts": {
-      "undefined": 6
+      "multiple-choice": 6
     },
     "stats": {
       "attempts": 0,
@@ -1172,7 +1172,7 @@ export const quickQuizCatalog = Object.freeze([
     "category": "science",
     "questionCount": 7,
     "questionTypeCounts": {
-      "undefined": 7
+      "multiple-choice": 7
     },
     "stats": {
       "attempts": 0,
@@ -1189,7 +1189,7 @@ export const quickQuizCatalog = Object.freeze([
     "category": "science",
     "questionCount": 8,
     "questionTypeCounts": {
-      "undefined": 7,
+      "multiple-choice": 7,
       "true-false": 1
     },
     "stats": {
@@ -1207,7 +1207,7 @@ export const quickQuizCatalog = Object.freeze([
     "category": "science",
     "questionCount": 9,
     "questionTypeCounts": {
-      "undefined": 7,
+      "multiple-choice": 7,
       "true-false": 2
     },
     "stats": {
@@ -1225,7 +1225,7 @@ export const quickQuizCatalog = Object.freeze([
     "category": "technology",
     "questionCount": 5,
     "questionTypeCounts": {
-      "undefined": 5
+      "multiple-choice": 5
     },
     "stats": {
       "attempts": 0,
@@ -1242,7 +1242,7 @@ export const quickQuizCatalog = Object.freeze([
     "category": "technology",
     "questionCount": 6,
     "questionTypeCounts": {
-      "undefined": 6
+      "multiple-choice": 6
     },
     "stats": {
       "attempts": 0,
@@ -1259,7 +1259,7 @@ export const quickQuizCatalog = Object.freeze([
     "category": "technology",
     "questionCount": 7,
     "questionTypeCounts": {
-      "undefined": 7
+      "multiple-choice": 7
     },
     "stats": {
       "attempts": 0,
@@ -1276,7 +1276,7 @@ export const quickQuizCatalog = Object.freeze([
     "category": "technology",
     "questionCount": 8,
     "questionTypeCounts": {
-      "undefined": 7,
+      "multiple-choice": 7,
       "true-false": 1
     },
     "stats": {
@@ -1294,7 +1294,7 @@ export const quickQuizCatalog = Object.freeze([
     "category": "technology",
     "questionCount": 9,
     "questionTypeCounts": {
-      "undefined": 7,
+      "multiple-choice": 7,
       "true-false": 2
     },
     "stats": {
@@ -1312,7 +1312,7 @@ export const quickQuizCatalog = Object.freeze([
     "category": "videogames",
     "questionCount": 5,
     "questionTypeCounts": {
-      "undefined": 5
+      "multiple-choice": 5
     },
     "stats": {
       "attempts": 0,
@@ -1329,7 +1329,7 @@ export const quickQuizCatalog = Object.freeze([
     "category": "videogames",
     "questionCount": 6,
     "questionTypeCounts": {
-      "undefined": 6
+      "multiple-choice": 6
     },
     "stats": {
       "attempts": 0,
@@ -1346,7 +1346,7 @@ export const quickQuizCatalog = Object.freeze([
     "category": "videogames",
     "questionCount": 7,
     "questionTypeCounts": {
-      "undefined": 7
+      "multiple-choice": 7
     },
     "stats": {
       "attempts": 0,
@@ -1363,7 +1363,7 @@ export const quickQuizCatalog = Object.freeze([
     "category": "videogames",
     "questionCount": 8,
     "questionTypeCounts": {
-      "undefined": 7,
+      "multiple-choice": 7,
       "true-false": 1
     },
     "stats": {
@@ -1381,7 +1381,7 @@ export const quickQuizCatalog = Object.freeze([
     "category": "videogames",
     "questionCount": 9,
     "questionTypeCounts": {
-      "undefined": 7,
+      "multiple-choice": 7,
       "true-false": 2
     },
     "stats": {

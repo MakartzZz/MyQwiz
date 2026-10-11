@@ -1,5 +1,6 @@
 import { Dices, Play, Search } from "lucide-react";
 import { useMemo } from "react";
+import QuestionTypeSummary from "./QuestionTypeSummary.jsx";
 import { QuizIcon, quizIconOptions } from "./QuizIcon.jsx";
 import SubjectSelect from "./SubjectSelect.jsx";
 
@@ -66,6 +67,7 @@ function QuickQuizLibrary({ quizzes, onPlay, onDraw, selectedCategory, searchQue
                       <h4>{quiz.title}</h4>
                       <p>{quiz.description}</p>
                     </div>
+                    <QuestionTypeSummary quiz={quiz} className="quick-quiz-card__types" iconSize={16} />
                     <div className="quick-quiz-card__footer">
                       <div className="quick-quiz-card__meta">
                         <span>{quiz.questionCount ?? quiz.questions?.length ?? 0} preguntas</span>

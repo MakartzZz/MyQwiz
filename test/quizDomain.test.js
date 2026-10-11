@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import test from "node:test";
 import { DEFAULT_GAME_RULES, GAME_MODES, QUESTION_TYPES, QUIZ_ICONS, QUIZ_SCHEMA_VERSION } from "../src/domain/quizConstants.js";
 import { canUseGameMode, getRaceTimeForQuestion } from "../src/domain/gameModes.js";
-import { createQuestion, createQuiz, duplicateQuiz, prepareQuizForReady } from "../src/domain/quizFactory.js";
+import { createQuestion, createQuiz, duplicateQuiz, mergeQuizzes, prepareQuizForReady } from "../src/domain/quizFactory.js";
 import { calculateScore, calculateShortAnswerSimilarity, evaluateQuestionAnswer, prepareQuizForPlay, shouldAutomaticallyAdvanceQuestion, shuffleItems } from "../src/domain/quizGameplay.js";
 import { migrateQuiz } from "../src/domain/quizMigration.js";
 import { validateQuiz } from "../src/domain/quizValidation.js";
@@ -192,6 +192,25 @@ test("duplicating a quiz preserves its content with fresh identifiers", () => {
   assert.notEqual(duplicate.questions[0].id, original.questions[0].id);
   assert.notEqual(duplicate.questions[0].options[0].id, original.questions[0].options[0].id);
   assert.deepEqual(duplicate.stats, { attempts: 0, bestScore: null, lastPlayedAt: null });
+});
+
+test("merging quizzes preserves the originals and creates fresh question identifiers", () => {
+  const first = createQuiz({ title: "Redes" });
+  const second = createQuiz({ title: "Seguridad" });
+  first.status = "ready";
+  second.status = "ready";
+  first.questions = [createQuestion(QUESTION_TYPES.TRUE_FALSE)];
+  second.questions = [createQuestion(QUESTION_TYPES.FILL_BLANK)];
+
+  const merged = mergeQuizzes(first, second);
+
+  assert.equal(merged.title, "Redes + Seguridad");
+  assert.equal(merged.status, "ready");
+  assert.equal(merged.questions.length, 2);
+  assert.notEqual(merged.questions[0].id, first.questions[0].id);
+  assert.notEqual(merged.questions[1].id, second.questions[0].id);
+  assert.equal(first.questions.length, 1);
+  assert.equal(second.questions.length, 1);
 });
 
 test("publishing an edited scored quiz clears its previous results", () => {

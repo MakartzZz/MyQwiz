@@ -11,13 +11,11 @@
   .game-mode-config, .game-mode-config--race { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .game-mode-config__heading { grid-column: 1 / -1; }
   .theme-gallery { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .theme-gallery--seasonal { grid-template-columns: repeat(auto-fit, minmax(230px, 288px)); }
   .music-album-grid { grid-template-columns: repeat(3, minmax(0, 205px)); }
   .settings-options { grid-template-rows: 245px 104px; }
   .question-type-picker { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .question-type-picker > div { grid-column: 1 / -1; padding: 4px; }
-  .prompt-room__workspace { grid-template-columns: 1fr; }
-  .prompt-output { position: static; min-height: 520px; }
-  .prompt-output__empty { min-height: 390px; }
   .theme-ribbon { opacity: .72; }
   .theme-ribbon--one { right: -1%; }
   .theme-ribbon--two { right: 10%; }
@@ -134,6 +132,7 @@
   .quiz-library-result-count { grid-column: auto; }
   .quiz-export-modal__drive { align-items: stretch; flex-direction: column; }
   .quiz-export-modal__drive button { width: 100%; }
+  .quiz-export-modal__choices { grid-template-columns: 1fr; }
   .quiz-import-modal__file { grid-template-columns: auto 1fr; }
   .quiz-import-modal__file button { width: 100%; grid-column: 1 / -1; }
   .prompt-builder, .prompt-output { padding: 18px; }
@@ -154,6 +153,8 @@
   .quiz-progress-notice__confirm { width: 100%; }
   .theme-studio { padding: 14px 0 36px; }
   .theme-gallery { grid-template-columns: 1fr; }
+  .theme-gallery--seasonal { grid-template-columns: minmax(0, 320px); }
+  .seasonal-theme-heading { margin-top: 42px; }
   .music-album-grid { width: 100%; padding: 3px 4px 24px; grid-auto-columns: unset; grid-auto-flow: row; grid-template-columns: repeat(2, minmax(0, 1fr)); justify-content: center; overflow-x: hidden; overflow-y: visible; scroll-snap-type: none; }
   .music-album-grid::-webkit-scrollbar { width: 0; height: 0; }
   .music-album-grid { scrollbar-width: none; }
@@ -221,10 +222,13 @@
   .music-backdrop__copy > span { left: -3%; font-size: 4.6rem; }
   .scoreboard__list, .scoreboard__list.is-empty { grid-template-columns: minmax(0, 1fr); gap: 10px; }
   .score-card { width: 100%; min-width: 0; min-height: 112px; padding: 15px 17px; grid-template-columns: auto minmax(0, 1fr) auto; grid-template-rows: 1fr 1fr; gap: 4px 13px; clip-path: polygon(2% 0, 100% 7%, 98% 100%, 0 93%); }
+  .score-card.is-placeholder { min-height: 112px; padding: 15px 20px; grid-template-columns: auto minmax(0, 1fr); grid-template-rows: 1fr; justify-items: start; gap: 14px; text-align: left; }
+  .score-card.is-placeholder .score-card__placeholder-mark { width: 40px; height: 40px; }
   .score-card__position { right: 13px; top: 11px; }
   .score-card__subject { grid-column: 1; grid-row: 1 / 3; align-self: center; }
-  .score-card__copy { grid-column: 2; grid-row: 1 / 3; align-self: center; padding-right: 0; }
-  .score-card__types { display: none; }
+  .score-card__copy { grid-column: 2; grid-row: 1; align-self: end; padding-right: 0; }
+  .score-card__types { grid-column: 2; grid-row: 2; align-self: start; justify-content: flex-start; flex-wrap: nowrap; }
+  .score-card__types > span { min-width: 30px; height: 26px; padding-inline: 5px; }
   .score-card__score { grid-column: 3; grid-row: 1; padding: 13px 3px 0 0; align-self: end; justify-items: end; }
   .score-card > button { width: 33px; height: 33px; grid-column: 3; grid-row: 2; align-self: start; justify-self: end; }
   .preference-page__heading { grid-template-columns: 1fr; }

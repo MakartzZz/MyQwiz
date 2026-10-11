@@ -17,7 +17,8 @@ for (const filename of filenames) {
     quiz.questionIds.forEach((questionId) => {
       const question = questions.get(questionId);
       if (!question) throw new Error(`Pregunta inexistente: ${collection.category}/${questionId}`);
-      questionTypeCounts[question.type] = (questionTypeCounts[question.type] ?? 0) + 1;
+      const questionType = question.type ?? "multiple-choice";
+      questionTypeCounts[questionType] = (questionTypeCounts[questionType] ?? 0) + 1;
     });
     catalog.push({
       id: `quick-${collection.category}-${quiz.id}`,

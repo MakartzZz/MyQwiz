@@ -33,6 +33,46 @@
   --blink-height: 14%;
 }
 
+.blinking-character[data-character-theme="halloween"] {
+  --character-aspect: .667;
+  --blink-x: 35%;
+  --blink-y: 41%;
+  --blink-width: 34%;
+  --blink-height: 18%;
+}
+
+.blinking-character[data-character-theme="christmas"] {
+  --character-aspect: .667;
+  --blink-x: 36%;
+  --blink-y: 36%;
+  --blink-width: 34%;
+  --blink-height: 22%;
+}
+
+.blinking-character[data-character-theme="newyear"] {
+  --character-aspect: .667;
+  --blink-x: 41%;
+  --blink-y: 32%;
+  --blink-width: 34%;
+  --blink-height: 16%;
+}
+
+.blinking-character[data-character-theme="valentine"] {
+  --character-aspect: .667;
+  --blink-x: 41%;
+  --blink-y: 31%;
+  --blink-width: 35%;
+  --blink-height: 17%;
+}
+
+.blinking-character[data-character-theme="easter"] {
+  --character-aspect: .667;
+  --blink-x: 43%;
+  --blink-y: 35%;
+  --blink-width: 34%;
+  --blink-height: 17%;
+}
+
 .blinking-character__motion {
   position: absolute;
   inset: 0;
@@ -44,6 +84,11 @@
 .blinking-character[data-character-theme="sky"] .blinking-character__motion { animation-delay: -.9s; }
 .blinking-character[data-character-theme="midnight"] .blinking-character__motion { animation-delay: -1.8s; }
 .blinking-character[data-character-theme="pink"] .blinking-character__motion { animation-delay: -2.7s; }
+.blinking-character[data-character-theme="halloween"] .blinking-character__motion { animation: character-ghost-float 4.2s cubic-bezier(.45, 0, .55, 1) infinite -1.2s; }
+.blinking-character[data-character-theme="christmas"] .blinking-character__motion { animation-delay: -3.1s; }
+.blinking-character[data-character-theme="newyear"] .blinking-character__motion { animation-delay: -2.2s; }
+.blinking-character[data-character-theme="valentine"] .blinking-character__motion { animation-delay: -1.5s; }
+.blinking-character[data-character-theme="easter"] .blinking-character__motion { animation-delay: -2.8s; }
 
 .blinking-character__frame {
   position: absolute;
@@ -75,6 +120,33 @@
   mask-image: radial-gradient(ellipse 36% 18% at 45% 39%, #000 88%, transparent 100%);
 }
 
+/* B.O.O. tiene ojos grandes y separados. El recorte amplio reemplaza por
+   completo sus contornos abiertos durante el parpadeo. */
+.blinking-character[data-character-theme="halloween"] .blinking-character__frame--blink {
+  -webkit-mask-image: radial-gradient(ellipse 39% 20% at 34% 39%, #000 92%, transparent 100%);
+  mask-image: radial-gradient(ellipse 39% 20% at 34% 39%, #000 92%, transparent 100%);
+}
+
+.blinking-character[data-character-theme="christmas"] .blinking-character__frame--blink {
+  -webkit-mask-image: radial-gradient(ellipse 34% 22% at 36% 36%, #000 92%, transparent 100%);
+  mask-image: radial-gradient(ellipse 34% 22% at 36% 36%, #000 92%, transparent 100%);
+}
+
+.blinking-character[data-character-theme="newyear"] .blinking-character__frame--blink {
+  -webkit-mask-image: radial-gradient(ellipse 35% 17% at 41% 32%, #000 92%, transparent 100%);
+  mask-image: radial-gradient(ellipse 35% 17% at 41% 32%, #000 92%, transparent 100%);
+}
+
+.blinking-character[data-character-theme="valentine"] .blinking-character__frame--blink {
+  -webkit-mask-image: radial-gradient(ellipse 36% 18% at 41% 31%, #000 92%, transparent 100%);
+  mask-image: radial-gradient(ellipse 36% 18% at 41% 31%, #000 92%, transparent 100%);
+}
+
+.blinking-character[data-character-theme="easter"] .blinking-character__frame--blink {
+  -webkit-mask-image: radial-gradient(ellipse 35% 18% at 43% 35%, #000 92%, transparent 100%);
+  mask-image: radial-gradient(ellipse 35% 18% at 43% 35%, #000 92%, transparent 100%);
+}
+
 .blinking-character.is-blinking .blinking-character__frame--blink { opacity: 1; }
 
 @keyframes character-idle-breathe {
@@ -83,8 +155,16 @@
   68% { transform: translateY(-2px) scaleX(.995) scaleY(1.012); }
 }
 
+@keyframes character-ghost-float {
+  0%, 100% { transform: translateY(0) rotate(-.35deg) scale(1); }
+  46% { transform: translateY(-7px) rotate(.35deg) scale(1.008); }
+  72% { transform: translateY(-3px) rotate(0deg) scale(.998); }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .blinking-character__motion { animation: none; }
+  .blinking-character[data-character-theme="halloween"] .blinking-character__motion { animation: none; }
 }
 
 :root[data-reduce-motion="true"] .blinking-character__motion { animation: none; }
+:root[data-reduce-motion="true"] .blinking-character[data-character-theme="halloween"] .blinking-character__motion { animation: none; }
