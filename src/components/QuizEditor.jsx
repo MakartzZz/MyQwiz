@@ -3,6 +3,7 @@ import {
   ArrowLeftRight,
   ListChecks,
   MessageSquareText,
+  Plus,
   TextCursorInput,
   ToggleLeft,
   X,
@@ -11,8 +12,11 @@ import { QUESTION_TYPES } from "../domain/quizConstants.js";
 import { cloneQuestion, createId, createQuestion, prepareQuizForReady } from "../domain/quizFactory.js";
 import { isSupportedQuestionImageUrl } from "../domain/questionImage.js";
 import { validateQuiz } from "../domain/quizValidation.js";
+import { readUserPreferences } from "../services/userPreferences.js";
 import QuestionImage from "./QuestionImage.jsx";
 import SubjectSelect from "./SubjectSelect.jsx";
+
+const QUESTION_DELETE_ANIMATION_MS = 320;
 
 const questionTypeOptions = [
   { id: QUESTION_TYPES.MULTIPLE_CHOICE, label: "Selección múltiple", hint: "Una opción correcta", icon: ListChecks },
@@ -21,6 +25,41 @@ const questionTypeOptions = [
   { id: QUESTION_TYPES.MATCHING, label: "Asociar", hint: "Relaciona parejas", icon: ArrowLeftRight },
   { id: QUESTION_TYPES.SHORT_ANSWER, label: "Respuesta breve", hint: "Compara una respuesta redactada", icon: MessageSquareText },
 ];
+
+const KeywordInput = ({ keywords, onChange }) => {
+  const formattedKeywords = keywords.join(", ");
+  const [inputValue, setInputValue] = useState(formattedKeywords);
+  const isFocusedRef = useRef(false);
+
+  useEffect(() => {
+    if (!isFocusedRef.current) setInputValue(formattedKeywords);
+  }, [formattedKeywords]);
+
+  const updateKeywords = (value) => {
+    setInputValue(value);
+    onChange(value.split(",").map((keyword) => keyword.trim()));
+  };
+
+  const finishEditing = () => {
+    isFocusedRef.current = false;
+    const normalizedKeywords = inputValue
+      .split(",")
+      .map((keyword) => keyword.trim())
+      .filter(Boolean);
+    setInputValue(normalizedKeywords.join(", "));
+    onChange(normalizedKeywords);
+  };
+
+  return (
+    <input
+      value={inputValue}
+      onFocus={() => { isFocusedRef.current = true; }}
+      onChange={(event) => updateKeywords(event.target.value)}
+      onBlur={finishEditing}
+      placeholder="Ejemplo: fotosíntesis, luz, energía"
+    />
+  );
+};
 
 const QuestionFields = ({ question, onChange }) => {
   if (question.type === QUESTION_TYPES.MULTIPLE_CHOICE) {
@@ -210,7 +249,10 @@ const QuestionFields = ({ question, onChange }) => {
       </label>
       <label className="editor-field">
         <span>Palabras clave <small>separadas por comas</small></span>
-        <input value={question.keywords.join(", ")} onChange={(event) => onChange({ keywords: event.target.value.split(",").map((keyword) => keyword.trim()).filter(Boolean) })} placeholder="Ejemplo: fotosíntesis, luz, energía" />
+        <KeywordInput
+          keywords={question.keywords}
+          onChange={(keywords) => onChange({ keywords })}
+        />
       </label>
     </div>
   );
@@ -222,7 +264,10 @@ function QuizEditor({ quiz, onBack, onSave, onValidationError }) {
   const [activeQuestionType, setActiveQuestionType] = useState(
     () => quiz.questions[0]?.type ?? QUESTION_TYPES.MULTIPLE_CHOICE,
   );
+  const [enteringQuestionId, setEnteringQuestionId] = useState(null);
+  const [deletingQuestionId, setDeletingQuestionId] = useState(null);
   const pendingScrollPositionRef = useRef(null);
+  const deleteQuestionTimeoutRef = useRef(null);
 
   useEffect(() => {
     setDraft(quiz);
@@ -234,6 +279,11 @@ function QuizEditor({ quiz, onBack, onSave, onValidationError }) {
       quiz.questions[0]?.type ?? QUESTION_TYPES.MULTIPLE_CHOICE,
     );
   }, [quiz.id]);
+
+  useEffect(
+    () => () => window.clearTimeout(deleteQuestionTimeoutRef.current),
+    [],
+  );
 
   useLayoutEffect(() => {
     const scrollPosition = pendingScrollPositionRef.current;
@@ -250,7 +300,7 @@ function QuizEditor({ quiz, onBack, onSave, onValidationError }) {
     });
 
     return () => window.cancelAnimationFrame(frameId);
-  }, [activeQuestionType]);
+  }, [activeQuestionType, draft.questions.length]);
 
   useEffect(() => {
     if (isSaved || !draft.title.trim()) return undefined;
@@ -311,8 +361,45 @@ function QuizEditor({ quiz, onBack, onSave, onValidationError }) {
   };
 
   const addQuestion = (type) => {
+    const newQuestion = createQuestion(type);
+    pendingScrollPositionRef.current = {
+      left: window.scrollX,
+      top: window.scrollY,
+    };
     selectQuestionType(type);
-    updateDraft({ questions: [createQuestion(type), ...draft.questions] });
+    setEnteringQuestionId(newQuestion.id);
+    updateDraft({ questions: [newQuestion, ...draft.questions] });
+  };
+
+  const removeQuestion = (questionId) => {
+    setDraft((current) => ({
+      ...current,
+      questions: current.questions.filter((question) => question.id !== questionId),
+      status: current.status === "ready" ? "draft" : current.status,
+    }));
+    setIsSaved(false);
+    setDeletingQuestionId(null);
+  };
+
+  const deleteQuestion = (questionId) => {
+    if (deletingQuestionId) return;
+
+    const reduceMotion =
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches ||
+      readUserPreferences().reduceMotion;
+
+    if (reduceMotion) {
+      removeQuestion(questionId);
+      return;
+    }
+
+    setEnteringQuestionId(null);
+    setDeletingQuestionId(questionId);
+    window.clearTimeout(deleteQuestionTimeoutRef.current);
+    deleteQuestionTimeoutRef.current = window.setTimeout(() => {
+      removeQuestion(questionId);
+      deleteQuestionTimeoutRef.current = null;
+    }, QUESTION_DELETE_ANIMATION_MS);
   };
 
   const moveQuestion = (questionId, direction) => {
@@ -398,27 +485,6 @@ function QuizEditor({ quiz, onBack, onSave, onValidationError }) {
         <span className="quiz-editor__count">{questionCountLabel}</span>
       </div>
 
-      <div className="question-type-picker">
-        <div>
-          <span className="eyebrow">Nueva pregunta</span>
-          <strong>Elige el formato</strong>
-        </div>
-        {questionTypeOptions.map((type) => {
-          const TypeIcon = type.icon;
-          return (
-            <button type="button" key={type.id} onClick={() => addQuestion(type.id)}>
-              <span className="question-type-picker__icon" aria-hidden="true">
-                <TypeIcon size={20} strokeWidth={1.9} />
-              </span>
-              <span className="question-type-picker__copy">
-                <strong>{type.label}</strong>
-                <small>{type.hint}</small>
-              </span>
-            </button>
-          );
-        })}
-      </div>
-
       <div className="question-type-tabs" role="tablist" aria-label="Preguntas por tipo">
         {questionTypeOptions.map((type) => {
           const TypeIcon = type.icon;
@@ -448,6 +514,19 @@ function QuizEditor({ quiz, onBack, onSave, onValidationError }) {
         role="tabpanel"
         aria-labelledby={`question-type-tab-${activeQuestionType}`}
       >
+      <div className="question-type-panel__create">
+        <span className="question-type-panel__type" aria-hidden="true">
+          <ActiveQuestionTypeIcon size={21} strokeWidth={1.9} />
+        </span>
+        <div>
+          <strong>{activeQuestionTypeOption.label}</strong>
+          <small>{activeQuestionTypeOption.hint}</small>
+        </div>
+        <button type="button" onClick={() => addQuestion(activeQuestionType)}>
+          <Plus size={18} strokeWidth={2.2} aria-hidden="true" />
+          Agregar pregunta
+        </button>
+      </div>
       {!activeTypeQuestions.length ? (
         <div className="quiz-editor__empty">
           <span><ActiveQuestionTypeIcon size={23} aria-hidden="true" /></span>
@@ -456,21 +535,29 @@ function QuizEditor({ quiz, onBack, onSave, onValidationError }) {
               ? `Todavía no hay preguntas de ${activeQuestionTypeOption.label.toLowerCase()}`
               : "Tu quiz todavía no tiene preguntas"}
           </strong>
-          <p>Agrega una de este formato usando el selector de arriba.</p>
+          <p>Usa el botÃ³n de arriba para crear la primera de este tipo.</p>
         </div>
       ) : (
         <div className="question-editor-list">
           {activeTypeQuestions.map((question, index) => {
             const type = questionTypeOptions.find((item) => item.id === question.type);
             return (
-              <article className="question-editor" key={question.id}>
+              <article
+                className={`question-editor ${index === 0 ? "is-first" : ""} ${enteringQuestionId === question.id ? "is-entering" : ""} ${deletingQuestionId === question.id ? "is-deleting" : ""}`}
+                key={question.id}
+                onAnimationEnd={(event) => {
+                  if (event.target === event.currentTarget && enteringQuestionId === question.id) {
+                    setEnteringQuestionId(null);
+                  }
+                }}
+              >
                 <div className="question-editor__top">
                   <div><span>Pregunta {index + 1}</span><strong>{type?.label}</strong></div>
                   <div className="question-editor__controls">
                     <button type="button" disabled={index === 0} onClick={() => moveQuestion(question.id, -1)} aria-label="Subir pregunta dentro de este tipo">↑</button>
                     <button type="button" disabled={index === activeTypeQuestions.length - 1} onClick={() => moveQuestion(question.id, 1)} aria-label="Bajar pregunta dentro de este tipo">↓</button>
                     <button type="button" onClick={() => duplicateQuestion(question.id)}>Duplicar</button>
-                    <button type="button" className="is-danger" onClick={() => updateDraft({ questions: draft.questions.filter((item) => item.id !== question.id) })}>Eliminar</button>
+                    <button type="button" className="is-danger" disabled={Boolean(deletingQuestionId)} onClick={() => deleteQuestion(question.id)}>Eliminar</button>
                   </div>
                 </div>
 

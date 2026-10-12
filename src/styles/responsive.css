@@ -20,8 +20,6 @@
   }
   .music-album-grid { grid-template-columns: repeat(3, minmax(0, 205px)); }
   .settings-options { grid-template-rows: 245px 104px; }
-  .question-type-picker { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .question-type-picker > div { grid-column: 1 / -1; padding: 4px; }
   .theme-ribbon { opacity: .72; }
   .theme-ribbon--one { right: -1%; }
   .theme-ribbon--two { right: 10%; }
@@ -71,9 +69,13 @@
   .main-content--themes { width: 100%; }
   .main-content--settings { width: 100%; }
   .main-content--music { width: 100%; }
+  .main-content--prompt { width: 100%; }
   .main-content--workspace { width: 100%; }
   .menu-button { display: grid; flex: 0 0 auto; }
   .topbar { justify-content: flex-start; }
+  .topbar.topbar--prompt { position: relative; justify-content: center; }
+  .topbar--prompt .menu-button { position: absolute; left: 0; top: 0; }
+  .topbar--prompt > div { width: 100%; padding-inline: 48px; }
   .topbar--menu-only { margin-bottom: 20px; }
   .hero-card { grid-template-columns: 1fr; }
   .hero-visual { display: none; }
@@ -283,8 +285,8 @@
   .quiz-editor__toolbar .settings-back + .quiz-editor__save-button { margin-left: auto; }
   .quiz-editor__header { grid-template-columns: 1fr; padding: 18px; }
   .quiz-icon-picker > div { grid-template-columns: repeat(4, minmax(0, 1fr)); }
-  .question-type-picker { grid-template-columns: 1fr; }
-  .question-type-picker > div { grid-column: auto; }
+  .question-type-panel__create { grid-template-columns: auto minmax(0, 1fr); }
+  .question-type-panel__create > button { width: 100%; grid-column: 1 / -1; }
   .question-fill-editor.has-image { grid-template-columns: 1fr; }
   .question-image-editor__preview { justify-self: start; }
   .question-editor { padding: 17px; }

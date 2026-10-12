@@ -465,6 +465,7 @@ function App() {
   const isHomeScreen = activeSection === "Inicio";
   const isQuizScreen = activeSection === "Mis quizzes";
   const isQuickQuizScreen = activeSection === "Quizzes rápidos";
+  const isPromptScreen = activeSection === "Sala de prompts";
   const isQuizActivityScreen =
     isQuizScreen && Boolean(editingQuiz || playingQuiz);
   const isQuickQuizActivityScreen =
@@ -1635,7 +1636,7 @@ function App() {
       )}
 
       <main
-        className={`main-content ${isThemeScreen ? "main-content--themes" : ""} ${isSettingsHome ? "main-content--settings" : ""} ${isMusicScreen ? "main-content--music" : ""} ${isHomeScreen || isQuizScreen || isQuickQuizScreen ? "main-content--workspace" : ""} ${isHomeScreen ? "main-content--home" : ""} ${isQuizScreen || isQuickQuizScreen ? "main-content--library" : ""}`}
+        className={`main-content ${isThemeScreen ? "main-content--themes" : ""} ${isSettingsHome ? "main-content--settings" : ""} ${isMusicScreen ? "main-content--music" : ""} ${isPromptScreen ? "main-content--prompt" : ""} ${isHomeScreen || isQuizScreen || isQuickQuizScreen ? "main-content--workspace" : ""} ${isHomeScreen ? "main-content--home" : ""} ${isQuizScreen || isQuickQuizScreen ? "main-content--library" : ""}`}
       >
         <Suspense fallback={<QwizLoader />}>
         <div className="section-transition" key={sectionTransitionKey}>
@@ -1643,7 +1644,7 @@ function App() {
           !isQuizActivityScreen &&
           !isQuickQuizActivityScreen && (
             <header
-              className={`topbar ${isQuizScreen || isQuickQuizScreen ? "topbar--menu-only" : ""}`}
+              className={`topbar ${isQuizScreen || isQuickQuizScreen ? "topbar--menu-only" : ""} ${isPromptScreen ? "topbar--prompt" : ""}`}
             >
               <button
                 className="menu-button"
