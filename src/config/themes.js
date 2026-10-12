@@ -48,7 +48,7 @@ import independenceCharacterPreview from "../assets/characters/independence-them
 import independenceCharacterBlinkPreview from "../assets/characters/independence-theme-card-blink-preview.webp";
 
 export const THEME_STORAGE_KEY = "myqwiz-theme";
-export const SEASONAL_THEME_LOCKING_ENABLED = false;
+export const SEASONAL_THEME_LOCKING_ENABLED = true;
 
 export const themes = [
   {
@@ -91,6 +91,7 @@ export const themes = [
     id: "newyear",
     label: "N.Y.E.",
     season: {
+      calendarOrder: 1,
       start: { month: 12, day: 29 },
       end: { month: 1, day: 7 },
       dateLabel: "29 DIC — 7 ENE",
@@ -105,6 +106,7 @@ export const themes = [
     id: "valentine",
     label: "C.U.P.I.D.",
     season: {
+      calendarOrder: 2,
       start: { month: 2, day: 8 },
       end: { month: 2, day: 15 },
       dateLabel: "8 FEB — 15 FEB",
@@ -119,6 +121,7 @@ export const themes = [
     id: "easter",
     label: "P.A.S.C.U.A.",
     season: {
+      calendarOrder: 3,
       anchor: "easter",
       startOffsetDays: -7,
       endOffsetDays: 1,
@@ -133,6 +136,7 @@ export const themes = [
     id: "summer",
     label: "S.U.R.F.",
     season: {
+      calendarOrder: 4,
       start: { month: 6, day: 24 },
       end: { month: 7, day: 10 },
       dateLabel: "24 JUN — 10 JUL",
@@ -147,6 +151,7 @@ export const themes = [
     id: "friendship",
     label: "B.F.F.",
     season: {
+      calendarOrder: 5,
       start: { month: 7, day: 24 },
       end: { month: 8, day: 2 },
       dateLabel: "24 JUL — 2 AGO",
@@ -161,6 +166,7 @@ export const themes = [
     id: "independence",
     label: "T.I.C.O.",
     season: {
+      calendarOrder: 6,
       start: { month: 9, day: 7 },
       end: { month: 9, day: 16 },
       dateLabel: "7 SEP — 16 SEP",
@@ -175,6 +181,7 @@ export const themes = [
     id: "halloween",
     label: "B.O.O.",
     season: {
+      calendarOrder: 7,
       start: { month: 10, day: 1 },
       end: { month: 11, day: 3 },
       dateLabel: "1 OCT — 3 NOV",
@@ -189,6 +196,7 @@ export const themes = [
     id: "christmas",
     label: "N.O.E.L.",
     season: {
+      calendarOrder: 8,
       start: { month: 11, day: 25 },
       end: { month: 12, day: 28 },
       dateLabel: "25 NOV — 28 DIC",
@@ -207,4 +215,6 @@ export const isValidTheme = (theme) => themes.some((item) => item.id === theme);
 
 export const permanentThemes = themes.filter((theme) => !theme.season);
 
-export const seasonalThemes = themes.filter((theme) => theme.season);
+export const seasonalThemes = themes
+  .filter((theme) => theme.season)
+  .sort((first, second) => first.season.calendarOrder - second.season.calendarOrder);
