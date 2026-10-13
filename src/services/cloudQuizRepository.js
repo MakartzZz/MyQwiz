@@ -140,8 +140,9 @@ export const listPendingQuizInvitations = async (userId) => {
     ]);
     if (!quizSnapshot.exists()) return null;
     return {
-      id: share.id,
       ...mapQuizSummary(quizSnapshot),
+      id: share.id,
+      quizId: share.data().quizId,
       ownerProfile: ownerProfile ? {
         username: ownerProfile.username,
         tag: ownerProfile.tag,
