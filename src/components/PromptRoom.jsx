@@ -1,5 +1,6 @@
 import { useMemo, useState } from "react";
 import { QUESTION_TYPES, QUIZ_ICONS } from "../domain/quizConstants.js";
+import { MAX_QUESTIONS_PER_QUIZ } from "../domain/cloudLimits.js";
 import { buildQuizPrompt, promptEducationLevels, promptQuestionTypes } from "../services/quizPrompt.js";
 import { systemNotifications } from "../services/systemNotifications.js";
 import SubjectSelect from "./SubjectSelect.jsx";
@@ -41,15 +42,24 @@ function PromptRoom() {
   const totalQuestions = useMemo(() => (
     Object.values(questionCounts).reduce((total, count) => total + count, 0)
   ), [questionCounts]);
+  const hasReachedQuestionLimit = totalQuestions >= MAX_QUESTIONS_PER_QUIZ;
   const canGenerate = Boolean(
     title.trim()
     && totalQuestions > 0
+    && totalQuestions <= MAX_QUESTIONS_PER_QUIZ
     && (sourceMode === "documents" || topic.trim()),
   );
 
   const updateCount = (typeId, value) => {
-    const nextValue = Math.min(50, Math.max(0, Number(value) || 0));
-    setQuestionCounts((current) => ({ ...current, [typeId]: nextValue }));
+    setQuestionCounts((current) => {
+      const otherQuestions = Object.entries(current).reduce(
+        (total, [currentTypeId, count]) => total + (currentTypeId === typeId ? 0 : count),
+        0,
+      );
+      const available = Math.max(0, MAX_QUESTIONS_PER_QUIZ - otherQuestions);
+      const nextValue = Math.min(50, available, Math.max(0, Math.trunc(Number(value) || 0)));
+      return { ...current, [typeId]: nextValue };
+    });
   };
 
   const generatePrompt = (event) => {
@@ -73,7 +83,9 @@ function PromptRoom() {
         <form className="prompt-builder" onSubmit={generatePrompt} aria-labelledby="prompt-room-title">
           <div className="prompt-builder__heading">
             <div><span className="eyebrow">01 · Configuración</span><h2 id="prompt-room-title">Cuéntanos qué quieres estudiar</h2></div>
-            <span className="prompt-builder__total">{totalQuestions} preguntas</span>
+            <span className={`prompt-builder__total ${hasReachedQuestionLimit ? "is-limit" : ""}`}>
+              {totalQuestions} / {MAX_QUESTIONS_PER_QUIZ} preguntas
+            </span>
           </div>
 
           <div className="prompt-builder__base-fields">
@@ -121,13 +133,24 @@ function PromptRoom() {
 
           <fieldset className="prompt-builder__types">
             <legend>¿Cuántas preguntas quieres de cada tipo?</legend>
+            {hasReachedQuestionLimit && (
+              <p className="prompt-builder__limit-message" role="status">
+                Llegaste al máximo de {MAX_QUESTIONS_PER_QUIZ} preguntas. Resta una para poder aumentar otro tipo.
+              </p>
+            )}
             {promptQuestionTypes.map((type) => (
               <div className={`prompt-type ${questionCounts[type.id] > 0 ? "is-active" : ""}`} key={type.id}>
                 <div><strong>{type.label}</strong><small>{type.description}</small></div>
                 <div className="prompt-type__counter">
                   <button type="button" onClick={() => updateCount(type.id, questionCounts[type.id] - 1)} aria-label={`Restar una pregunta de ${type.label}`}>−</button>
                   <input type="number" min="0" max="50" value={questionCounts[type.id]} onChange={(event) => updateCount(type.id, event.target.value)} aria-label={`Cantidad de preguntas de ${type.label}`} />
-                  <button type="button" onClick={() => updateCount(type.id, questionCounts[type.id] + 1)} aria-label={`Agregar una pregunta de ${type.label}`}>+</button>
+                  <button
+                    type="button"
+                    onClick={() => updateCount(type.id, questionCounts[type.id] + 1)}
+                    aria-label={`Agregar una pregunta de ${type.label}`}
+                    disabled={hasReachedQuestionLimit || questionCounts[type.id] >= 50}
+                    title={hasReachedQuestionLimit ? `Máximo de ${MAX_QUESTIONS_PER_QUIZ} preguntas alcanzado` : undefined}
+                  >+</button>
                 </div>
               </div>
             ))}

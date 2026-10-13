@@ -106,15 +106,8 @@ export default function SidebarMascot({ onActivate, rewardSignal = 0 }) {
     }
   };
 
-  return (
-    <button
-      className={`sidebar-mascot ${isRewarding ? "is-rewarding" : ""}`}
-      type="button"
-      aria-label="Mascota de MyQwiz"
-      onDoubleClick={onActivate}
-      onPointerUp={handleTouch}
-    >
-      <svg viewBox="0 0 96 84" role="presentation">
+  const mascot = (
+    <svg viewBox="0 0 96 84" role="presentation">
         <path
           className="sidebar-mascot__body"
           d="M48 82C19 82 8 62 9 37 10 16 18 3 28 3 38 3 42 18 44 33h8C54 18 58 3 68 3c10 0 18 13 19 34 1 25-10 45-39 45Z"
@@ -128,6 +121,25 @@ export default function SidebarMascot({ onActivate, rewardSignal = 0 }) {
           </g>
         </g>
       </svg>
+  );
+
+  if (!onActivate) {
+    return (
+      <span className={`sidebar-mascot ${isRewarding ? "is-rewarding" : ""}`} aria-hidden="true">
+        {mascot}
+      </span>
+    );
+  }
+
+  return (
+    <button
+      className={`sidebar-mascot ${isRewarding ? "is-rewarding" : ""}`}
+      type="button"
+      aria-label="Mascota de MyQwiz"
+      onDoubleClick={onActivate}
+      onPointerUp={handleTouch}
+    >
+      {mascot}
     </button>
   );
 }

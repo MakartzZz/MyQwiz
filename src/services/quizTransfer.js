@@ -11,11 +11,25 @@ const unwrapMarkdownCodeBlock = (content) => content
   .replace(/\s*```$/, "")
   .trim();
 
+const createPortableQuiz = (quiz) => ({
+  schemaVersion: quiz.schemaVersion,
+  id: quiz.id,
+  title: quiz.title,
+  description: quiz.description,
+  iconId: quiz.iconId,
+  createdAt: quiz.createdAt,
+  updatedAt: quiz.updatedAt,
+  preferences: quiz.preferences,
+  settings: quiz.settings,
+  stats: quiz.stats,
+  questions: quiz.questions,
+});
+
 export const createQuizExport = (quiz) => ({
   fileType: MYQWIZ_FILE_TYPE,
   exportVersion: MYQWIZ_EXPORT_VERSION,
   exportedAt: new Date().toISOString(),
-  quiz,
+  quiz: createPortableQuiz(quiz),
 });
 
 export const serializeQuiz = (quiz) => JSON.stringify(createQuizExport(quiz), null, 2);

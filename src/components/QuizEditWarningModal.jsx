@@ -39,7 +39,7 @@ function QuizEditWarningModal({ quiz, onClose, onConfirm }) {
             Tu mejor nota actual en <strong>“{quiz.title}”</strong> es de <strong>{quiz.stats.bestScore}%</strong>.
           </p>
           <p>
-            La nota seguirá visible mientras los cambios permanezcan como borrador. Cuando vuelvas a marcar el quiz como listo, se eliminarán la nota y los intentos anteriores porque será una evaluación diferente.
+            Al guardar cualquier cambio se eliminarán la nota y los intentos anteriores, porque el contenido ya no representará la misma evaluación.
           </p>
         </div>
 

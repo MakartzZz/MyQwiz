@@ -2,15 +2,71 @@ import assert from "node:assert/strict";
 import test from "node:test";
 import { DEFAULT_GAME_RULES, GAME_MODES, QUESTION_TYPES, QUIZ_ICONS, QUIZ_SCHEMA_VERSION } from "../src/domain/quizConstants.js";
 import { canUseGameMode, getRaceTimeForQuestion } from "../src/domain/gameModes.js";
-import { createQuestion, createQuiz, duplicateQuiz, mergeQuizzes, prepareQuizForReady } from "../src/domain/quizFactory.js";
+import { clearQuizResults, createQuestion, createQuiz, duplicateQuiz, mergeQuizzes } from "../src/domain/quizFactory.js";
 import { calculateScore, calculateShortAnswerSimilarity, evaluateQuestionAnswer, prepareQuizForPlay, shouldAutomaticallyAdvanceQuestion, shuffleItems } from "../src/domain/quizGameplay.js";
 import { migrateQuiz } from "../src/domain/quizMigration.js";
 import { validateQuiz } from "../src/domain/quizValidation.js";
 import { buildQuizPrompt } from "../src/services/quizPrompt.js";
 import { areQuizzesEquivalent, parseQuizImport, serializeQuiz } from "../src/services/quizTransfer.js";
 import { DEFAULT_USER_PREFERENCES, normalizeUserPreferences } from "../src/services/userPreferences.js";
+import {
+  createUserTag,
+  isQuizWithinCloudLimits,
+  isValidAvatarId,
+  MAX_OWNED_QUIZZES,
+  MAX_QUESTIONS_PER_QUIZ,
+} from "../src/domain/cloudLimits.js";
+import {
+  createEntryChallenge,
+  getEntryChallengeQuestion,
+  isEntryChallengeAnswerCorrect,
+} from "../src/domain/entryChallenge.js";
 
-test("createQuiz generates a versioned draft without fixing a game mode", () => {
+test("entry challenge stores one ordinary personal answer with three fixed distractors", () => {
+  const challenge = createEntryChallenge("travel", "  Costa Rica  ");
+
+  assert.equal(challenge.questionId, "travel");
+  assert.equal(challenge.answer, "Costa Rica");
+  assert.equal(challenge.normalizedAnswer, "costa rica");
+  assert.equal(challenge.distractors.length, 3);
+  assert.equal(new Set(challenge.distractors).size, 3);
+  assert.deepEqual(
+    createEntryChallenge("travel", "Costa Rica").distractors,
+    challenge.distractors,
+  );
+  assert.equal(getEntryChallengeQuestion("travel")?.prompt.includes("viajar"), true);
+  assert.equal(isEntryChallengeAnswerCorrect(challenge, "cósta rica"), true);
+  assert.equal(isEntryChallengeAnswerCorrect(challenge, challenge.distractors[0]), false);
+});
+
+test("entry challenge rejects vague answers and unknown questions", () => {
+  assert.throws(() => createEntryChallenge("animal", "Gato"), /pregunta/i);
+  assert.throws(() => createEntryChallenge("food", "ninguna"), /personal/i);
+  assert.throws(() => createEntryChallenge("free_time", "x"), /2 y 60/i);
+});
+
+test("cloud limits cap owned quizzes, questions, avatars and tag format", () => {
+  const quiz = createQuiz({ title: "Límites" });
+  quiz.questions = Array.from({ length: MAX_QUESTIONS_PER_QUIZ }, () => ({}));
+  const deterministicRandom = {
+    getRandomValues(values) {
+      values.fill(0);
+      return values;
+    },
+  };
+
+  assert.equal(MAX_OWNED_QUIZZES, 30);
+  assert.equal(isQuizWithinCloudLimits(quiz), true);
+  quiz.questions.push({});
+  assert.equal(isQuizWithinCloudLimits(quiz), false);
+  assert.equal(validateQuiz(quiz).errors.some((error) => error.code === "too_many_questions"), true);
+  assert.equal(isValidAvatarId(1), true);
+  assert.equal(isValidAvatarId(15), true);
+  assert.equal(isValidAvatarId(16), false);
+  assert.match(createUserTag(deterministicRandom), /^[2-9A-HJ-NP-Z]{6}$/);
+});
+
+test("createQuiz generates a versioned quiz without publishing states or a fixed game mode", () => {
   const quiz = createQuiz({
     title: "  Redes  ",
     description: "Repaso",
@@ -19,6 +75,7 @@ test("createQuiz generates a versioned draft without fixing a game mode", () => 
   assert.equal(quiz.schemaVersion, QUIZ_SCHEMA_VERSION);
   assert.equal(quiz.title, "Redes");
   assert.equal(quiz.iconId, QUIZ_ICONS.GENERAL);
+  assert.equal("status" in quiz, false);
   assert.equal("gameMode" in quiz.settings, false);
   assert.deepEqual(quiz.stats, {
     attempts: 0,
@@ -156,10 +213,11 @@ test("race mode assigns time according to the question type", () => {
   );
 });
 
-test("version one drafts migrate without their fixed game mode", () => {
+test("version one quizzes migrate without their publishing state or fixed game mode", () => {
   const legacyQuiz = {
     ...createQuiz({ title: "Borrador anterior" }),
     schemaVersion: 1,
+    status: "draft",
     settings: {
       gameMode: GAME_MODES.LIVES,
       shuffleQuestions: false,
@@ -175,6 +233,17 @@ test("version one drafts migrate without their fixed game mode", () => {
     shuffleQuestions: false,
     shuffleAnswers: true,
   });
+  assert.equal("status" in migratedQuiz, false);
+  assert.equal(validateQuiz(migratedQuiz).valid, true);
+});
+
+test("current stored quizzes discard the obsolete publishing state", () => {
+  const migratedQuiz = migrateQuiz({
+    ...createQuiz({ title: "Quiz existente" }),
+    status: "ready",
+  });
+
+  assert.equal("status" in migratedQuiz, false);
   assert.equal(validateQuiz(migratedQuiz).valid, true);
 });
 
@@ -187,7 +256,7 @@ test("duplicating a quiz preserves its content with fresh identifiers", () => {
 
   assert.notEqual(duplicate.id, original.id);
   assert.equal(duplicate.title, "Biología (copia)");
-  assert.equal(duplicate.status, "draft");
+  assert.equal("status" in duplicate, false);
   assert.equal(duplicate.iconId, QUIZ_ICONS.SCIENCE);
   assert.notEqual(duplicate.questions[0].id, original.questions[0].id);
   assert.notEqual(duplicate.questions[0].options[0].id, original.questions[0].options[0].id);
@@ -197,15 +266,13 @@ test("duplicating a quiz preserves its content with fresh identifiers", () => {
 test("merging quizzes preserves the originals and creates fresh question identifiers", () => {
   const first = createQuiz({ title: "Redes" });
   const second = createQuiz({ title: "Seguridad" });
-  first.status = "ready";
-  second.status = "ready";
   first.questions = [createQuestion(QUESTION_TYPES.TRUE_FALSE)];
   second.questions = [createQuestion(QUESTION_TYPES.FILL_BLANK)];
 
   const merged = mergeQuizzes(first, second);
 
   assert.equal(merged.title, "Redes + Seguridad");
-  assert.equal(merged.status, "ready");
+  assert.equal("status" in merged, false);
   assert.equal(merged.questions.length, 2);
   assert.notEqual(merged.questions[0].id, first.questions[0].id);
   assert.notEqual(merged.questions[1].id, second.questions[0].id);
@@ -213,19 +280,17 @@ test("merging quizzes preserves the originals and creates fresh question identif
   assert.equal(second.questions.length, 1);
 });
 
-test("publishing an edited scored quiz clears its previous results", () => {
+test("editing a scored quiz clears its previous results", () => {
   const quiz = createQuiz({ title: "Historia editada" });
-  quiz.status = "draft";
   quiz.stats = {
     attempts: 4,
     bestScore: 90,
     lastPlayedAt: "2026-09-30T12:00:00.000Z",
   };
 
-  const readyQuiz = prepareQuizForReady(quiz);
+  const editedQuiz = clearQuizResults(quiz);
 
-  assert.equal(readyQuiz.status, "ready");
-  assert.deepEqual(readyQuiz.stats, {
+  assert.deepEqual(editedQuiz.stats, {
     attempts: 0,
     bestScore: null,
     lastPlayedAt: null,
@@ -233,12 +298,12 @@ test("publishing an edited scored quiz clears its previous results", () => {
   assert.equal(quiz.stats.bestScore, 90);
 });
 
-test("publishing an unplayed draft keeps its empty results", () => {
+test("editing an unplayed quiz keeps its empty results", () => {
   const quiz = createQuiz({ title: "Quiz nuevo" });
-  const readyQuiz = prepareQuizForReady(quiz);
+  const editedQuiz = clearQuizResults(quiz);
 
-  assert.equal(readyQuiz.status, "ready");
-  assert.deepEqual(readyQuiz.stats, quiz.stats);
+  assert.equal(editedQuiz, quiz);
+  assert.deepEqual(editedQuiz.stats, quiz.stats);
 });
 
 test("exporting and importing preserves every question type and the quiz icon", () => {
@@ -450,6 +515,7 @@ test("prompt generator includes the requested distribution and MyQwiz schema", (
   assert.match(prompt, /respuesta correcta no debe destacar/);
   assert.match(prompt, /"zero-day"/);
   assert.match(prompt, /inequívocamente incorrectas/);
+  assert.doesNotMatch(prompt, /"status"/);
   assert.doesNotMatch(prompt, /Estructura para Asociar/);
 });
 

@@ -10,9 +10,8 @@ const normalizeSearchText = (value) => value
 
 function CardActionIcon({ name }) {
   const paths = {
-    continue: <><path d="M5 12h14" /><path d="m13 6 6 6-6 6" /></>,
     play: <path d="m8 5 11 7-11 7V5Z" />,
-    export: <><path d="M12 3v12" /><path d="m7 8 5-5 5 5" /><path d="M5 13v6h14v-6" /></>,
+    share: <><circle cx="18" cy="5" r="3" /><circle cx="6" cy="12" r="3" /><circle cx="18" cy="19" r="3" /><path d="m8.6 10.5 6.8-4" /><path d="m8.6 13.5 6.8 4" /></>,
     rename: <><path d="M4 20h4l10-10-4-4L4 16v4Z" /><path d="m12.5 7.5 4 4" /></>,
     duplicate: <><rect x="8" y="8" width="11" height="11" rx="1" /><path d="M16 8V5H5v11h3" /></>,
     merge: <><path d="M4 6h4c5 0 4 12 9 12h3" /><path d="m17 15 3 3-3 3" /><path d="M4 18h4c2.2 0 3.2-2.3 4.1-5" /><path d="M16 6h4" /><path d="m17 3 3 3-3 3" /></>,
@@ -26,9 +25,10 @@ function CardActionIcon({ name }) {
   );
 }
 
-function QuizCard({ quiz, canMerge, onOpen, onPlay, onRename, onDuplicate, onMerge, onDelete, onExport }) {
-  const isReady = quiz.status === "ready";
+function QuizCard({ quiz, canMerge, onOpen, onPlay, onDuplicate, onMerge, onDelete, onExport }) {
   const bestScore = Number.isFinite(quiz.stats?.bestScore) ? quiz.stats.bestScore : null;
+  const questionCount = quiz.questionCount ?? quiz.questions?.length ?? 0;
+  const ownerName = quiz.isShared ? (quiz.ownerProfile?.username ?? "Usuario") : "TÚ";
 
   const actionButton = (label, icon, onClick, className = "") => (
     <button className={className} type="button" onClick={onClick} aria-label={label} title={label}>
@@ -40,11 +40,16 @@ function QuizCard({ quiz, canMerge, onOpen, onPlay, onRename, onDuplicate, onMer
     <article className="quiz-library-card">
       <div className="quiz-library-card__info">
         <div className="quiz-library-card__top">
-          <span className={`quiz-status ${isReady ? "is-ready" : ""}`}>{isReady ? "Listo" : "Borrador"}</span>
-          <span className={`quiz-best-score ${bestScore === null ? "is-empty" : ""}`}>
-            <small>Mejor nota</small>
-            <strong>{bestScore === null ? "—" : `${bestScore}%`}</strong>
-          </span>
+          <div className="quiz-library-card__metrics">
+            <span className="quiz-meta-badge quiz-owner-badge" title={ownerName}>
+              <small>Propietario</small>
+              <strong>{ownerName}</strong>
+            </span>
+            <span className={`quiz-meta-badge quiz-best-score ${bestScore === null ? "is-empty" : ""}`}>
+              <small>Mejor nota</small>
+              <strong>{bestScore === null ? "—" : `${bestScore}%`}</strong>
+            </span>
+          </div>
         </div>
 
         <div className="quiz-library-card__identity">
@@ -58,16 +63,16 @@ function QuizCard({ quiz, canMerge, onOpen, onPlay, onRename, onDuplicate, onMer
         <QuestionTypeSummary quiz={quiz} className="quiz-library-card__types" emptyLabel="Sin preguntas todavía" />
 
         <div className="quiz-library-card__controls">
-          <span>{quiz.questions.length} {quiz.questions.length === 1 ? "pregunta" : "preguntas"}</span>
+          <span>{questionCount} {questionCount === 1 ? "pregunta" : "preguntas"}</span>
           <div className="quiz-library-card__actions">
-            {actionButton("Exportar quiz", "export", () => onExport(quiz))}
-            {actionButton(isReady ? "Editar quiz" : "Renombrar quiz", "rename", () => isReady ? onOpen(quiz) : onRename(quiz))}
+            {actionButton("Compartir quiz", "share", () => onExport(quiz))}
+            {actionButton(quiz.isShared ? "Crear copia para editar" : "Editar quiz", "rename", () => onOpen(quiz))}
             {actionButton("Duplicar quiz", "duplicate", () => onDuplicate(quiz))}
             <button type="button" onClick={() => onMerge(quiz)} aria-label="Fusionar quiz" title="Fusionar quiz" disabled={!canMerge}>
               <CardActionIcon name="merge" />
             </button>
-            {actionButton("Eliminar quiz", "delete", () => onDelete(quiz), "is-danger")}
-            {actionButton(isReady ? "Jugar quiz" : "Continuar edición", isReady ? "play" : "continue", () => isReady ? onPlay(quiz) : onOpen(quiz), `is-primary ${isReady ? "is-play" : ""}`)}
+            {actionButton(quiz.isShared ? "Quitar de mi biblioteca" : "Eliminar quiz", "delete", () => onDelete(quiz), "is-danger")}
+            {actionButton("Jugar quiz", "play", () => onPlay(quiz), "is-primary is-play")}
           </div>
         </div>
       </div>
@@ -75,37 +80,22 @@ function QuizCard({ quiz, canMerge, onOpen, onPlay, onRename, onDuplicate, onMer
   );
 }
 
-function QuizGroup({ title, description, quizzes, ...actions }) {
-  if (!quizzes.length) return null;
-
-  return (
-    <section className="quiz-library-group">
-      <div className="quiz-library-group__heading">
-        <div>
-          <h3>{title}</h3>
-          <p>{description}</p>
-        </div>
-        <span>{quizzes.length}</span>
-      </div>
-      <div className="quiz-library-grid">
-        {quizzes.map((quiz) => <QuizCard quiz={quiz} key={quiz.id} {...actions} />)}
-      </div>
-    </section>
-  );
-}
-
-function QuizLibrary({ quizzes, onOpen, onPlay, onRename, onDuplicate, onMerge, onDelete, onExport }) {
+function QuizLibrary({ quizzes, onOpen, onPlay, onDuplicate, onMerge, onDelete, onExport }) {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedIcon, setSelectedIcon] = useState("all");
+  const [ownershipFilter, setOwnershipFilter] = useState("all");
 
   const filteredQuizzes = useMemo(() => {
     const normalizedQuery = normalizeSearchText(searchQuery.trim());
     return quizzes.filter((quiz) => {
       const matchesName = !normalizedQuery || normalizeSearchText(quiz.title).includes(normalizedQuery);
       const matchesIcon = selectedIcon === "all" || quiz.iconId === selectedIcon;
-      return matchesName && matchesIcon;
+      const matchesOwnership = ownershipFilter === "all"
+        || (ownershipFilter === "owned" && !quiz.isShared)
+        || (ownershipFilter === "shared" && quiz.isShared);
+      return matchesName && matchesIcon && matchesOwnership;
     });
-  }, [quizzes, searchQuery, selectedIcon]);
+  }, [quizzes, ownershipFilter, searchQuery, selectedIcon]);
 
   if (!quizzes.length) {
     return (
@@ -117,12 +107,11 @@ function QuizLibrary({ quizzes, onOpen, onPlay, onRename, onDuplicate, onMerge, 
     );
   }
 
-  const readyQuizzes = filteredQuizzes.filter((quiz) => quiz.status === "ready");
-  const draftQuizzes = filteredQuizzes.filter((quiz) => quiz.status !== "ready");
-  const actions = { canMerge: quizzes.length > 1, onOpen, onPlay, onRename, onDuplicate, onMerge, onDelete, onExport };
+  const actions = { canMerge: quizzes.length > 1, onOpen, onPlay, onDuplicate, onMerge, onDelete, onExport };
   const clearFilters = () => {
     setSearchQuery("");
     setSelectedIcon("all");
+    setOwnershipFilter("all");
   };
 
   return (
@@ -136,13 +125,20 @@ function QuizLibrary({ quizzes, onOpen, onPlay, onRename, onDuplicate, onMerge, 
           </div>
         </label>
         <SubjectSelect value={selectedIcon} onChange={setSelectedIcon} includeAll label="Materia" />
+        <fieldset className="quiz-library-ownership">
+          <legend>Propiedad</legend>
+          <div>
+            <button className={ownershipFilter === "all" ? "is-active" : ""} type="button" onClick={() => setOwnershipFilter("all")} aria-pressed={ownershipFilter === "all"}>Todos</button>
+            <button className={ownershipFilter === "owned" ? "is-active" : ""} type="button" onClick={() => setOwnershipFilter("owned")} aria-pressed={ownershipFilter === "owned"}>Propios</button>
+            <button className={ownershipFilter === "shared" ? "is-active" : ""} type="button" onClick={() => setOwnershipFilter("shared")} aria-pressed={ownershipFilter === "shared"} aria-label="Compartidos conmigo" title="Compartidos conmigo">Compartidos</button>
+          </div>
+        </fieldset>
         <span className="quiz-library-result-count">{filteredQuizzes.length} {filteredQuizzes.length === 1 ? "resultado" : "resultados"}</span>
       </div>
 
       {filteredQuizzes.length ? (
-        <div className="quiz-library-groups">
-          <QuizGroup title="Listos para jugar" description="Quizzes completos y validados." quizzes={readyQuizzes} {...actions} />
-          <QuizGroup title="Borradores" description="Continúa trabajando donde lo dejaste." quizzes={draftQuizzes} {...actions} />
+        <div className="quiz-library-grid">
+          {filteredQuizzes.map((quiz) => <QuizCard quiz={quiz} key={quiz.id} {...actions} />)}
         </div>
       ) : (
         <div className="quiz-library-no-results">

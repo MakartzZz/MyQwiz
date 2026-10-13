@@ -66,7 +66,7 @@ function QuizMergeModal({ quiz, quizzes, onClose, onConfirm }) {
                 <span><QuizIcon iconId={candidate.iconId} size={22} /></span>
                 <span>
                   <strong>{candidate.title}</strong>
-                  <small>{candidate.questions.length} preguntas · {candidate.status === "ready" ? "Listo" : "Borrador"}</small>
+                  <small>{candidate.questionCount ?? candidate.questions?.length ?? 0} preguntas</small>
                 </span>
               </label>
             ))}

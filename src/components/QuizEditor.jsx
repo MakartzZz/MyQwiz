@@ -9,9 +9,9 @@ import {
   X,
 } from "lucide-react";
 import { QUESTION_TYPES } from "../domain/quizConstants.js";
-import { cloneQuestion, createId, createQuestion, prepareQuizForReady } from "../domain/quizFactory.js";
+import { MAX_QUESTIONS_PER_QUIZ } from "../domain/cloudLimits.js";
+import { clearQuizResults, cloneQuestion, createId, createQuestion } from "../domain/quizFactory.js";
 import { isSupportedQuestionImageUrl } from "../domain/questionImage.js";
-import { validateQuiz } from "../domain/quizValidation.js";
 import { readUserPreferences } from "../services/userPreferences.js";
 import QuestionImage from "./QuestionImage.jsx";
 import SubjectSelect from "./SubjectSelect.jsx";
@@ -258,9 +258,10 @@ const QuestionFields = ({ question, onChange }) => {
   );
 };
 
-function QuizEditor({ quiz, onBack, onSave, onValidationError }) {
+function QuizEditor({ quiz, onBack, onSave }) {
   const [draft, setDraft] = useState(quiz);
   const [isSaved, setIsSaved] = useState(true);
+  const [isSaving, setIsSaving] = useState(false);
   const [activeQuestionType, setActiveQuestionType] = useState(
     () => quiz.questions[0]?.type ?? QUESTION_TYPES.MULTIPLE_CHOICE,
   );
@@ -305,19 +306,21 @@ function QuizEditor({ quiz, onBack, onSave, onValidationError }) {
   useEffect(() => {
     if (isSaved || !draft.title.trim()) return undefined;
 
-    const autosaveTimer = window.setTimeout(() => {
-      const savedQuiz = onSave(draft, { silent: true });
+    const autosaveTimer = window.setTimeout(async () => {
+      setIsSaving(true);
+      const savedQuiz = await onSave(draft, { silent: true });
       if (savedQuiz) {
         setDraft(savedQuiz);
         setIsSaved(true);
       }
+      setIsSaving(false);
     }, 900);
 
     return () => window.clearTimeout(autosaveTimer);
   }, [draft, isSaved, onSave]);
 
   const questionCountLabel = useMemo(() => (
-    `${draft.questions.length} ${draft.questions.length === 1 ? "pregunta" : "preguntas"}`
+    `${draft.questions.length} / ${MAX_QUESTIONS_PER_QUIZ} ${draft.questions.length === 1 ? "pregunta" : "preguntas"}`
   ), [draft.questions.length]);
   const questionTypeCounts = useMemo(() => Object.fromEntries(
     questionTypeOptions.map((type) => [
@@ -335,11 +338,7 @@ function QuizEditor({ quiz, onBack, onSave, onValidationError }) {
   const ActiveQuestionTypeIcon = activeQuestionTypeOption.icon;
 
   const updateDraft = (changes) => {
-    setDraft((current) => ({
-      ...current,
-      ...changes,
-      status: current.status === "ready" ? "draft" : current.status,
-    }));
+    setDraft((current) => clearQuizResults({ ...current, ...changes }));
     setIsSaved(false);
   };
 
@@ -361,6 +360,7 @@ function QuizEditor({ quiz, onBack, onSave, onValidationError }) {
   };
 
   const addQuestion = (type) => {
+    if (draft.questions.length >= MAX_QUESTIONS_PER_QUIZ) return;
     const newQuestion = createQuestion(type);
     pendingScrollPositionRef.current = {
       left: window.scrollX,
@@ -372,10 +372,9 @@ function QuizEditor({ quiz, onBack, onSave, onValidationError }) {
   };
 
   const removeQuestion = (questionId) => {
-    setDraft((current) => ({
+    setDraft((current) => clearQuizResults({
       ...current,
       questions: current.questions.filter((question) => question.id !== questionId),
-      status: current.status === "ready" ? "draft" : current.status,
     }));
     setIsSaved(false);
     setDeletingQuestionId(null);
@@ -420,6 +419,7 @@ function QuizEditor({ quiz, onBack, onSave, onValidationError }) {
   };
 
   const duplicateQuestion = (questionId) => {
+    if (draft.questions.length >= MAX_QUESTIONS_PER_QUIZ) return;
     const questionIndex = draft.questions.findIndex(
       (question) => question.id === questionId,
     );
@@ -434,29 +434,20 @@ function QuizEditor({ quiz, onBack, onSave, onValidationError }) {
     });
   };
 
-  const saveDraft = () => {
-    const savedQuiz = onSave(draft);
+  const saveQuiz = async () => {
+    setIsSaving(true);
+    const savedQuiz = await onSave(draft);
+    setIsSaving(false);
     if (!savedQuiz) return;
     setDraft(savedQuiz);
     setIsSaved(true);
   };
 
-  const markAsReady = () => {
-    const validation = validateQuiz(draft, { requirePlayable: true });
-    if (!validation.valid) {
-      onValidationError(validation.errors);
-      return;
-    }
-
-    const savedQuiz = onSave(prepareQuizForReady(draft));
-    if (!savedQuiz) return;
-    setDraft(savedQuiz);
-    setIsSaved(true);
-  };
-
-  const leaveEditor = () => {
+  const leaveEditor = async () => {
     if (!isSaved && draft.title.trim()) {
-      const savedQuiz = onSave(draft, { silent: true });
+      setIsSaving(true);
+      const savedQuiz = await onSave(draft, { silent: true });
+      setIsSaving(false);
       if (!savedQuiz) return;
     }
     onBack();
@@ -465,10 +456,9 @@ function QuizEditor({ quiz, onBack, onSave, onValidationError }) {
   return (
     <section className="quiz-editor" aria-labelledby="quiz-editor-title">
       <div className="quiz-editor__toolbar">
-        <button className="settings-back" type="button" onClick={leaveEditor}>← Volver a la biblioteca</button>
-        {draft.status !== "ready" && <button className="editor-ready-button" type="button" onClick={markAsReady}>Marcar como listo</button>}
-        <button className="secondary-button quiz-editor__save-button" type="button" onClick={saveDraft} disabled={isSaved || !draft.title.trim()} aria-live="polite">
-          {isSaved ? (draft.status === "ready" ? "Quiz guardado" : "Borrador guardado") : "Guardar borrador"}
+        <button className="settings-back" type="button" onClick={leaveEditor} disabled={isSaving}>← Volver a la biblioteca</button>
+        <button className="secondary-button quiz-editor__save-button" type="button" onClick={saveQuiz} disabled={isSaving || isSaved || !draft.title.trim()} aria-live="polite">
+          {isSaving ? "Guardando…" : isSaved ? "Quiz guardado" : "Guardar cambios"}
         </button>
       </div>
 
@@ -514,6 +504,11 @@ function QuizEditor({ quiz, onBack, onSave, onValidationError }) {
         role="tabpanel"
         aria-labelledby={`question-type-tab-${activeQuestionType}`}
       >
+      {draft.questions.length >= MAX_QUESTIONS_PER_QUIZ && (
+        <p className="quiz-editor__limit-message" role="status">
+          Llegaste al máximo de {MAX_QUESTIONS_PER_QUIZ} preguntas. Elimina una para poder agregar o duplicar otra.
+        </p>
+      )}
       <div className="question-type-panel__create">
         <span className="question-type-panel__type" aria-hidden="true">
           <ActiveQuestionTypeIcon size={21} strokeWidth={1.9} />
@@ -522,9 +517,9 @@ function QuizEditor({ quiz, onBack, onSave, onValidationError }) {
           <strong>{activeQuestionTypeOption.label}</strong>
           <small>{activeQuestionTypeOption.hint}</small>
         </div>
-        <button type="button" onClick={() => addQuestion(activeQuestionType)}>
+        <button type="button" onClick={() => addQuestion(activeQuestionType)} disabled={draft.questions.length >= MAX_QUESTIONS_PER_QUIZ}>
           <Plus size={18} strokeWidth={2.2} aria-hidden="true" />
-          Agregar pregunta
+          {draft.questions.length >= MAX_QUESTIONS_PER_QUIZ ? "Límite alcanzado" : "Agregar pregunta"}
         </button>
       </div>
       {!activeTypeQuestions.length ? (
@@ -556,7 +551,7 @@ function QuizEditor({ quiz, onBack, onSave, onValidationError }) {
                   <div className="question-editor__controls">
                     <button type="button" disabled={index === 0} onClick={() => moveQuestion(question.id, -1)} aria-label="Subir pregunta dentro de este tipo">↑</button>
                     <button type="button" disabled={index === activeTypeQuestions.length - 1} onClick={() => moveQuestion(question.id, 1)} aria-label="Bajar pregunta dentro de este tipo">↓</button>
-                    <button type="button" onClick={() => duplicateQuestion(question.id)}>Duplicar</button>
+                    <button type="button" disabled={draft.questions.length >= MAX_QUESTIONS_PER_QUIZ} onClick={() => duplicateQuestion(question.id)}>Duplicar</button>
                     <button type="button" className="is-danger" disabled={Boolean(deletingQuestionId)} onClick={() => deleteQuestion(question.id)}>Eliminar</button>
                   </div>
                 </div>

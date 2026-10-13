@@ -1,5 +1,5 @@
 import { lazy, Suspense, useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { CircleDashed, Play, SwatchBook } from "lucide-react";
+import { CircleDashed, LogOut, Play, SwatchBook } from "lucide-react";
 import { Toaster } from "sileo";
 import myQwizWordmarkMidnight from "./assets/branding/myqwiz-wordmark-midnight.webp";
 import myQwizWordmarkPink from "./assets/branding/myqwiz-wordmark-pink.webp";
@@ -14,6 +14,7 @@ import myQwizWordmarkSummer from "./assets/branding/myqwiz-wordmark-summer.webp"
 import myQwizWordmarkFriendship from "./assets/branding/myqwiz-wordmark-friendship.webp";
 import myQwizWordmarkIndependence from "./assets/branding/myqwiz-wordmark-independence.webp";
 import AlbumCover from "./components/PersonalAlbumCover.jsx";
+import { ProfileAvatar } from "./components/ProfileAvatar.jsx";
 import QuestionTypeSummary from "./components/QuestionTypeSummary.jsx";
 import { QuizIcon } from "./components/QuizIcon.jsx";
 import {
@@ -57,6 +58,12 @@ import {
 import { quizSessionStorage } from "./services/quizSessionStorage.js";
 import { quickQuizProgress } from "./services/quickQuizProgress.js";
 import {
+  shareQuizWithFriends,
+  syncCloudQuizForSharing,
+} from "./services/cloudQuizRepository.js";
+import { validateQuiz } from "./domain/quizValidation.js";
+import { MAX_OWNED_QUIZZES } from "./domain/cloudLimits.js";
+import {
   playButtonPressSound,
   playButtonHoverSound,
   playSupportHoverSound,
@@ -64,7 +71,6 @@ import {
 } from "./services/uiSounds.js";
 import {
   areQuizzesEquivalent,
-  copyQuizText,
   downloadQuizFile,
   MAX_QUIZ_FILE_SIZE,
   normalizeQuizTitle,
@@ -73,6 +79,7 @@ import {
 import "./App.css";
 
 const QuizCreatorModal = lazy(() => import("./components/QuizCreatorModal.jsx"));
+const AuthPortal = lazy(() => import("./components/AuthPortal.jsx"));
 const QuizEditor = lazy(() => import("./components/QuizEditor.jsx"));
 const QuizExportModal = lazy(() => import("./components/QuizExportModal.jsx"));
 const GameModeSelector = lazy(() => import("./components/GameModeSelector.jsx"));
@@ -90,6 +97,7 @@ const MusicSelector = lazy(() => import("./components/MusicSelector.jsx"));
 const PersonalAlbumModal = lazy(() => import("./components/PersonalAlbumModal.jsx"));
 const CatFeedingGame = lazy(() => import("./components/CatFeedingGame.jsx"));
 const PromptRoom = lazy(() => import("./components/PromptRoom.jsx"));
+const ProfileModal = lazy(() => import("./components/ProfileModal.jsx"));
 const ThemeSwitcher = lazy(() => import("./components/ThemeSwitcher.jsx"));
 
 const wordmarkByTheme = {
@@ -210,6 +218,12 @@ const Icon = ({ name, size = 20 }) => {
     back: (
       <>
         <path d="m15 18-6-6 6-6" />
+      </>
+    ),
+    "refresh-cw": (
+      <>
+        <path d="M20 11a8 8 0 1 0-2.3 5.7" />
+        <path d="M20 4v7h-7" />
       </>
     ),
     volume: (
@@ -340,7 +354,7 @@ const readStoredMusicVolume = () => {
   return MUSIC_VOLUME_LEVELS.includes(storedVolume) ? storedVolume : 0.2;
 };
 
-function App() {
+function MainApp({ account, onSignOut, onProfileUpdated, themeContext }) {
   const [activeSection, setActiveSection] = useState("Inicio");
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(
@@ -348,6 +362,7 @@ function App() {
   );
   const [sidebarMotion, setSidebarMotion] = useState(null);
   const [isCreatorOpen, setIsCreatorOpen] = useState(false);
+  const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
   const [editingQuizId, setEditingQuizId] = useState(null);
   const [playingQuizId, setPlayingQuizId] = useState(null);
   const [quickQuizId, setQuickQuizId] = useState(null);
@@ -410,7 +425,7 @@ function App() {
   const quickQuizLoaderRef = useRef(null);
   const quickQuizLoadSequenceRef = useRef(0);
   const sidebarMotionTimeoutRef = useRef(null);
-  const { theme, changeTheme, cancelThemeTransition, calendarDate } = useTheme();
+  const { theme, changeTheme, cancelThemeTransition, calendarDate } = themeContext;
   const shouldLoadPersonalMusic = (
     (activeSection === "Ajustes" && settingsView === "music")
     || selectedAlbumId.startsWith("personal-album-")
@@ -430,14 +445,22 @@ function App() {
   });
   const {
     quizzes,
-    createDraft,
-    saveDraft,
-    duplicateDraft,
-    mergeDrafts,
-    deleteDraft,
-    importDraft,
+    isLoading: quizLibraryLoading,
+    loadQuiz,
+    refresh: refreshQuizLibrary,
+    createQuizEntry,
+    saveQuiz,
+    duplicateQuizEntry,
+    mergeQuizEntries,
+    deleteQuiz,
+    importQuiz,
     recordAttempt,
-  } = useQuizLibrary();
+  } = useQuizLibrary(account.user.uid);
+
+  const ownedQuizCount = useMemo(() => quizzes.filter(
+    (quiz) => quiz.isOwner || (!quiz.isShared && quiz.ownerId === account.user.uid),
+  ).length, [account.user.uid, quizzes]);
+  const hasReachedOwnedQuizLimit = ownedQuizCount >= MAX_OWNED_QUIZZES;
 
   const editingQuiz = quizzes.find((quiz) => quiz.id === editingQuizId) ?? null;
   const playingQuiz = quizzes.find((quiz) => quiz.id === playingQuizId) ?? null;
@@ -978,22 +1001,48 @@ function App() {
 
   const beginQuizCreation = () => {
     selectSection("Mis quizzes");
+    if (hasReachedOwnedQuizLimit) {
+      systemNotifications.warning(
+        "Límite de quizzes alcanzado",
+        `Ya tienes ${MAX_OWNED_QUIZZES} quizzes propios. Elimina uno para crear otro; los compartidos no cuentan.`,
+      );
+      return;
+    }
     setIsCreatorOpen(true);
   };
 
-  const createQuizDraft = (quizDetails) => {
+  const createPersonalQuiz = async (quizDetails) => {
+    if (hasReachedOwnedQuizLimit) {
+      systemNotifications.warning(
+        "Límite de quizzes alcanzado",
+        `Solo puedes tener ${MAX_OWNED_QUIZZES} quizzes propios.`,
+      );
+      setIsCreatorOpen(false);
+      return;
+    }
     try {
-      const quiz = createDraft(quizDetails);
+      const quiz = await createQuizEntry(quizDetails);
       setIsCreatorOpen(false);
       setEditingQuizId(quiz.id);
       systemNotifications.success(
-        "Borrador guardado",
+        "Quiz creado",
         `“${quiz.title}” ya está disponible en tu biblioteca.`,
       );
-    } catch {
+    } catch (error) {
       systemNotifications.error(
         "No se pudo guardar",
-        "Revisa el almacenamiento disponible del navegador e inténtalo nuevamente.",
+        error.message || "Revisa tu conexión e inténtalo nuevamente.",
+      );
+    }
+  };
+
+  const refreshPersonalQuizLibrary = async () => {
+    try {
+      await refreshQuizLibrary();
+    } catch (error) {
+      systemNotifications.error(
+        "No se pudo actualizar la biblioteca",
+        error.message || "Inténtalo nuevamente.",
       );
     }
   };
@@ -1006,14 +1055,33 @@ function App() {
     setEditingQuizId(quiz.id);
   };
 
-  const openQuizDraft = (quiz) => {
-    const hasPreviousScore = Number.isFinite(quiz.stats?.bestScore);
-    if (quiz.status === "ready" && hasPreviousScore) {
-      setQuizPendingEdit(quiz);
+  const openQuizEditor = async (quiz) => {
+    const requiresOwnCopy = quiz.isShared || quiz.ownerId !== account.user.uid;
+    if (requiresOwnCopy && hasReachedOwnedQuizLimit) {
+      systemNotifications.warning(
+        "No puedes crear la copia",
+        `Ya tienes ${MAX_OWNED_QUIZZES} quizzes propios. Elimina uno antes de editar un quiz compartido.`,
+      );
       return;
     }
-
-    enterQuizEditor(quiz);
+    try {
+      let editableQuiz = await loadQuiz(quiz);
+      if (editableQuiz.isShared || editableQuiz.ownerId !== account.user.uid) {
+        editableQuiz = await duplicateQuizEntry(editableQuiz);
+        systemNotifications.success(
+          "Copia creada",
+          `Creamos una copia propia de “${quiz.title}” para que puedas editarla.`,
+        );
+      }
+      const hasPreviousScore = Number.isFinite(editableQuiz.stats?.bestScore);
+      if (hasPreviousScore) {
+        setQuizPendingEdit(editableQuiz);
+        return;
+      }
+      enterQuizEditor(editableQuiz);
+    } catch (error) {
+      systemNotifications.error("No se pudo abrir", error.message || "Inténtalo nuevamente.");
+    }
   };
 
   const confirmQuizEdit = (quiz) => {
@@ -1021,12 +1089,23 @@ function App() {
     enterQuizEditor(quiz);
   };
 
-  const openQuizGame = (quiz) => {
-    setActiveSection("Mis quizzes");
-    setEditingQuizId(null);
-    setPlayingQuizId(quiz.id);
-    setActiveGameMode(null);
-    setActiveGameRules({});
+  const openQuizGame = async (quiz) => {
+    try {
+      const playableQuiz = await loadQuiz(quiz);
+      const validation = validateQuiz(playableQuiz, { requirePlayable: true });
+      if (!validation.valid) {
+        showQuizValidationError(validation.errors);
+        return;
+      }
+
+      setActiveSection("Mis quizzes");
+      setEditingQuizId(null);
+      setPlayingQuizId(playableQuiz.id);
+      setActiveGameMode(null);
+      setActiveGameRules({});
+    } catch (error) {
+      systemNotifications.error("No se pudo cargar el quiz", error.message || "Inténtalo nuevamente.");
+    }
   };
 
   const openQuickQuizGame = async (quiz) => {
@@ -1160,7 +1239,11 @@ function App() {
     ({ score }) => {
       quizSessionStorage.clear();
       setSavedGameSession(null);
-      if (playingQuizId) recordAttempt(playingQuizId, score);
+      if (playingQuizId) {
+        recordAttempt(playingQuizId, score).catch(() => {
+          systemNotifications.error("No se guardó el resultado", "Inténtalo nuevamente más tarde.");
+        });
+      }
     },
     [playingQuizId, recordAttempt],
   );
@@ -1170,8 +1253,14 @@ function App() {
     setSavedGameSession(savedSession);
   }, []);
 
-  const resumeQuizGame = () => {
+  const resumeQuizGame = async () => {
     if (!savedGameSession || !resumableQuiz) return;
+    try {
+      await loadQuiz(resumableQuiz);
+    } catch (error) {
+      systemNotifications.error("No se pudo continuar", error.message || "Inténtalo nuevamente.");
+      return;
+    }
     playQuizStartSound();
     beginQuizEntryTransition(() => {
       setActiveSection("Mis quizzes");
@@ -1192,10 +1281,10 @@ function App() {
     });
   };
 
-  const saveQuizDraft = useCallback(
-    (quiz, { silent = false } = {}) => {
+  const saveQuizChanges = useCallback(
+    async (quiz, { silent = false } = {}) => {
       try {
-        const savedQuiz = saveDraft(quiz);
+        const savedQuiz = await saveQuiz(quiz);
         if (!silent) {
           systemNotifications.success(
             "Cambios guardados",
@@ -1211,7 +1300,7 @@ function App() {
         return null;
       }
     },
-    [saveDraft],
+    [saveQuiz],
   );
 
   const openManageQuiz = (quiz, mode) => {
@@ -1221,17 +1310,18 @@ function App() {
 
   const closeManageQuiz = () => setManagedQuiz(null);
 
-  const confirmManageQuiz = (quiz) => {
+  const confirmManageQuiz = async (quiz) => {
     try {
       if (manageMode === "delete") {
-        if (deleteDraft(quiz.id)) {
+        if (await deleteQuiz(quiz)) {
           systemNotifications.success(
-            "Quiz eliminado",
+            quiz.isShared ? "Quiz retirado" : "Quiz eliminado",
             `“${quiz.title}” ya no está en tu biblioteca.`,
           );
         }
       } else {
-        const savedQuiz = saveDraft(quiz);
+        const fullQuiz = await loadQuiz(quiz);
+        const savedQuiz = await saveQuiz({ ...fullQuiz, title: quiz.title });
         systemNotifications.success(
           "Nombre actualizado",
           `Ahora aparece como “${savedQuiz.title}”.`,
@@ -1246,9 +1336,16 @@ function App() {
     }
   };
 
-  const duplicateQuizDraft = (quiz) => {
+  const duplicatePersonalQuiz = async (quiz) => {
+    if (hasReachedOwnedQuizLimit) {
+      systemNotifications.warning(
+        "No puedes crear otra copia",
+        `Ya alcanzaste el máximo de ${MAX_OWNED_QUIZZES} quizzes propios.`,
+      );
+      return;
+    }
     try {
-      const duplicate = duplicateDraft(quiz);
+      const duplicate = await duplicateQuizEntry(quiz);
       systemNotifications.success(
         "Copia creada",
         `“${duplicate.title}” ya está en tu biblioteca.`,
@@ -1261,9 +1358,16 @@ function App() {
     }
   };
 
-  const mergeQuizDrafts = (primaryQuiz, secondaryQuiz) => {
+  const mergePersonalQuizzes = async (primaryQuiz, secondaryQuiz) => {
+    if (hasReachedOwnedQuizLimit) {
+      systemNotifications.warning(
+        "No puedes fusionarlos todavía",
+        `La fusión crea un quiz nuevo y ya tienes el máximo de ${MAX_OWNED_QUIZZES} propios.`,
+      );
+      return;
+    }
     try {
-      const mergedQuiz = mergeDrafts(primaryQuiz, secondaryQuiz);
+      const mergedQuiz = await mergeQuizEntries(primaryQuiz, secondaryQuiz);
       setMergingQuiz(null);
       systemNotifications.success(
         "Quizzes fusionados",
@@ -1287,11 +1391,23 @@ function App() {
     systemNotifications.warning("Quiz incompleto", `${firstError}${remaining}`);
   };
 
-  const openQuizImport = () => setIsImportModalOpen(true);
+  const openQuizImport = () => {
+    if (hasReachedOwnedQuizLimit) {
+      systemNotifications.warning(
+        "No puedes importar otro quiz",
+        `Ya alcanzaste el máximo de ${MAX_OWNED_QUIZZES} quizzes propios.`,
+      );
+      return;
+    }
+    setIsImportModalOpen(true);
+  };
   const chooseQuizImportFile = () => importInputRef.current?.click();
 
-  const completeQuizImport = (sourceQuiz) => {
-    const importedQuiz = importDraft(sourceQuiz);
+  const completeQuizImport = async (sourceQuiz) => {
+    if (hasReachedOwnedQuizLimit) {
+      throw new Error(`Ya tienes el máximo de ${MAX_OWNED_QUIZZES} quizzes propios.`);
+    }
+    const importedQuiz = await importQuiz(sourceQuiz);
     setActiveSection("Mis quizzes");
     systemNotifications.success(
       "Quiz importado",
@@ -1300,13 +1416,13 @@ function App() {
     return importedQuiz;
   };
 
-  const importQuizContent = (content) => {
+  const importQuizContent = async (content) => {
     try {
       if (new Blob([content]).size > MAX_QUIZ_FILE_SIZE)
         throw new Error("El contenido supera el límite de 5 MB.");
       const parsedQuiz = parseQuizImport(content);
       const identicalQuiz = quizzes.find((quiz) =>
-        areQuizzesEquivalent(quiz, parsedQuiz),
+        Array.isArray(quiz.questions) && areQuizzesEquivalent(quiz, parsedQuiz),
       );
       const sameNameQuiz = quizzes.find(
         (quiz) =>
@@ -1322,7 +1438,7 @@ function App() {
           reason: identicalQuiz ? "identical" : "same-name",
         });
       } else {
-        completeQuizImport(parsedQuiz);
+        await completeQuizImport(parsedQuiz);
       }
       return true;
     } catch (error) {
@@ -1341,7 +1457,7 @@ function App() {
     try {
       if (file.size > MAX_QUIZ_FILE_SIZE)
         throw new Error("El archivo supera el límite de 5 MB.");
-      importQuizContent(await file.text());
+      await importQuizContent(await file.text());
     } catch (error) {
       systemNotifications.error(
         "No se pudo importar",
@@ -1352,7 +1468,7 @@ function App() {
     }
   };
 
-  const confirmConflictingImport = (title) => {
+  const confirmConflictingImport = async (title) => {
     const normalizedTitle = normalizeQuizTitle(title);
     if (
       quizzes.some((quiz) => normalizeQuizTitle(quiz.title) === normalizedTitle)
@@ -1364,8 +1480,23 @@ function App() {
       return;
     }
 
-    completeQuizImport({ ...importConflict.quiz, title });
-    setImportConflict(null);
+    try {
+      await completeQuizImport({ ...importConflict.quiz, title });
+      setImportConflict(null);
+    } catch (error) {
+      systemNotifications.error(
+        "No se pudo importar",
+        error.message || "Inténtalo nuevamente.",
+      );
+    }
+  };
+
+  const openQuizExport = async (quiz) => {
+    try {
+      setExportingQuiz(await loadQuiz(quiz));
+    } catch (error) {
+      systemNotifications.error("No se pudo abrir", error.message || "Inténtalo nuevamente.");
+    }
   };
 
   const exportQuizFile = (filename) => {
@@ -1385,29 +1516,29 @@ function App() {
     }
   };
 
-  const copyQuizExportText = async () => {
+  const sendQuizToFriends = async (friendships) => {
     if (!exportingQuiz) return;
     try {
-      await copyQuizText(exportingQuiz);
+      await syncCloudQuizForSharing(account.user.uid, exportingQuiz);
+      await shareQuizWithFriends({
+        quizId: exportingQuiz.id,
+        ownerId: account.user.uid,
+        friendships,
+      });
       systemNotifications.success(
-        "Texto copiado",
-        `“${exportingQuiz.title}” está listo para pegarse o compartirse.`,
+        "Quiz compartido",
+        friendships.length === 1
+          ? `Enviamos “${exportingQuiz.title}” a tu amistad.`
+          : `Enviamos “${exportingQuiz.title}” a ${friendships.length} amistades.`,
       );
       setExportingQuiz(null);
-    } catch {
+    } catch (error) {
       systemNotifications.error(
-        "No se pudo copiar",
-        "El navegador no permitió acceder al portapapeles.",
+        "No se pudo compartir",
+        error?.message ?? "Inténtalo nuevamente.",
       );
+      throw error;
     }
-  };
-
-  const openGoogleDrive = () => {
-    window.open(
-      "https://drive.google.com/drive/my-drive",
-      "_blank",
-      "noopener,noreferrer",
-    );
   };
 
   return (
@@ -1585,25 +1716,6 @@ function App() {
           </div>
         </div>
 
-        <a
-          className="sidebar-support"
-          href="https://ko-fi.com/makartzzz"
-          target="_blank"
-          rel="noopener noreferrer"
-          data-button-sound="interface"
-          aria-label="Invitar al creador un café en Ko-fi"
-          onPointerEnter={(event) => {
-            if (event.pointerType !== "touch") playButtonHoverSound();
-          }}
-        >
-          <SupportCoffee className="sidebar-support__coffee" />
-          <span>
-            <small>¿Te gusta MyQwiz?</small>
-            <strong>Invítame un café</strong>
-          </span>
-          <Icon name="arrow" size={16} />
-        </a>
-
         <button
           className="nav-item nav-item--settings"
           type="button"
@@ -1614,6 +1726,34 @@ function App() {
           <Icon name="settings" />
           <span>Ajustes</span>
         </button>
+
+        <div className="sidebar-account">
+          <button
+            className="sidebar-account__profile"
+            type="button"
+            onClick={() => {
+              setIsProfileModalOpen(true);
+              setIsMenuOpen(false);
+            }}
+            aria-label="Abrir perfil y solicitudes de amistad"
+            title={isSidebarCollapsed ? "Mi perfil" : undefined}
+          >
+            <ProfileAvatar avatarId={account.profile.avatarId} size={38} />
+            <span className="sidebar-account__copy">
+              <strong>{account.profile.username}</strong>
+              <small>#{account.profile.tag}</small>
+            </span>
+          </button>
+          <button
+            className="sidebar-account__logout"
+            type="button"
+            onClick={onSignOut}
+            aria-label="Cerrar sesión"
+            title="Cerrar sesión"
+          >
+            <LogOut size={17} />
+          </button>
+        </div>
       </aside>
 
       <button
@@ -1830,7 +1970,9 @@ function App() {
         )}
 
         {activeSection === "Mis quizzes" &&
-          (playingQuiz ? (
+          (quizLibraryLoading ? (
+            <section className="feature-loading" role="status">Cargando tu biblioteca…</section>
+          ) : playingQuiz ? (
             activeGameMode ? (
               <QuizPlayer
                 key={`${playingQuiz.id}-${activeGameMode}-${gameAttemptKey}`}
@@ -1860,8 +2002,7 @@ function App() {
             <QuizEditor
               quiz={editingQuiz}
               onBack={() => setEditingQuizId(null)}
-              onSave={saveQuizDraft}
-              onValidationError={showQuizValidationError}
+              onSave={saveQuizChanges}
             />
           ) : (
             <>
@@ -1878,7 +2019,16 @@ function App() {
                     <button
                       className="text-button"
                       type="button"
-                      onClick={() => setIsCreatorOpen(true)}
+                      onClick={refreshPersonalQuizLibrary}
+                    >
+                      <Icon name="refresh-cw" size={17} /> Actualizar
+                    </button>
+                    <button
+                      className="text-button"
+                      type="button"
+                      onClick={beginQuizCreation}
+                      disabled={hasReachedOwnedQuizLimit}
+                      title={hasReachedOwnedQuizLimit ? `Máximo de ${MAX_OWNED_QUIZZES} quizzes propios alcanzado` : undefined}
                     >
                       <Icon name="plus" size={17} /> Crear quiz
                     </button>
@@ -1886,6 +2036,8 @@ function App() {
                       className="text-button"
                       type="button"
                       onClick={openQuizImport}
+                      disabled={hasReachedOwnedQuizLimit}
+                      title={hasReachedOwnedQuizLimit ? `Máximo de ${MAX_OWNED_QUIZZES} quizzes propios alcanzado` : undefined}
                     >
                       <Icon name="file" size={17} /> Importar
                     </button>
@@ -1898,16 +2050,19 @@ function App() {
                     </button>
                   </div>
                 </div>
+                <p className={`library-owned-limit ${hasReachedOwnedQuizLimit ? "is-reached" : ""}`} role="status">
+                  <strong>{ownedQuizCount} / {MAX_OWNED_QUIZZES}</strong> quizzes propios
+                  {hasReachedOwnedQuizLimit && <span> Alcanzaste el máximo. Elimina uno para crear, importar, duplicar o fusionar otro.</span>}
+                </p>
                 <QuizLibrary
                   quizzes={quizzes}
-                  onCreate={() => setIsCreatorOpen(true)}
-                  onOpen={openQuizDraft}
+                  onCreate={beginQuizCreation}
+                  onOpen={openQuizEditor}
                   onPlay={openQuizGame}
-                  onRename={(quiz) => openManageQuiz(quiz, "rename")}
-                  onDuplicate={duplicateQuizDraft}
+                  onDuplicate={duplicatePersonalQuiz}
                   onMerge={setMergingQuiz}
                   onDelete={(quiz) => openManageQuiz(quiz, "delete")}
-                  onExport={setExportingQuiz}
+                  onExport={openQuizExport}
                 />
               </section>
             </>
@@ -2173,7 +2328,7 @@ function App() {
           <QuizCreatorModal
             isOpen
             onClose={() => setIsCreatorOpen(false)}
-            onCreate={createQuizDraft}
+            onCreate={createPersonalQuiz}
           />
         )}
         {drawnQuickQuiz && (
@@ -2209,7 +2364,7 @@ function App() {
             quiz={mergingQuiz}
             quizzes={quizzes}
             onClose={() => setMergingQuiz(null)}
-            onConfirm={mergeQuizDrafts}
+            onConfirm={mergePersonalQuizzes}
           />
         )}
         {isImportModalOpen && (
@@ -2230,10 +2385,10 @@ function App() {
         {exportingQuiz && (
           <QuizExportModal
             quiz={exportingQuiz}
+            userId={account.user.uid}
             onClose={() => setExportingQuiz(null)}
             onExport={exportQuizFile}
-            onCopy={copyQuizExportText}
-            onDrive={openGoogleDrive}
+            onShare={sendQuizToFriends}
           />
         )}
         {isPersonalAlbumModalOpen && (
@@ -2252,6 +2407,13 @@ function App() {
             onFeed={feedSidebarCat}
           />
         )}
+        {isProfileModalOpen && (
+          <ProfileModal
+            account={account}
+            onClose={() => setIsProfileModalOpen(false)}
+            onProfileUpdated={onProfileUpdated}
+          />
+        )}
       </Suspense>
       <audio
         ref={musicAudioRef}
@@ -2267,6 +2429,129 @@ function App() {
         onChange={importQuizFile}
       />
     </div>
+  );
+}
+
+const challengeSessionKey = (userId) => `myqwiz:entry-challenge:${userId}`;
+
+function App() {
+  const themeContext = useTheme();
+  const [accessState, setAccessState] = useState({
+    stage: "loading",
+    user: null,
+    profile: null,
+    challenge: null,
+  });
+
+  useEffect(() => {
+    let active = true;
+    let loadSequence = 0;
+    let unsubscribe = () => {};
+
+    Promise.all([
+      import("./services/firebaseAuth.js"),
+      import("./services/cloudProfileRepository.js"),
+    ]).then(([authService, profileService]) => {
+      if (!active) return;
+      unsubscribe = authService.observeAuthUser(async (user) => {
+        const sequence = loadSequence + 1;
+        loadSequence = sequence;
+        if (!user) {
+          if (active) {
+            setAccessState({ stage: "credentials", user: null, profile: null, challenge: null });
+          }
+          return;
+        }
+
+        if (active) {
+          setAccessState({ stage: "loading", user, profile: null, challenge: null });
+        }
+
+        try {
+          const [profile, challenge] = await Promise.all([
+            profileService.getCloudUserProfile(user.uid),
+            profileService.getCloudEntryChallenge(user.uid),
+          ]);
+          if (!active || sequence !== loadSequence) return;
+
+          if (!profile || !challenge) {
+            setAccessState({ stage: "onboarding", user, profile, challenge });
+            return;
+          }
+
+          const challengePassed = window.sessionStorage.getItem(challengeSessionKey(user.uid)) === "true";
+          setAccessState({
+            stage: challengePassed ? "ready" : "challenge",
+            user,
+            profile,
+            challenge,
+          });
+        } catch {
+          if (active && sequence === loadSequence) {
+            setAccessState({ stage: "onboarding", user, profile: null, challenge: null });
+          }
+        }
+      });
+    }).catch(() => {
+      if (active) {
+        setAccessState({ stage: "credentials", user: null, profile: null, challenge: null });
+      }
+    });
+
+    return () => {
+      active = false;
+      unsubscribe();
+    };
+  }, []);
+
+  const completeProfile = ({ profile, entryChallenge }) => {
+    setAccessState((current) => ({
+      ...current,
+      stage: "challenge",
+      profile,
+      challenge: entryChallenge,
+    }));
+  };
+
+  const passEntryChallenge = () => {
+    if (!accessState.user) return;
+    window.sessionStorage.setItem(challengeSessionKey(accessState.user.uid), "true");
+    setAccessState((current) => ({ ...current, stage: "ready" }));
+  };
+
+  const signOutAccount = async () => {
+    if (accessState.user) {
+      window.sessionStorage.removeItem(challengeSessionKey(accessState.user.uid));
+    }
+    const { signOutCurrentUser } = await import("./services/firebaseAuth.js");
+    await signOutCurrentUser();
+  };
+
+  const updateAccountProfile = (profile) => {
+    setAccessState((current) => ({ ...current, profile: { ...current.profile, ...profile } }));
+  };
+
+  if (accessState.stage === "ready") {
+    return (
+      <MainApp
+        account={accessState}
+        onSignOut={signOutAccount}
+        onProfileUpdated={updateAccountProfile}
+        themeContext={themeContext}
+      />
+    );
+  }
+
+  return (
+    <Suspense fallback={<QwizLoader />}>
+      <AuthPortal
+        {...accessState}
+        wordmark={wordmarkByTheme[themeContext.theme] ?? wordmarkByTheme.violet}
+        onProfileCreated={completeProfile}
+        onChallengePassed={passEntryChallenge}
+        onUseAnotherAccount={signOutAccount}
+      />
+    </Suspense>
   );
 }
 

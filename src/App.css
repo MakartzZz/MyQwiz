@@ -1,4 +1,5 @@
 @import "./styles/shell.css";
+@import "./styles/auth.css";
 @import "./styles/blinking-character.css";
 @import "./styles/home.css";
 @import "./styles/customization.css";

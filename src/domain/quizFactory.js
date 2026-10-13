@@ -88,6 +88,19 @@ export const cloneQuestion = (question) => {
   return clone;
 };
 
+export const clearQuizResults = (quiz) => (
+  Number.isFinite(quiz.stats?.bestScore)
+    ? {
+        ...quiz,
+        stats: {
+          attempts: 0,
+          bestScore: null,
+          lastPlayedAt: null,
+        },
+      }
+    : quiz
+);
+
 export const createQuiz = ({
   title,
   description = "",
@@ -101,7 +114,6 @@ export const createQuiz = ({
     title: title?.trim() || "Quiz sin título",
     description: description.trim(),
     iconId,
-    status: "draft",
     createdAt: timestamp,
     updatedAt: timestamp,
     preferences: {
@@ -120,18 +132,6 @@ export const createQuiz = ({
     questions: [],
   };
 };
-
-export const prepareQuizForReady = (quiz) => ({
-  ...quiz,
-  status: "ready",
-  stats: Number.isFinite(quiz.stats?.bestScore)
-    ? {
-        attempts: 0,
-        bestScore: null,
-        lastPlayedAt: null,
-      }
-    : { ...quiz.stats },
-});
 
 export const duplicateQuiz = (sourceQuiz) => {
   const duplicate = createQuiz({
@@ -160,9 +160,6 @@ export const mergeQuizzes = (primaryQuiz, secondaryQuiz) => {
 
   return {
     ...mergedQuiz,
-    status: primaryQuiz.status === "ready" && secondaryQuiz.status === "ready"
-      ? "ready"
-      : "draft",
     preferences: { ...primaryQuiz.preferences },
     settings: { ...primaryQuiz.settings },
     questions: [...primaryQuiz.questions, ...secondaryQuiz.questions].map(cloneQuestion),

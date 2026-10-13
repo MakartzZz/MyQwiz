@@ -21,6 +21,7 @@ function QuizManageModal({ quiz, mode, onClose, onConfirm }) {
   if (!quiz) return null;
 
   const isDelete = mode === "delete";
+  const isSharedQuiz = quiz.isShared;
   const submit = (event) => {
     event.preventDefault();
     if (!isDelete && !title.trim()) return;
@@ -32,15 +33,21 @@ function QuizManageModal({ quiz, mode, onClose, onConfirm }) {
       <section className="quiz-modal quiz-manage-modal" role="dialog" aria-modal="true" aria-labelledby="quiz-manage-title" onMouseDown={(event) => event.stopPropagation()}>
         <div className="quiz-modal__header">
           <div>
-            <span className="eyebrow">{isDelete ? "Eliminar quiz" : "Cambiar nombre"}</span>
-            <h2 id="quiz-manage-title">{isDelete ? "¿Eliminar este quiz?" : "Renombra tu quiz"}</h2>
+            <span className="eyebrow">{isDelete ? (isSharedQuiz ? "Quitar quiz" : "Eliminar quiz") : "Cambiar nombre"}</span>
+            <h2 id="quiz-manage-title">{isDelete ? (isSharedQuiz ? "¿Quitarlo de tu biblioteca?" : "¿Eliminar este quiz?") : "Renombra tu quiz"}</h2>
           </div>
           <button className="modal-close" type="button" onClick={onClose} aria-label="Cerrar">×</button>
         </div>
 
         <form onSubmit={submit}>
           {isDelete ? (
-            <p className="quiz-manage-modal__warning">Se eliminará <strong>“{quiz.title}”</strong> de este navegador. Esta acción no se puede deshacer.</p>
+            <p className="quiz-manage-modal__warning">
+              {isSharedQuiz ? (
+                <>Se quitará <strong>“{quiz.title}”</strong> de tu biblioteca. El quiz original de tu amistad no se modificará.</>
+              ) : (
+                <>Se eliminará <strong>“{quiz.title}”</strong> de tu cuenta y dejará de estar disponible para quienes lo recibieron. Esta acción no se puede deshacer.</>
+              )}
+            </p>
           ) : (
             <label className="form-field">
               <span>Nuevo título</span>
@@ -50,7 +57,7 @@ function QuizManageModal({ quiz, mode, onClose, onConfirm }) {
 
           <div className="quiz-modal__actions">
             <button className="modal-cancel" type="button" onClick={onClose}>Cancelar</button>
-            <button className={`secondary-button ${isDelete ? "is-danger" : ""}`} type="submit" disabled={!isDelete && !title.trim()}>{isDelete ? "Eliminar definitivamente" : "Guardar nombre"}</button>
+            <button className={`secondary-button ${isDelete ? "is-danger" : ""}`} type="submit" disabled={!isDelete && !title.trim()}>{isDelete ? (isSharedQuiz ? "Quitar de mi biblioteca" : "Eliminar definitivamente") : "Guardar nombre"}</button>
           </div>
         </form>
       </section>

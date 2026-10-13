@@ -5,6 +5,8 @@
 .prompt-builder__heading, .prompt-output__heading { display: flex; align-items: flex-start; justify-content: space-between; gap: 18px; }
 .prompt-builder__heading h2, .prompt-output__heading h3 { margin: 5px 0 0; font: 750 1.15rem "Archivo", sans-serif; }
 .prompt-builder__total { padding: 8px 11px; flex: 0 0 auto; color: var(--on-primary); background: var(--purple); font-size: .65rem; font-weight: 850; clip-path: polygon(5% 0, 100% 7%, 95% 100%, 0 93%); }
+.prompt-builder__total.is-limit { color: #fff; background: var(--coral); }
+.prompt-builder__limit-message { margin: 0 0 2px; padding: 10px 12px; color: var(--ink); background: var(--coral-soft); font-size: .66rem; font-weight: 750; line-height: 1.45; }
 .prompt-builder__base-fields { display: grid; grid-template-columns: minmax(0, 1fr) minmax(190px, .42fr); gap: 14px; }
 .prompt-builder .subject-select-field { align-self: end; }
 .prompt-builder .quiz-subject-select__control { min-height: 46px; background: var(--page-bg); }
@@ -21,6 +23,7 @@
 .prompt-type small { color: var(--muted); font-size: .62rem; line-height: 1.4; }
 .prompt-type__counter { display: grid; grid-template-columns: 30px 42px 30px; align-items: center; }
 .prompt-type__counter button { display: grid; width: 30px; height: 30px; place-items: center; color: var(--on-primary); background: var(--purple); font-size: 1rem; font-weight: 800; }
+.prompt-type__counter button:disabled { cursor: not-allowed; opacity: .38; }
 .prompt-type__counter input { width: 42px; height: 30px; padding: 0; border: 0; outline: 0; color: var(--ink); background: var(--surface); font-size: .72rem; font-weight: 850; text-align: center; appearance: textfield; }
 .prompt-type__counter input::-webkit-inner-spin-button { appearance: none; }
 .prompt-builder__delivery { grid-template-columns: 1fr 1fr; }

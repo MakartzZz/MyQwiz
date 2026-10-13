@@ -1,5 +1,6 @@
 import { QUESTION_TYPES, QUIZ_ICONS, QUIZ_SCHEMA_VERSION } from "./quizConstants.js";
 import { isSupportedQuestionImageUrl } from "./questionImage.js";
+import { MAX_QUESTIONS_PER_QUIZ } from "./cloudLimits.js";
 
 const supportedQuestionTypes = new Set(Object.values(QUESTION_TYPES));
 const supportedQuizIcons = new Set(Object.values(QUIZ_ICONS));
@@ -107,6 +108,15 @@ export const validateQuiz = (quiz, { requirePlayable = false } = {}) => {
   if (!Array.isArray(quiz.questions)) {
     addError(errors, "questions", "La lista de preguntas no es válida.", "invalid_questions");
   } else {
+    if (quiz.questions.length > MAX_QUESTIONS_PER_QUIZ) {
+      addError(
+        errors,
+        "questions",
+        `Cada quiz puede tener un máximo de ${MAX_QUESTIONS_PER_QUIZ} preguntas.`,
+        "too_many_questions",
+      );
+    }
+
     if (requirePlayable && quiz.questions.length === 0) {
       addError(errors, "questions", "Agrega al menos una pregunta para jugar.", "empty_quiz");
     }

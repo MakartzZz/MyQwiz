@@ -49,9 +49,9 @@
   .sidebar.is-collapsed .nav-label { display: block; }
   .sidebar.is-collapsed .nav-item > span { display: inline; }
   .sidebar.is-collapsed .sidebar-card__copy { display: inline; }
+  .sidebar.is-collapsed .sidebar-account__copy { display: grid; }
   .sidebar.is-collapsed .sidebar-card__progress-row { display: flex; }
   .sidebar.is-collapsed .sidebar-music > div button:not(:nth-child(2)) { display: grid; }
-  .sidebar.is-collapsed .sidebar-support { display: grid; }
   .sidebar.is-collapsed .main-nav { margin-top: 58px; gap: 8px; }
   .sidebar.is-collapsed .nav-item { width: auto; min-height: 48px; padding: 0 13px; justify-content: flex-start; gap: 13px; }
   .sidebar.is-collapsed .nav-item:hover { transform: translateX(2px); }
@@ -63,6 +63,9 @@
   .sidebar.is-collapsed .sidebar-music { width: auto; min-height: 82px; height: auto; padding: 13px 12px; justify-content: flex-start; border-radius: 11px; box-shadow: 3px 3px 0 color-mix(in srgb, var(--card-shadow) 65%, transparent); }
   .sidebar.is-collapsed .sidebar-music > div { margin-left: auto; }
   .sidebar.is-collapsed .sidebar-music > div button { width: 29px; height: 29px; }
+  .sidebar.is-collapsed .sidebar-account { width: auto; padding: 8px; grid-template-columns: minmax(0, 1fr) auto; justify-items: stretch; }
+  .sidebar.is-collapsed .sidebar-account__profile { width: auto; grid-template-columns: auto minmax(0, 1fr); justify-items: stretch; }
+  .sidebar.is-collapsed .sidebar-account__logout { width: 31px; height: 31px; }
   .menu-backdrop { position: fixed; z-index: 15; inset: 0; display: block; background: var(--backdrop); }
   .game-feedback-reaction { left: clamp(16px, 2.5vw, 34px); }
   .main-content { width: 100%; margin-left: 0; padding: 24px; }
@@ -85,6 +88,21 @@
   .quick-quiz-hero { grid-template-columns: 1fr; }
   .quick-quiz-draw { width: max-content; }
   .quiz-library-result-count { grid-column: 1 / -1; width: max-content; }
+}
+
+@media (max-width: 820px) and (max-height: 820px) {
+  .sidebar, .sidebar.is-collapsed {
+    padding: 18px 14px max(14px, env(safe-area-inset-bottom));
+  }
+  .sidebar .brand, .sidebar.is-collapsed .brand { min-height: 48px; }
+  .sidebar .main-nav, .sidebar.is-collapsed .main-nav { margin-top: 28px; gap: 4px; }
+  .sidebar .nav-label { padding-bottom: 5px; }
+  .sidebar .nav-item, .sidebar.is-collapsed .nav-item { min-height: 44px; }
+  .sidebar .sidebar-widgets, .sidebar.is-collapsed .sidebar-widgets { margin: auto 0 10px; gap: 7px; }
+  .sidebar .sidebar-music, .sidebar.is-collapsed .sidebar-music { min-height: 70px; padding: 8px 10px; }
+  .sidebar .sidebar-music .sidebar-music__cover { width: 48px; height: 48px; }
+  .sidebar .nav-item--settings, .sidebar.is-collapsed .nav-item--settings { margin-top: 2px; }
+  .sidebar .sidebar-account, .sidebar.is-collapsed .sidebar-account { margin-top: 6px; padding: 6px; }
 }
 
 @media (max-width: 600px), (min-width: 601px) and (max-width: 900px) and (orientation: portrait) {
@@ -147,7 +165,7 @@
     line-height: .94;
   }
   .hero-card p { max-width: 440px; margin-bottom: 14px; font-size: .7rem; line-height: 1.45; }
-  .hero-card__actions { flex-wrap: nowrap; gap: 7px; }
+  .hero-card__actions { align-items: flex-start; flex-direction: column; flex-wrap: nowrap; gap: 7px; }
   .hero-card .primary-button,
   .hero-card__quick-button { min-height: 40px; padding-inline: 12px; gap: 6px; font-size: .68rem; white-space: nowrap; }
   .hero-card__actions svg { width: 17px; height: 17px; }
@@ -210,9 +228,6 @@
   .quiz-result__type { min-height: 82px; padding: 13px; }
   .quiz-library-filters { grid-template-columns: 1fr; }
   .quiz-library-result-count { grid-column: auto; }
-  .quiz-export-modal__drive { align-items: stretch; flex-direction: column; }
-  .quiz-export-modal__drive button { width: 100%; }
-  .quiz-export-modal__choices { grid-template-columns: 1fr; }
   .quiz-import-modal__file { grid-template-columns: auto 1fr; }
   .quiz-import-modal__file button { width: 100%; grid-column: 1 / -1; }
   .prompt-builder, .prompt-output { padding: 18px; }
@@ -280,7 +295,6 @@
   .settings-option__tonearm > i { display: none; }
   .settings-option__music-copy { z-index: 3; }
   .quiz-editor__toolbar { --toolbar-shape: polygon(2% 0, 100% 3%, 98% 100%, 0 97%); position: sticky; padding: 12px 18px; flex-wrap: wrap; }
-  .quiz-editor__toolbar .editor-ready-button { margin-left: auto; }
   .quiz-editor__toolbar .quiz-editor__save-button { margin-left: 0; }
   .quiz-editor__toolbar .settings-back + .quiz-editor__save-button { margin-left: auto; }
   .quiz-editor__header { grid-template-columns: 1fr; padding: 18px; }

@@ -1,17 +1,13 @@
 .quiz-editor { display: grid; gap: 22px; padding-bottom: 42px; }
 .quiz-editor__toolbar { --toolbar-shape: polygon(1% 0, 100% 5%, 99% 100%, 0 95%); position: sticky; z-index: 8; top: 0; display: flex; min-height: 66px; padding: 10px 24px; align-items: center; gap: 14px; isolation: isolate; }
 .quiz-editor__toolbar::before { position: absolute; z-index: -1; inset: 0; background: color-mix(in srgb, var(--surface) 38%, var(--page-bg)); clip-path: var(--toolbar-shape); content: ""; pointer-events: none; }
-.editor-ready-button { min-height: 42px; margin-left: auto; padding: 0 14px; border: 1px solid var(--mint); border-radius: 8px; color: var(--mint); background: var(--mint-soft); font-size: .7rem; font-weight: 800; transition: transform .18s ease, box-shadow .18s ease, background .18s ease; }
-.editor-ready-button:hover { transform: translate(-1px, -1px); box-shadow: 4px 4px 0 var(--card-shadow); }
-:root[data-theme="violet"] .editor-ready-button { border: 2px solid #f4f1e9; color: #293326; background: #d8ddd4; box-shadow: 3px 3px 0 #263122; }
-:root[data-theme="violet"] .editor-ready-button:hover { background: #eef0eb; box-shadow: 5px 5px 0 #263122; }
 .quiz-editor__toolbar .quiz-editor__save-button { min-width: 148px; }
 .quiz-editor__toolbar .settings-back + .quiz-editor__save-button { margin-left: auto; }
 .quiz-editor__header { position: relative; display: grid; padding: 24px; grid-template-columns: minmax(0, 1.15fr) minmax(0, .85fr) minmax(190px, .42fr); align-items: start; gap: 18px; border: 2px solid var(--line); border-radius: 12px; background: var(--surface); box-shadow: 5px 5px 0 var(--card-shadow); }
 .quiz-editor__count { position: absolute; right: 22px; top: -13px; padding: 6px 10px; color: var(--on-primary); background: var(--purple); font-size: .68rem; font-weight: 800; letter-spacing: .05em; text-transform: uppercase; }
+.quiz-editor__limit-message { margin: 0 0 12px; padding: 10px 12px; color: var(--ink); background: var(--coral-soft); font-size: .68rem; font-weight: 750; line-height: 1.45; }
 
 .quiz-library-result-count,
-.quiz-library-group__heading > span,
 .quiz-library-card__icon,
 .quiz-editor__count {
   border-radius: 0;

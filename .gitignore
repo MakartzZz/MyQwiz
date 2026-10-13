@@ -2,11 +2,22 @@
 node_modules/
 dist/
 .vite/
+.firebase-emulators/
 
 # Local environment files
 .env
 .env.*
 !.env.example
+
+# Private backend credentials (never commit these)
+*firebase-adminsdk*.json
+*service-account*.json
+*serviceAccount*.json
+*google-application-credentials*.json
+*.pem
+*.p12
+*.pfx
+*.key
 
 # Logs
 *.log

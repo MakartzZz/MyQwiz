@@ -10,7 +10,6 @@ export const normalizeQuickQuizCollection = (collection) => {
     description: quiz.description,
     difficulty: quiz.difficulty,
     iconId: collection.category,
-    status: "ready",
     source: "quick",
     createdAt: "2026-09-30T00:00:00.000Z",
     updatedAt: "2026-09-30T00:00:00.000Z",

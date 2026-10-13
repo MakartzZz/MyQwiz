@@ -52,7 +52,7 @@ function QuizCreatorModal({ isOpen, onClose, onCreate }) {
       >
         <div className="quiz-modal__header">
           <div>
-            <span className="eyebrow">Nuevo borrador</span>
+            <span className="eyebrow">Nuevo quiz</span>
             <h2 id="quiz-modal-title">Crea la base de tu quiz</h2>
           </div>
           <button className="modal-close" type="button" onClick={onClose} aria-label="Cerrar">×</button>
@@ -73,7 +73,7 @@ function QuizCreatorModal({ isOpen, onClose, onCreate }) {
 
           <div className="quiz-modal__actions">
             <button className="modal-cancel" type="button" onClick={onClose}>Cancelar</button>
-            <button className="secondary-button" type="submit" disabled={!title.trim()}>Crear borrador</button>
+            <button className="secondary-button" type="submit" disabled={!title.trim()}>Crear quiz</button>
           </div>
         </form>
       </section>

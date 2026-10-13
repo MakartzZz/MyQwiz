@@ -1,4 +1,5 @@
 import { QUESTION_TYPES } from "../domain/quizConstants.js";
+import { MAX_QUESTIONS_PER_QUIZ } from "../domain/cloudLimits.js";
 
 export const promptQuestionTypes = [
   { id: QUESTION_TYPES.MULTIPLE_CHOICE, label: "Selección múltiple", description: "Opciones con una única respuesta correcta" },
@@ -84,6 +85,9 @@ export const buildQuizPrompt = ({
 }) => {
   const activeTypes = promptQuestionTypes.filter((type) => (questionCounts[type.id] ?? 0) > 0);
   const totalQuestions = activeTypes.reduce((total, type) => total + questionCounts[type.id], 0);
+  if (totalQuestions > MAX_QUESTIONS_PER_QUIZ) {
+    throw new Error(`Cada quiz puede tener un máximo de ${MAX_QUESTIONS_PER_QUIZ} preguntas.`);
+  }
   const levelLabel = promptEducationLevels.find((level) => level.id === educationLevel)?.label ?? "Secundaria";
   const distribution = activeTypes
     .map((type) => `- ${questionCounts[type.id]} de ${type.label} (type: "${type.id}")`)
@@ -138,7 +142,6 @@ El objeto raíz debe respetar exactamente esta estructura:
     "title": "${title.trim()}",
     "description": "Descripción breve del contenido",
     "iconId": "${iconId}",
-    "status": "ready",
     "createdAt": "fecha ISO 8601 actual",
     "updatedAt": "fecha ISO 8601 actual",
     "preferences": { "themeId": null, "playlistId": null },

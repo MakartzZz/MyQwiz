@@ -2,9 +2,10 @@ import { QUIZ_ICONS, QUIZ_SCHEMA_VERSION } from "./quizConstants.js";
 
 const migrateFromVersionOne = (quiz) => {
   const { gameMode: _legacyGameMode, rules: _legacyRules, ...quizSettings } = quiz.settings ?? {};
+  const { status: _legacyStatus, ...quizWithoutStatus } = quiz;
 
   return {
-    ...quiz,
+    ...quizWithoutStatus,
     schemaVersion: QUIZ_SCHEMA_VERSION,
     iconId: quiz.iconId ?? QUIZ_ICONS.GENERAL,
     settings: {
@@ -25,8 +26,9 @@ export const migrateQuiz = (quiz) => {
   }
 
   if (quiz.schemaVersion === QUIZ_SCHEMA_VERSION) {
+    const { status: _legacyStatus, ...quizWithoutStatus } = quiz;
     return {
-      ...quiz,
+      ...quizWithoutStatus,
       iconId: quiz.iconId ?? QUIZ_ICONS.GENERAL,
     };
   }
