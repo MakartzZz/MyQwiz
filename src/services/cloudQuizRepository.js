@@ -304,12 +304,9 @@ export const shareQuizWithFriends = async ({ quizId, ownerId, friendships }) => 
       reference: doc(firestore, "quizShares", `${quizId}_${recipientId}`),
     };
   });
-  const snapshots = await Promise.all(shares.map(({ reference }) => getDoc(reference)));
-  const pendingShares = shares.filter((_, index) => !snapshots[index].exists());
-  if (pendingShares.length === 0) return;
 
   const batch = writeBatch(firestore);
-  pendingShares.forEach(({ friendshipId, recipientId, reference }) => {
+  shares.forEach(({ friendshipId, recipientId, reference }) => {
     batch.set(reference, {
       quizId,
       ownerId,
