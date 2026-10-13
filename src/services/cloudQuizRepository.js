@@ -161,7 +161,9 @@ export const listQuizShareStatuses = async (quizId, ownerId) => {
   ));
   return Object.fromEntries(snapshot.docs.map((share) => [
     share.data().recipientId,
-    share.data().status,
+    // Las comparticiones creadas antes de incorporar la bandeja no tenían estado.
+    // Se consideran pendientes para impedir que el propietario intente sobrescribirlas.
+    share.data().status ?? "pending",
   ]));
 };
 
