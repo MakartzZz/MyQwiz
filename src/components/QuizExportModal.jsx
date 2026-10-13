@@ -2,10 +2,12 @@ import { useEffect, useState } from "react";
 import { Check, LoaderCircle, Send } from "lucide-react";
 import { useModalOpenSound } from "../hooks/useModalOpenSound.js";
 import { getFriendships } from "../services/cloudFriendRepository.js";
+import { listQuizShareStatuses } from "../services/cloudQuizRepository.js";
 import { ProfileAvatar } from "./ProfileAvatar.jsx";
 
 function QuizExportModal({ quiz, userId, onClose, onExport, onShare }) {
   const [friends, setFriends] = useState([]);
+  const [shareStatuses, setShareStatuses] = useState({});
   const [selectedFriendIds, setSelectedFriendIds] = useState(() => new Set());
   const [loadingFriends, setLoadingFriends] = useState(true);
   const [sharing, setSharing] = useState(false);
@@ -16,13 +18,20 @@ function QuizExportModal({ quiz, userId, onClose, onExport, onShare }) {
     if (!quiz || !userId) return undefined;
     let active = true;
     setFriends([]);
+    setShareStatuses({});
     setSelectedFriendIds(new Set());
     setLoadingFriends(true);
     setMessage("");
 
-    getFriendships(userId)
-      .then((currentFriends) => {
-        if (active) setFriends(currentFriends);
+    Promise.all([
+      getFriendships(userId),
+      listQuizShareStatuses(quiz.id, userId),
+    ])
+      .then(([currentFriends, currentShareStatuses]) => {
+        if (active) {
+          setFriends(currentFriends);
+          setShareStatuses(currentShareStatuses);
+        }
       })
       .catch(() => {
         if (active) setMessage("No pudimos cargar tus amistades. Inténtalo nuevamente.");
@@ -102,19 +111,31 @@ function QuizExportModal({ quiz, userId, onClose, onExport, onShare }) {
             )}
             {friends.map((friendship) => {
               const selected = selectedFriendIds.has(friendship.id);
+              const recipientId = friendship.friend?.uid;
+              const existingStatus = recipientId ? shareStatuses[recipientId] : null;
+              const unavailable = Boolean(existingStatus);
               return (
-                <label className={selected ? "is-selected" : ""} key={friendship.id}>
+                <label className={`${selected ? "is-selected" : ""} ${unavailable ? "is-unavailable" : ""}`} key={friendship.id}>
                   <input
                     type="checkbox"
                     checked={selected}
+                    disabled={unavailable}
                     onChange={() => toggleFriend(friendship.id)}
                   />
                   <ProfileAvatar avatarId={friendship.friend?.avatarId ?? 1} size={40} />
                   <span>
                     <strong>{friendship.friend?.username ?? "Usuario de MyQwiz"}</strong>
-                    <small>{friendship.friend?.tag ? `#${friendship.friend.tag}` : "Amistad de MyQwiz"}</small>
+                    <small>
+                      {existingStatus === "accepted"
+                        ? "Ya tiene este quiz"
+                        : existingStatus === "pending"
+                          ? "Invitación pendiente"
+                          : friendship.friend?.tag
+                            ? `#${friendship.friend.tag}`
+                            : "Amistad de MyQwiz"}
+                    </small>
                   </span>
-                  <i aria-hidden="true"><Check size={15} /></i>
+                  <i aria-hidden="true">{unavailable ? "—" : <Check size={15} />}</i>
                 </label>
               );
             })}

@@ -9,6 +9,7 @@ import {
   runTransaction,
   serverTimestamp,
   setDoc,
+  updateDoc,
   where,
   writeBatch,
 } from "firebase/firestore";
@@ -85,6 +86,7 @@ export const listSharedQuizSummaries = async (userId) => {
   const shareSnapshot = await getDocs(query(
     collection(firestore, "quizShares"),
     where("recipientId", "==", userId),
+    where("status", "==", "accepted"),
     orderBy("createdAt", "desc"),
   ));
   const ownerProfilePromises = new Map();
@@ -114,6 +116,53 @@ export const listSharedQuizSummaries = async (userId) => {
     } : null;
   }));
   return summaries.filter(Boolean);
+};
+
+export const listPendingQuizInvitations = async (userId) => {
+  const shareSnapshot = await getDocs(query(
+    collection(firestore, "quizShares"),
+    where("recipientId", "==", userId),
+    where("status", "==", "pending"),
+    orderBy("createdAt", "desc"),
+  ));
+  const ownerProfilePromises = new Map();
+  shareSnapshot.docs.forEach((share) => {
+    const ownerId = share.data().ownerId;
+    if (!ownerProfilePromises.has(ownerId)) {
+      ownerProfilePromises.set(ownerId, getCloudUserProfile(ownerId));
+    }
+  });
+
+  const invitations = await Promise.all(shareSnapshot.docs.map(async (share) => {
+    const [quizSnapshot, ownerProfile] = await Promise.all([
+      getDoc(quizReference(share.data().quizId)),
+      ownerProfilePromises.get(share.data().ownerId),
+    ]);
+    if (!quizSnapshot.exists()) return null;
+    return {
+      id: share.id,
+      ...mapQuizSummary(quizSnapshot),
+      ownerProfile: ownerProfile ? {
+        username: ownerProfile.username,
+        tag: ownerProfile.tag,
+        avatarId: ownerProfile.avatarId,
+      } : null,
+      invitationCreatedAt: timestampToIso(share.data().createdAt),
+    };
+  }));
+  return invitations.filter(Boolean);
+};
+
+export const listQuizShareStatuses = async (quizId, ownerId) => {
+  const snapshot = await getDocs(query(
+    collection(firestore, "quizShares"),
+    where("quizId", "==", quizId),
+    where("ownerId", "==", ownerId),
+  ));
+  return Object.fromEntries(snapshot.docs.map((share) => [
+    share.data().recipientId,
+    share.data().status,
+  ]));
 };
 
 export const loadCloudQuiz = async (quizId) => {
@@ -282,13 +331,39 @@ export const removeReceivedQuiz = (quizId, userId) => (
   deleteDoc(doc(firestore, "quizShares", `${quizId}_${userId}`))
 );
 
+export const acceptQuizInvitation = async (shareId, userId) => {
+  const shareRef = doc(firestore, "quizShares", shareId);
+  const snapshot = await getDoc(shareRef);
+  if (!snapshot.exists()) throw new Error("Esta invitación ya no está disponible.");
+  const share = snapshot.data();
+  if (share.recipientId !== userId || share.status !== "pending") {
+    throw new Error("Esta invitación ya fue respondida.");
+  }
+  await updateDoc(shareRef, {
+    status: "accepted",
+    updatedAt: serverTimestamp(),
+  });
+};
+
+export const declineQuizInvitation = async (shareId, userId) => {
+  const shareRef = doc(firestore, "quizShares", shareId);
+  const snapshot = await getDoc(shareRef);
+  if (!snapshot.exists()) return;
+  if (snapshot.data().recipientId !== userId || snapshot.data().status !== "pending") {
+    throw new Error("Esta invitación ya fue respondida.");
+  }
+  await deleteDoc(shareRef);
+};
+
 export const shareQuizWithFriend = async ({ quizId, ownerId, recipientId, friendshipId }) => {
   await setDoc(doc(firestore, "quizShares", `${quizId}_${recipientId}`), {
     quizId,
     ownerId,
     recipientId,
     friendshipId,
+    status: "pending",
     createdAt: serverTimestamp(),
+    updatedAt: serverTimestamp(),
   });
 };
 
@@ -305,15 +380,19 @@ export const shareQuizWithFriends = async ({ quizId, ownerId, friendships }) => 
     };
   });
 
-  const batch = writeBatch(firestore);
-  shares.forEach(({ friendshipId, recipientId, reference }) => {
-    batch.set(reference, {
-      quizId,
-      ownerId,
-      recipientId,
-      friendshipId,
-      createdAt: serverTimestamp(),
+  for (let offset = 0; offset < shares.length; offset += 10) {
+    const batch = writeBatch(firestore);
+    shares.slice(offset, offset + 10).forEach(({ friendshipId, recipientId, reference }) => {
+      batch.set(reference, {
+        quizId,
+        ownerId,
+        recipientId,
+        friendshipId,
+        status: "pending",
+        createdAt: serverTimestamp(),
+        updatedAt: serverTimestamp(),
+      });
     });
-  });
-  await batch.commit();
+    await batch.commit();
+  }
 };

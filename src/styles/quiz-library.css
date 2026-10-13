@@ -1,4 +1,6 @@
 .quiz-library-filters { display: grid; margin-bottom: 28px; padding: 16px; grid-template-columns: minmax(190px, 1fr) minmax(145px, .42fr) minmax(230px, .72fr) auto; align-items: end; gap: 12px; border: 2px solid var(--line); background: var(--surface); box-shadow: 4px 4px 0 var(--card-shadow); }
+.library-inbox-button { position: relative; }
+.library-inbox-count { display: grid; min-width: 20px; height: 20px; padding: 0 5px; place-items: center; color: var(--on-primary); background: var(--coral); font-size: .57rem; font-weight: 900; line-height: 1; clip-path: polygon(9% 0, 100% 8%, 91% 100%, 0 92%); }
 .quiz-library-search,
 .subject-select-field { display: grid; min-width: 0; gap: 7px; color: var(--ink); font-size: .68rem; font-weight: 750; }
 .quiz-library-search > div { display: flex; min-height: 43px; padding: 0 12px; align-items: center; gap: 9px; border: 1px solid var(--line); border-radius: 7px; color: var(--muted); background: var(--page-bg); }

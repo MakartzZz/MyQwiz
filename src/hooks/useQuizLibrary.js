@@ -1,9 +1,12 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { createQuiz, duplicateQuiz, mergeQuizzes } from "../domain/quizFactory.js";
 import {
+  acceptQuizInvitation,
   createCloudQuiz,
+  declineQuizInvitation,
   deleteCloudQuiz,
   listOwnedQuizSummaries,
+  listPendingQuizInvitations,
   listQuizProgress,
   listSharedQuizSummaries,
   loadCloudQuiz,
@@ -82,6 +85,7 @@ const migrateLocalQuizzes = (userId, knownSummaries) => {
 
 export function useQuizLibrary(userId) {
   const [quizzes, setQuizzes] = useState([]);
+  const [quizInvitations, setQuizInvitations] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const quizzesRef = useRef(quizzes);
 
@@ -91,8 +95,12 @@ export function useQuizLibrary(userId) {
 
   const refresh = useCallback(async () => {
     if (!userId) return [];
-    const summaries = await loadSummaries(userId);
+    const [summaries, invitations] = await Promise.all([
+      loadSummaries(userId),
+      listPendingQuizInvitations(userId),
+    ]);
     setQuizzes(summaries);
+    setQuizInvitations(invitations);
     return summaries;
   }, [userId]);
 
@@ -100,15 +108,22 @@ export function useQuizLibrary(userId) {
     if (!userId) return undefined;
     let active = true;
     setIsLoading(true);
-    loadSummaries(userId)
-      .then(async (summaries) => {
+    Promise.all([
+      loadSummaries(userId),
+      listPendingQuizInvitations(userId),
+    ])
+      .then(async ([summaries, invitations]) => {
         if (active) setQuizzes(summaries);
+        if (active) setQuizInvitations(invitations);
         await migrateLocalQuizzes(userId, summaries);
         if (!active) return;
         setQuizzes(await loadSummaries(userId));
       })
       .catch(() => {
-        if (active) setQuizzes([]);
+        if (active) {
+          setQuizzes([]);
+          setQuizInvitations([]);
+        }
       })
       .finally(() => {
         if (active) setIsLoading(false);
@@ -183,6 +198,16 @@ export function useQuizLibrary(userId) {
     return true;
   }, [userId]);
 
+  const acceptInvitation = useCallback(async (invitationId) => {
+    await acceptQuizInvitation(invitationId, userId);
+    await refresh();
+  }, [refresh, userId]);
+
+  const declineInvitation = useCallback(async (invitationId) => {
+    await declineQuizInvitation(invitationId, userId);
+    setQuizInvitations((current) => current.filter(({ id }) => id !== invitationId));
+  }, [userId]);
+
   const importQuiz = useCallback(async (sourceQuiz) => {
     const importedQuiz = duplicateQuiz(sourceQuiz);
     importedQuiz.title = sourceQuiz.title;
@@ -200,6 +225,7 @@ export function useQuizLibrary(userId) {
 
   return {
     quizzes,
+    quizInvitations,
     isLoading,
     refresh,
     loadQuiz,
@@ -208,6 +234,8 @@ export function useQuizLibrary(userId) {
     duplicateQuizEntry,
     mergeQuizEntries,
     deleteQuiz,
+    acceptInvitation,
+    declineInvitation,
     importQuiz,
     recordAttempt,
   };

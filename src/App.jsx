@@ -1,5 +1,5 @@
 import { lazy, Suspense, useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { CircleDashed, LogOut, Play, SwatchBook } from "lucide-react";
+import { CircleDashed, Inbox as InboxIcon, LogOut, Play, SwatchBook } from "lucide-react";
 import { Toaster } from "sileo";
 import myQwizWordmarkMidnight from "./assets/branding/myqwiz-wordmark-midnight.webp";
 import myQwizWordmarkPink from "./assets/branding/myqwiz-wordmark-pink.webp";
@@ -82,6 +82,7 @@ const QuizCreatorModal = lazy(() => import("./components/QuizCreatorModal.jsx"))
 const AuthPortal = lazy(() => import("./components/AuthPortal.jsx"));
 const QuizEditor = lazy(() => import("./components/QuizEditor.jsx"));
 const QuizExportModal = lazy(() => import("./components/QuizExportModal.jsx"));
+const QuizInboxModal = lazy(() => import("./components/QuizInboxModal.jsx"));
 const GameModeSelector = lazy(() => import("./components/GameModeSelector.jsx"));
 const QuizImportConflictModal = lazy(() => import("./components/QuizImportConflictModal.jsx"));
 const QuizImportModal = lazy(() => import("./components/QuizImportModal.jsx"));
@@ -363,6 +364,7 @@ function MainApp({ account, onSignOut, onProfileUpdated, themeContext }) {
   const [sidebarMotion, setSidebarMotion] = useState(null);
   const [isCreatorOpen, setIsCreatorOpen] = useState(false);
   const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
+  const [isQuizInboxOpen, setIsQuizInboxOpen] = useState(false);
   const [editingQuizId, setEditingQuizId] = useState(null);
   const [playingQuizId, setPlayingQuizId] = useState(null);
   const [quickQuizId, setQuickQuizId] = useState(null);
@@ -445,6 +447,7 @@ function MainApp({ account, onSignOut, onProfileUpdated, themeContext }) {
   });
   const {
     quizzes,
+    quizInvitations,
     isLoading: quizLibraryLoading,
     loadQuiz,
     refresh: refreshQuizLibrary,
@@ -453,6 +456,8 @@ function MainApp({ account, onSignOut, onProfileUpdated, themeContext }) {
     duplicateQuizEntry,
     mergeQuizEntries,
     deleteQuiz,
+    acceptInvitation,
+    declineInvitation,
     importQuiz,
     recordAttempt,
   } = useQuizLibrary(account.user.uid);
@@ -1045,6 +1050,22 @@ function MainApp({ account, onSignOut, onProfileUpdated, themeContext }) {
         error.message || "Inténtalo nuevamente.",
       );
     }
+  };
+
+  const acceptSharedQuizInvitation = async (invitationId) => {
+    await acceptInvitation(invitationId);
+    systemNotifications.success(
+      "Quiz agregado",
+      "El quiz compartido ya aparece en tu biblioteca.",
+    );
+  };
+
+  const declineSharedQuizInvitation = async (invitationId) => {
+    await declineInvitation(invitationId);
+    systemNotifications.success(
+      "Invitación rechazada",
+      "Quitamos el quiz de tu bandeja.",
+    );
   };
 
   const enterQuizEditor = (quiz) => {
@@ -2017,6 +2038,18 @@ function MainApp({ account, onSignOut, onProfileUpdated, themeContext }) {
                   </div>
                   <div className="library-heading-actions">
                     <button
+                      className="text-button library-inbox-button"
+                      type="button"
+                      onClick={() => setIsQuizInboxOpen(true)}
+                    >
+                      <InboxIcon size={17} /> Bandeja
+                      {quizInvitations.length > 0 && (
+                        <span className="library-inbox-count" aria-label={`${quizInvitations.length} invitaciones pendientes`}>
+                          {quizInvitations.length > 99 ? "99+" : quizInvitations.length}
+                        </span>
+                      )}
+                    </button>
+                    <button
                       className="text-button"
                       type="button"
                       onClick={refreshPersonalQuizLibrary}
@@ -2389,6 +2422,14 @@ function MainApp({ account, onSignOut, onProfileUpdated, themeContext }) {
             onClose={() => setExportingQuiz(null)}
             onExport={exportQuizFile}
             onShare={sendQuizToFriends}
+          />
+        )}
+        {isQuizInboxOpen && (
+          <QuizInboxModal
+            invitations={quizInvitations}
+            onAccept={acceptSharedQuizInvitation}
+            onClose={() => setIsQuizInboxOpen(false)}
+            onDecline={declineSharedQuizInvitation}
           />
         )}
         {isPersonalAlbumModalOpen && (

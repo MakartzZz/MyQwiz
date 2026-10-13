@@ -127,13 +127,19 @@ service cloud.firestore {
         && getAfter(/databases/$(database)/documents/quizzes/$(quizId)).data.ownerId == request.auth.uid;
     }
 
-    function hasQuizShare(quizId) {
+    function hasQuizInvitation(quizId) {
       return signedIn()
         && exists(/databases/$(database)/documents/quizShares/$(quizId + '_' + request.auth.uid));
     }
 
+    function hasAcceptedQuizShare(quizId) {
+      return hasQuizInvitation(quizId)
+        && get(/databases/$(database)/documents/quizShares/$(quizId + '_' + request.auth.uid)).data.status
+          == 'accepted';
+    }
+
     function canReadQuiz(quizId) {
-      return ownsQuiz(quizId) || hasQuizShare(quizId);
+      return ownsQuiz(quizId) || hasAcceptedQuizShare(quizId);
     }
 
     function validProfile(data, uid) {
@@ -323,7 +329,8 @@ service cloud.firestore {
           && accountAfter.lastQuizMutationId == quizId;
       }
 
-      allow get: if canReadQuiz(quizId);
+      // Una invitación pendiente puede leer solo el resumen necesario para la bandeja.
+      allow get: if canReadQuiz(quizId) || hasQuizInvitation(quizId);
       allow list: if signedIn() && resource.data.ownerId == request.auth.uid;
 
       allow create: if signedIn()
@@ -374,14 +381,21 @@ service cloud.firestore {
 
     match /quizShares/{shareId} {
       function validShare(data) {
-        return data.keys().hasOnly([
-            'quizId', 'ownerId', 'recipientId', 'friendshipId', 'createdAt'
+        return data.keys().hasAll([
+            'quizId', 'ownerId', 'recipientId', 'friendshipId', 'status',
+            'createdAt', 'updatedAt'
+          ])
+          && data.keys().hasOnly([
+            'quizId', 'ownerId', 'recipientId', 'friendshipId', 'status',
+            'createdAt', 'updatedAt'
           ])
           && data.quizId is string
           && data.ownerId is string
           && data.recipientId is string
           && data.friendshipId is string
-          && data.createdAt is timestamp;
+          && data.status in ['pending', 'accepted']
+          && data.createdAt is timestamp
+          && data.updatedAt is timestamp;
       }
 
       function friendshipAllowsShare(data) {
@@ -400,26 +414,25 @@ service cloud.firestore {
         && shareId == request.resource.data.quizId + '_' + request.resource.data.recipientId
         && request.resource.data.ownerId == request.auth.uid
         && request.resource.data.recipientId != request.auth.uid
+        && request.resource.data.status == 'pending'
         && ownsQuiz(request.resource.data.quizId)
         && exists(/databases/$(database)/documents/friendships/$(request.resource.data.friendshipId))
         && friendshipAllowsShare(request.resource.data)
-        && request.resource.data.createdAt == request.time;
+        && request.resource.data.createdAt == request.time
+        && request.resource.data.updatedAt == request.time;
 
-      // Volver a compartir con la misma amistad es seguro e idempotente. Esto evita
-      // tener que leer primero un documento que quizá todavía no existe.
+      // Solo el destinatario puede aceptar una invitación pendiente.
       allow update: if signedIn()
         && validShare(request.resource.data)
-        && shareId == request.resource.data.quizId + '_' + request.resource.data.recipientId
-        && request.resource.data.ownerId == request.auth.uid
-        && request.resource.data.recipientId != request.auth.uid
+        && resource.data.recipientId == request.auth.uid
         && request.resource.data.quizId == resource.data.quizId
         && request.resource.data.ownerId == resource.data.ownerId
         && request.resource.data.recipientId == resource.data.recipientId
         && request.resource.data.friendshipId == resource.data.friendshipId
-        && ownsQuiz(request.resource.data.quizId)
-        && exists(/databases/$(database)/documents/friendships/$(request.resource.data.friendshipId))
-        && friendshipAllowsShare(request.resource.data)
-        && request.resource.data.createdAt == request.time;
+        && request.resource.data.createdAt == resource.data.createdAt
+        && resource.data.status == 'pending'
+        && request.resource.data.status == 'accepted'
+        && request.resource.data.updatedAt == request.time;
       allow delete: if signedIn()
         && (resource.data.ownerId == request.auth.uid || resource.data.recipientId == request.auth.uid);
     }
